@@ -14,7 +14,7 @@ public class CheckerUsersScenarioBuild {
         return scenario(scenarioName)
             .group("Checker Workflow")
             .on(
-                exec(feed(Feeders.checkerUsers())   
+                feed(Feeders.checkerUsers())   
                     .exec(session -> session
                         .set("username", session.getString("Username"))
                     )             
@@ -52,7 +52,7 @@ public class CheckerUsersScenarioBuild {
                             )
                     
                         )
-                )))
+                ))
             );
     }
 }

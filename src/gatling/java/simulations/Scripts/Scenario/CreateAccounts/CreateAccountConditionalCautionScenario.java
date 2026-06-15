@@ -208,13 +208,13 @@ public final class CreateAccountConditionalCautionScenario {
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                 ) 
-
                 //Select Court details
                 .pause(5,20)
                 .exec(
                     http("OPAL - Opal-fines-service - Courts")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/courts?business_unit=#{selectedBusinessUnitId}")
                         .headers(Headers.getHeaders(12))
+                       .check(Feeders.saveCourtId())                        
                 )
                 .exec(
                     http("OPAL - Opal-fines-service - Local-justice-areas")
@@ -349,8 +349,20 @@ public final class CreateAccountConditionalCautionScenario {
                     return session
                         .set("selectedProsecutorId", prosecutorIds.get(index))
                         .set("selectedProsecutorName", prosecutorNames.get(index));
-                })
+                })              
+                .exec(session -> {
+                    // Retrieve business unit IDs and corresponding user IDs from the session
+                    List<Integer> businessUnitIds = session.getList("businessUnitIds");
+                    List<String> businessUnitUserIds = session.getList("businessUnitUserIds");
 
+                    // Generate a random index
+                    int index = java.util.concurrent.ThreadLocalRandom.current()
+                        .nextInt(businessUnitIds.size());
+
+                    return session
+                        .set("selectedBusinessUnitId", businessUnitIds.get(index))
+                        .set("selectedbusinessUnitUserIds", businessUnitUserIds.get(index));
+                }) 
                 //Selecting Submit for review
                 .pause(20,60)
                 .exec(session -> {
