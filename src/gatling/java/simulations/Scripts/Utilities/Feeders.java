@@ -91,7 +91,7 @@ public class Feeders {
     }
 
     public static CheckBuilder.Final saveBusinessUnitId() {
-        return CoreDsl.jsonPath("$.refData[*].business_unit_id").findRandom().saveAs("getBusinessUnitId");
+        return CoreDsl.jsonPath("$.refData[*].business_unit_id").findRandom().saveAs("selectedBusinessUnitId");
     }
     public static CheckBuilder.Final saveCourtId() {
         return CoreDsl.jsonPath("$.refData[*].court_id").findRandom().saveAs("getCourtId");

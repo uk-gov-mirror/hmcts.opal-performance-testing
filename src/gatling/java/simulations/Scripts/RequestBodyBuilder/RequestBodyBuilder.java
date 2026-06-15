@@ -185,7 +185,7 @@ public class RequestBodyBuilder {
         "            }\n" +
         "        ],\n" +
         "        \"originator_id\": %s,\n" +
-        "        \"originator_name\": \"undefined\",\n" +
+        "        \"originator_name\": \"%s\",\n" +
         "        \"originator_type\": \"FP\",\n" +
         "        \"payment_card_request\": null,\n" +
         "        \"payment_terms\": {\n" +
@@ -222,7 +222,7 @@ public class RequestBodyBuilder {
         "}",
         accountNoteText, accountNoteText, addressLine1, addressLine1,         
         forename, surname, courtId, fpRegNumber, noticeNumber,
-        prosecutorId, prosecutorCaseRef, businessUnitId, businessUnitUserIds, userName, todaydate, userName);
+        prosecutorId, prosecutorName, prosecutorCaseRef, businessUnitId, businessUnitUserIds, userName, todaydate, userName);
     }
 
     public static String BuildDraftAccountFineRequestBody(Session session) {
@@ -239,7 +239,6 @@ public class RequestBodyBuilder {
         // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
         String forename = session.get("generatedForename") != null ? session.get("generatedForename").toString() : DataGenerator.generateRandomFirstName();
         String surname = session.get("generatedSurname") != null ? session.get("generatedSurname").toString() : DataGenerator.generateRandomLastName();
-        String nin = session.get("generatedNin") != null ? session.get("generatedNin").toString() : DataGenerator.generateRandomNationalInsuranceNumber();
         String vehicleReg = session.get("generatedVehicleReg") != null ? session.get("generatedVehicleReg").toString() : DataGenerator.generateRandomVehicleRegistration();
         String email1 = session.get("generatedEmail1") != null ? session.get("generatedEmail1").toString() : (forename.toLowerCase() + "." + surname.toLowerCase() + "@example.com");
         String employerCompanyName = session.get("generatedEmployerCompanyName") != null ? session.get("generatedEmployerCompanyName").toString() : DataGenerator.generateRandomEmployerName();

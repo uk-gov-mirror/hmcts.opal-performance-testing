@@ -120,44 +120,59 @@ public final class CreateAccountConditionalCautionScenario {
                                 // jsonPath("$.summaries[*].submitted_by_name").findAll().saveAs("submittedByNames")
                             )                       
                 
-                .exec(session -> {
+                            .exec(session -> {
 
-                    List<String> summaries = session.getList("summaries");
+                                List<String> summaries = session.getList("summaries");
 
-                    if (summaries == null || summaries.isEmpty()) {
-                        return session.markAsFailed();
-                    }
+                                if (summaries == null || summaries.isEmpty()) {
+                                    System.out.println("No summaries returned");
+                                    return session;
+                                }
 
-                    String rawJson = summaries.get(0); // usually only one array wrapper
+                                String rawJson = summaries.get(0);
 
-                    try {
-                        ObjectMapper mapper = new ObjectMapper();
+                                try {
+                                    ObjectMapper mapper = new ObjectMapper();
 
-                        // STEP 1: parse outer array
-                        JsonNode arrayNode = mapper.readTree(rawJson);
+                                    // Parse the summaries array
+                                    JsonNode arrayNode = mapper.readTree(rawJson);
 
-                        if (!arrayNode.isArray() || arrayNode.size() == 0) {
-                            System.err.println("Summaries array is empty or invalid");
-                            return session.markAsFailed();
-                        }
+                                    // No accounts available
+                                    if (!arrayNode.isArray() || arrayNode.size() == 0) {
 
-                        // STEP 2: pick a real summary object inside array
-                        JsonNode node = arrayNode.get(
-                            ThreadLocalRandom.current().nextInt(arrayNode.size())
-                        );
+                                        System.out.println(
+                                            "No submitted draft accounts available for user: "
+                                            + session.getString("username")
+                                            + " - continuing with account creation"
+                                        );
 
-                        return session
-                            .set("selectedDraftAccountId", node.get("draft_account_id").asText())
-                            .set("selectedBusinessUnitId", node.get("business_unit_id").asText())
-                            .set("accountStatus", node.get("account_status").asText())
-                            .set("submittedBy", node.get("submitted_by").asText())
-                            .set("submittedByName", node.get("submitted_by_name").asText());
+                                        return session
+                                            .set("selectedDraftAccountId", "")
+                                            .set("selectedBusinessUnitId", "")
+                                            .set("accountStatus", "")
+                                            .set("submittedBy", "")
+                                            .set("submittedByName", "");
+                                    }                                    
 
-                    } catch (Exception e) {
-                        System.err.println("Failed to parse summaries JSON: " + rawJson);
-                        e.printStackTrace();
-                        return session.markAsFailed();
-                    }
+                                    // Randomly select one account from the array
+                                    JsonNode node = arrayNode.get(
+                                        ThreadLocalRandom.current().nextInt(arrayNode.size())
+                                    );
+
+                                    return session
+                                        .set("selectedDraftAccountId", node.get("draft_account_id").asText())
+                                        .set("selectedBusinessUnitId", node.get("business_unit_id").asText())
+                                        .set("accountStatus", node.get("account_status").asText())
+                                        .set("submittedBy", node.get("submitted_by").asText())
+                                        .set("submittedByName", node.get("submitted_by_name").asText());
+
+                                } catch (Exception e) {
+
+                                    System.err.println("Failed to parse summaries JSON: " + rawJson);
+                                    e.printStackTrace();
+
+                                    return session.markAsFailed();
+                                }
                 })
                 //Selecting Manual create account
                 .exec(
@@ -172,20 +187,7 @@ public final class CreateAccountConditionalCautionScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
                 )
-                .exitHereIfFailed() 
-                
-                .exec(session -> {
-                    List<Integer> businessUnitIds = session.getList("businessUnitIds");
-                    List<String> businessUnitUserIds = session.getList("businessUnitUserIds");
-
-                    // Generate a random index
-                    int index = java.util.concurrent.ThreadLocalRandom.current()
-                        .nextInt(businessUnitIds.size());
-
-                    return session
-                        .set("selectedBusinessUnitId", businessUnitIds.get(index))
-                        .set("selectedbusinessUnitUserIds", businessUnitUserIds.get(index));
-                })
+                .exitHereIfFailed()  
 
                 //Selecting Create account
                 .pause(5,20)
