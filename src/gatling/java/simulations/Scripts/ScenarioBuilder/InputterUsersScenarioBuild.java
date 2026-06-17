@@ -26,7 +26,7 @@ public class InputterUsersScenarioBuild {
         .on(
 
             // Feed CSV once per user
-            feed(Feeders.inputterUsers())
+            exec(feed(Feeders.inputterUsers())
 
             .exec(session -> session
                 .set("username", session.getString("Username"))
@@ -65,6 +65,6 @@ public class InputterUsersScenarioBuild {
                 )
             )
 
-        );
+        ));
     }
 }
