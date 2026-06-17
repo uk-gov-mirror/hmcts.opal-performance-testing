@@ -1,7 +1,6 @@
 package simulations.Scripts.Utilities;
 
 import io.gatling.javaapi.core.ChainBuilder;
-
 import static io.gatling.javaapi.core.CoreDsl.exec;
 
 import org.slf4j.Logger;
@@ -12,34 +11,23 @@ public class UserInfoLogger {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(UserInfoLogger.class);
 
-    /**
-     * Main request logger
-     */
-    public static ChainBuilder logDetailedErrorMessage(
-            String requestName
-    ) {
+    private static boolean isGateway(int code) {
+        return code == 502 || code == 504;
+    }
+
+    public static ChainBuilder logDetailedErrorMessage(String requestName) {
 
         return exec(session -> {
 
-            String statusCode =
+            Integer statusCode =
                     session.contains("httpStatus")
-                            ? String.valueOf(session.getInt("httpStatus"))
-                            : "N/A";
+                            ? session.getInt("httpStatus")
+                            : null;
 
             String responseBody =
                     session.contains("responseBody")
                             ? session.getString("responseBody")
-                            : "N/A";
-
-            String errorType =
-                    session.contains("Changetosomething2")
-                            ? session.getString("Changetosomething2")
-                            : "N/A";
-
-            String errorTitle =
-                    session.contains("Changetosomething")
-                            ? session.getString("Changetosomething")
-                            : "N/A";
+                            : "N/A";           
 
             String errorStatus =
                     session.contains("errorStatus")
@@ -56,10 +44,13 @@ public class UserInfoLogger {
                             ? session.getString("Username")
                             : "N/A";
 
+            boolean gatewayError =
+                    statusCode != null && isGateway(statusCode);
+
             // -------------------------
             // SUCCESS
             // -------------------------
-            if (!session.isFailed()) {
+            if (!session.isFailed() && !gatewayError) {
 
                 LOGGER.info(
                         "Request '{}' succeeded. User: {}. Status: {}",
@@ -72,10 +63,32 @@ public class UserInfoLogger {
             }
 
             // -------------------------
-            // FAILURE
+            // GATEWAY ERROR
             // -------------------------
-            LOGGER.error(
-                    """
+            if (gatewayError) {
+
+                LOGGER.error("""
+                        Request '{}' FAILED (Gateway Error)
+
+                        Status Code: {}
+                        User: {}
+
+                        Response Body:
+                        {}
+                        """,
+                        requestName,
+                        statusCode,
+                        userName,
+                        responseBody
+                );
+
+                return session;
+            }
+
+            // -------------------------
+            // FUNCTIONAL FAILURE 
+            // -------------------------
+            LOGGER.error("""
                     Request '{}' FAILED
 
                     Status Code: {}
@@ -83,20 +96,17 @@ public class UserInfoLogger {
                     Error Title: {}
                     Error Status: {}
 
-                    User:
-                    detail={}
-                    Username={}
+                    User: {}
+                    Detail: {}
 
                     Response Body:
                     {}
                     """,
                     requestName,
                     statusCode,
-                    errorType,
-                    errorTitle,
                     errorStatus,
-                    detail,
                     userName,
+                    detail,
                     responseBody
             );
 

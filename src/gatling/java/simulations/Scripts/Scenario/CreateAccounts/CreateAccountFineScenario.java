@@ -74,8 +74,9 @@ public final class CreateAccountFineScenario {
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
                     .check(Feeders.saveErrorDetails())
+                    
                 )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams"))
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted"))
                 .exitHereIfFailed()
 
                 //Build draft account query parameters from business unit data in session (Publishing Failed)               
@@ -202,9 +203,11 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Opal-fines-service - Business-units")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units?permission=CREATE_MANAGE_DRAFT_ACCOUNTS")
                         .headers(Headers.getHeaders(12))
-                        .check(status().is(200)) 
                         .check(Feeders.saveBusinessUnitId())
-                )               
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Business-units"))              
                 .exitHereIfFailed()                       
            
                 //Selecting Create new account
@@ -242,7 +245,11 @@ public final class CreateAccountFineScenario {
                     http("OPAL - API - Users-state")
                     .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                     .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state")) 
+
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -271,7 +278,11 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Opal-fines-service - Results")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/results?result_ids=FCOMP&result_ids=FVS&result_ids=FCOST&result_ids=FCPC&result_ids=FO&result_ids=FCC&result_ids=FVEBD&result_ids=FFR")
                     .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Results"))
+
                 .exec(
                     http("OPAL - Opal-fines-service - Major-creditors")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors?businessUnit=#{selectedBusinessUnitId}")
@@ -300,7 +311,10 @@ public final class CreateAccountFineScenario {
                     http("OPAL - API - Users-state")
                     .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                     .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state")) 
 
                 //Selecting Add Payment terms  
                 .pause(5,20)    
