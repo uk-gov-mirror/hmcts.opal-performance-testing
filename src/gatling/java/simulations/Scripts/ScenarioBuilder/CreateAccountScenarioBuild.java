@@ -5,6 +5,7 @@ package simulations.Scripts.ScenarioBuilder;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountConditionalCautionScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFixedScenario;
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountParentGuardianScenario;
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Utilities.Feeders;
 import io.gatling.javaapi.core.*;
@@ -19,10 +20,14 @@ public class CreateAccountScenarioBuild {
             .on(
                 exec(feed(Feeders.inputterUsers())
                     .exec(LoginScenario.LoginRequest())
-                    .repeat(10)
-                    .on(exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
-                    .exec(CreateAccountFineScenario.CreateAccountFineRequest())
-                    .exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
+                    .repeat(1)
+                    .on(
+                        // exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
+                  //  exec(CreateAccountFineScenario.CreateAccountFineRequest())
+                    exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
+
+                    
+                    //.exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
                 
                     )
                     // .exec(CreateAccountFixedScenario.CreateAccountFixedRequest())

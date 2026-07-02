@@ -12,9 +12,6 @@ import io.gatling.javaapi.core.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,49 +22,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
 import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
 
-public final class CreateAccountFixedScenario {
+public final class CreateAccountParentGuardianScenario {
 
-    private CreateAccountFixedScenario() {}
+    private CreateAccountParentGuardianScenario() {}
 
-    public static ChainBuilder CreateAccountFixedRequest() {
+    public static ChainBuilder CreateAccountParentGuardianRequest() {
 
-        return group("OPAL Create Manual Account")
-        .on(
+        return group("OPAL Create Manual Account").on(
             //Selecting Account tab:
+
                 exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                 
+                        .check(status().is(200))                                         
+                )  
   
             //Create and Manage Draft Accounts
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                  
+                        .check(status().is(200))                                         
+                )  
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                 
+                        .check(status().is(200))                                         
+                ) 
             // Displays the created accounts by filters.    
-            //Build draft account query parameters from business unit data in session (Submitted / Resubmitted)                 
+            //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
+                
                 .exec(session ->
                     DraftAccountQueryBuilder.buildAndStore(
                         session,
@@ -88,8 +74,9 @@ public final class CreateAccountFixedScenario {
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
                     .check(Feeders.saveErrorDetails())
+                    
                 )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams"))
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted"))
                 .exitHereIfFailed()
 
                 //Build draft account query parameters from business unit data in session (Publishing Failed)               
@@ -115,7 +102,7 @@ public final class CreateAccountFixedScenario {
                 )
                 .exitHereIfFailed() 
 
-                //Third call for draft account query parameters from business unit data in session (Submitted / Resubmitted) 
+                //Second call for draft account query parameters from business unit data in session (Publishing Failed)  
                 .exec(
                     http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted")
                         .get(session ->
@@ -125,104 +112,116 @@ public final class CreateAccountFixedScenario {
                         )
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))
-                        .check(
+                              .check(
                                    jsonPath("$.summaries").findAll().saveAs("summaries"))
                                 // jsonPath("$.summaries[*].draft_account_id").findAll().saveAs("draftAccountIds"),
                                 // jsonPath("$.summaries[*].business_unit_id").findAll().saveAs("businessUnitIds"),
                                 // jsonPath("$.summaries[*].account_status").findAll().saveAs("accountStatuses"),
                                 // jsonPath("$.summaries[*].submitted_by").findAll().saveAs("submittedBys"),
                                 // jsonPath("$.summaries[*].submitted_by_name").findAll().saveAs("submittedByNames")
-                    )                       
-                
-                .exec(session -> {
+                            ) 
+                            .exec(session -> {
 
-                        List<String> summaries = session.getList("summaries");
+                                List<String> summaries = session.getList("summaries");
 
-                        if (summaries == null || summaries.isEmpty()) {
-                            System.out.println("No summaries returned");
-                            return session;
-                        }
+                                if (summaries == null || summaries.isEmpty()) {
+                                    System.out.println("No summaries returned");
+                                    return session;
+                                }
 
-                        String rawJson = summaries.get(0);
+                                String rawJson = summaries.get(0);
 
-                        try {
-                            ObjectMapper mapper = new ObjectMapper();
+                                try {
+                                    ObjectMapper mapper = new ObjectMapper();
 
-                            // Parse the summaries array
-                            JsonNode arrayNode = mapper.readTree(rawJson);
+                                    // Parse the summaries array
+                                    JsonNode arrayNode = mapper.readTree(rawJson);
 
-                            // No accounts available
-                            if (!arrayNode.isArray() || arrayNode.size() == 0) {
+                                    // No accounts available
+                                    if (!arrayNode.isArray() || arrayNode.size() == 0) {
 
-                                System.out.println(
-                                    "No submitted draft accounts available for user: "
-                                    + session.getString("username")
-                                    + " - continuing with account creation"
-                                );
+                                        System.out.println(
+                                            "No submitted draft accounts available for user: "
+                                            + session.getString("username")
+                                            + " - continuing with account creation"
+                                        );
 
-                                return session
-                                    .set("selectedDraftAccountId", "")
-                                    .set("selectedBusinessUnitId", "")
-                                    .set("accountStatus", "")
-                                    .set("submittedBy", "")
-                                    .set("submittedByName", "");
-                            }                                    
+                                        return session
+                                            .set("selectedDraftAccountId", "")
+                                            .set("selectedBusinessUnitId", "")
+                                            .set("accountStatus", "")
+                                            .set("submittedBy", "")
+                                            .set("submittedByName", "");
+                                    }                                    
 
-                            // Randomly select one account from the array
-                            JsonNode node = arrayNode.get(
-                                ThreadLocalRandom.current().nextInt(arrayNode.size())
-                            );
+                                    // Randomly select one account from the array
+                                    JsonNode node = arrayNode.get(
+                                        ThreadLocalRandom.current().nextInt(arrayNode.size())
+                                    );
 
-                            return session
-                                .set("selectedDraftAccountId", node.get("draft_account_id").asText())
-                                .set("selectedBusinessUnitId", node.get("business_unit_id").asText())
-                                .set("accountStatus", node.get("account_status").asText())
-                                .set("submittedBy", node.get("submitted_by").asText())
-                                .set("submittedByName", node.get("submitted_by_name").asText());
+                                    return session
+                                        .set("selectedDraftAccountId", node.get("draft_account_id").asText())
+                                        .set("selectedBusinessUnitId", node.get("business_unit_id").asText())
+                                        .set("accountStatus", node.get("account_status").asText())
+                                        .set("submittedBy", node.get("submitted_by").asText())
+                                        .set("submittedByName", node.get("submitted_by_name").asText());
 
-                        } catch (Exception e) {
+                                } catch (Exception e) {
 
-                            System.err.println("Failed to parse summaries JSON: " + rawJson);
-                            e.printStackTrace();
+                                    System.err.println("Failed to parse summaries JSON: " + rawJson);
+                                    e.printStackTrace();
 
-                            return session.markAsFailed();
-                        }
-                    }
-                )
-                 //Selecting Manual create account
+                                    return session.markAsFailed();
+                                }
+                            })
+
+                //Selecting Manual create account
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-                                
-                .exec(
+                                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()                  
+                .exitHereIfFailed()  
+                                 .exitHereIfFailed() 
 
-                .exec(session -> {
-                    List<Integer> businessUnitIds = session.getList("businessUnitIds");
-                    List<String> businessUnitUserIds = session.getList("businessUnitUserIds");
+                //Selecting Create new account
+               // .pause(5,20)
 
-                    // Generate a random index
-                    int index = java.util.concurrent.ThreadLocalRandom.current()
-                        .nextInt(businessUnitIds.size());
-
-                    return session
-                        .set("selectedBusinessUnitId", businessUnitIds.get(index))
-                        .set("selectedbusinessUnitUserIds", businessUnitUserIds.get(index));
-                })
-
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
+                    http("OPAL - Opal-fines-service - Business-units")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units?permission=CREATE_MANAGE_DRAFT_ACCOUNTS")
+                        .headers(Headers.getHeaders(12))
+                        .check(Feeders.saveBusinessUnitId())
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Business-units"))              
+                .exitHereIfFailed()                       
+           
                 //Selecting Create new account
                 .pause(5,20)
 
@@ -235,57 +234,93 @@ public final class CreateAccountFixedScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-                 
-                .exec(
-                    http("OPAL - Opal-fines-service - Business-units")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units?permission=CREATE_MANAGE_DRAFT_ACCOUNTS")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().is(200)) 
-                        .check(Feeders.saveBusinessUnitId())
-
-                )               
-                .exitHereIfFailed()  
-
-                //Selecting Business Unit and Fixed Penalty                     
-                .pause(5,20)
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                  
-                .exec(          
-                    http("OPAL - Opal-fines-service - Prosecutors")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/prosecutors?business_unit=#{selectedBusinessUnitId}")
-                        .headers(Headers.getHeaders(12))
-                 //   .check(Feeders.saveProsecutorId())  
-                //    .check(Feeders.saveProsecutors()) 
-                        .check(
-                        jsonPath("$.ref_data[*].prosecutor_id").findAll().saveAs("prosecutorIds"),
-                        jsonPath("$.ref_data[*].name").findAll().saveAs("prosecutorNames")
-                    )
-
-                ) 
-
+                                 
+                //Selecting Court details
+                .pause(5,20) 
                 .exec(
                     http("OPAL - Opal-fines-service - Courts")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/courts?business_unit=#{selectedBusinessUnitId}")
                         .headers(Headers.getHeaders(12))
                         .check(Feeders.saveCourtId())                        
+
                 )
                 .exec(
                     http("OPAL - Opal-fines-service - Local-justice-areas")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/local-justice-areas")
                         .headers(Headers.getHeaders(12))
-                )
-                    
-                //Entering Fixed Penalty details                    
-                .pause(5,20)
+                ) 
 
+                //Selecting Add Personal details
+                .pause(5,20)
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
+                    http("OPAL - API - Users-state")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                    .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state")) 
+
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
+                //Selecting Add Defendant contact details
+                .pause(5,20) 
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
+                //Selecting Add Employer details 
+                .pause(5,20)                       
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
+                //Selecting Add an offence 
+                .pause(5,20)        
+                .exec(
+                    http("OPAL - Opal-fines-service - Results")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/results?result_ids=FCOMP&result_ids=FVS&result_ids=FCOST&result_ids=FCPC&result_ids=FO&result_ids=FCC&result_ids=FVEBD&result_ids=FFR")
+                    .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Results"))
+
+                .exec(
+                    http("OPAL - Opal-fines-service - Major-creditors")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors?businessUnit=#{selectedBusinessUnitId}")
+                    .headers(Headers.getHeaders(12))
+                )
+                .pause(5,20)
                 .exec(session -> {
                     String offence = DataGenerator.generateRandomOFFENCE();
                     return session.set("offenceCode", offence);
@@ -302,11 +337,32 @@ public final class CreateAccountFixedScenario {
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Offences"))
                 .exitHereIfFailed()  
 
+                //Selecting Review offence        
+                .pause(5,20) 
                 .exec(
                     http("OPAL - API - Users-state")
                     .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                     .headers(Headers.getHeaders(12))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state")) 
+
+                //Selecting Add Payment terms  
+                .pause(5,20)    
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                            
+
+                //Selecting Account comments and notes
+                .pause(5,20) 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -316,21 +372,48 @@ public final class CreateAccountFixedScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-                 
+                                                 
+                //Selecting Review account
+                .pause(5,20) 
                 .exec(
-                    http("OPAL - Opal-fines-service - Results")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/results?result_ids=FCOMP&result_ids=FVS&result_ids=FCOST&result_ids=FCPC&result_ids=FO&result_ids=FCC&result_ids=FVEBD&result_ids=FFR")
-                    .headers(Headers.getHeaders(12))
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
-                .exec(
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
+                    http("OPAL - Sso - Authenticated")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Opal-fines-service - Major-creditors")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors?businessUnit=#{selectedBusinessUnitId}")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/prosecutors?business_unit=#{selectedBusinessUnitId}")
                     .headers(Headers.getHeaders(12))
-                )
+                    // .check(Feeders.saveProsecutorId())  
+                    // .check(Feeders.saveProsecutors()) 
+                    .check(
+                        jsonPath("$.ref_data[*].prosecutor_id").findAll().saveAs("prosecutorIds"),
+                        jsonPath("$.ref_data[*].name").findAll().saveAs("prosecutorNames")
+                    )
 
-                /// Checking fixed penalty account details - Selecting Submit for Review
-                .pause(20,60)
-
+                ) 
                 .exec(session -> {
                     // Retrieve lists of prosecutor IDs and names from the Gatling session
                     List<Integer> prosecutorIds = session.getList("prosecutorIds");
@@ -374,13 +457,13 @@ public final class CreateAccountFixedScenario {
                         "selectedBusinessUnitUserId",
                         businessUnitUserIds.get(index)
                     );
-                })                                         
+                })                                      
 
               .exec(session -> {
                     try {
                         String draftAccountRequestPayload =
-                            RequestBodyBuilder.BuildDraftAccountRequestBody(session);
-                
+                            RequestBodyBuilder.BuildDraftAccountParentGuardianRequestBody(session);
+                        
                         // Create SHA-512 digest
                         String contentDigest =
                             ContentDigestGenerator.generateSha512ContentDigest(
@@ -411,32 +494,27 @@ public final class CreateAccountFixedScenario {
                         return session.markAsFailed();
                     }
                 })
-
+                
                 //Selecting Submit for review
                 .pause(20,60)
                 .exec(
                     http("OPAL - Opal-fines-service - Draft-accounts")
-                        .post(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/draft-accounts")
-                        .headers(Headers.getHeaders(14))
-                        .body(StringBody(session -> session.get("draftAccountRequestPayload")))
-                        .asJson()
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(201))
-                        .check(Feeders.saveErrorDetails())
-                        .check(Feeders.saveCreatedAccountId())
+                    .post(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/draft-accounts")
+                    .headers(Headers.getHeaders(14)) 
+                    .body(StringBody(session -> session.get("draftAccountRequestPayload"))).asJson()
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(201))
+                    .check(Feeders.saveErrorDetails()) 
+                    .check(Feeders.saveCreatedAccountId())
+
                 )
                 .exec(session -> {
                     AccountCounters.TOTAL_CREATED.incrementAndGet();
-                    AccountCounters.FIXED_CREATED.incrementAndGet();
+                    AccountCounters.FINE_CREATED.incrementAndGet();
                     return session;
                 })
-
-                // optional detailed logger you already have
-                .exec(UserInfoLogger.logDetailedErrorMessage(
-                    "OPAL - Opal-fines-service - Draft-accounts"
-                ))
-
-                .exitHereIfFailed()
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts"))
+                .exitHereIfFailed() 
 
                 // =======================================================
                 // CUSTOM LOGGING SECTION
@@ -456,7 +534,7 @@ public final class CreateAccountFixedScenario {
                     );
 
                     return session.set("createdAccountCount", count);
-                })                
+                })
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")

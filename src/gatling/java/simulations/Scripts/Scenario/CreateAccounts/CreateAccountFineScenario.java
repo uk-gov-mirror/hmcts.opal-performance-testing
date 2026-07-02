@@ -181,14 +181,22 @@ public final class CreateAccountFineScenario {
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
-                )                
-                .exec(
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
                 )
-                .exitHereIfFailed() 
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exitHereIfFailed() 
 
                 //Selecting Create new account
                // .pause(5,20)
@@ -198,8 +206,12 @@ public final class CreateAccountFineScenario {
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
                 )
-                .exec(
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Opal-fines-service - Business-units")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units?permission=CREATE_MANAGE_DRAFT_ACCOUNTS")
                         .headers(Headers.getHeaders(12))
@@ -217,8 +229,12 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                ) 
-                
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 
                 //Selecting Court details
                 .pause(5,20) 
                 .exec(
@@ -240,8 +256,12 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
-                .exec(
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - API - Users-state")
                     .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                     .headers(Headers.getHeaders(12))
@@ -254,24 +274,36 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                ) 
-
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
                 //Selecting Add Defendant contact details
                 .pause(5,20) 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                ) 
-
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
                 //Selecting Add Employer details 
                 .pause(5,20)                       
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
                 )
-
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                 
                 //Selecting Add an offence 
                 .pause(5,20)        
                 .exec(
@@ -322,7 +354,12 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                )            
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                            
 
                 //Selecting Account comments and notes
                 .pause(5,20) 
@@ -330,26 +367,42 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                )   
-                                
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                                 
                 //Selecting Review account
                 .pause(5,20) 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                ) 
-                .exec(
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                )                                 
-                .exec(
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                ) 
-                .exec(
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                                 .exec(
                     http("OPAL - Opal-fines-service - Major-creditors")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/prosecutors?business_unit=#{selectedBusinessUnitId}")
                     .headers(Headers.getHeaders(12))
@@ -378,18 +431,33 @@ public final class CreateAccountFineScenario {
                         .set("selectedProsecutorName", prosecutorNames.get(index));
                 })
                 .exec(session -> {
-                    // Retrieve business unit IDs and corresponding user IDs from the session
-                    List<Integer> businessUnitIds = session.getList("businessUnitIds");
-                    List<String> businessUnitUserIds = session.getList("businessUnitUserIds");
+                    String selectedBusinessUnitId =
+                        session.get("selectedBusinessUnitId").toString();
 
-                    // Generate a random index
-                    int index = java.util.concurrent.ThreadLocalRandom.current()
-                        .nextInt(businessUnitIds.size());
+                    List<String> businessUnitIds =
+                        session.getList("businessUnitIds");
 
-                    return session
-                        .set("selectedBusinessUnitId", businessUnitIds.get(index))
-                        .set("selectedbusinessUnitUserIds", businessUnitUserIds.get(index));
-                })                                        
+                    List<String> businessUnitUserIds =
+                        session.getList("businessUnitUserIds");
+
+                    System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
+                    System.out.println("businessUnitIds = " + businessUnitIds);
+                    System.out.println("businessUnitUserIds = " + businessUnitUserIds);
+
+                    int index = businessUnitIds.indexOf(selectedBusinessUnitId);
+
+                    if (index == -1) {
+                        throw new RuntimeException(
+                            "No business unit user found for business unit "
+                                + selectedBusinessUnitId
+                        );
+                    }
+
+                    return session.set(
+                        "selectedBusinessUnitUserId",
+                        businessUnitUserIds.get(index)
+                    );
+                })                                         
 
               .exec(session -> {
                     try {
@@ -471,7 +539,12 @@ public final class CreateAccountFineScenario {
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                     .headers(Headers.getHeaders(11))
-                )        
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                        
         );            
     }
 }

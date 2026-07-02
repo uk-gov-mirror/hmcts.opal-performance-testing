@@ -20,11 +20,12 @@ public final class LoginScenario {
     public static ChainBuilder LoginRequest() {
 
         return group("OPAL Login").on(
-                exec(http("OPAL - Sso - Login - /")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/login")
-                    .headers(Headers.getHeaders(1))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
+                exec(
+                    http("OPAL - Sso - Login - /")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/login")
+                        .headers(Headers.getHeaders(1))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Login - /"))
 
@@ -32,19 +33,19 @@ public final class LoginScenario {
 
                 .exec(
                     http("OPAL - Oauth2 - v2.0 - Authorize")
-                    .get(AppConfig.UrlConfig.AUTH_URL + AppConfig.TenantConfig.AAD_TENANT_ID +"/oauth2/v2.0/authorize?" +
-                    "client_id="+ AppConfig.TenantConfig.CLIENT_ID +"&scope="+ AppConfig.TenantConfig.SCOPE +
-                    "&redirect_uri="+ AppConfig.TenantConfig.REDIRECT_URL + 
-                    "&client-request-id="+ AppConfig.TenantConfig.CLIENT_REQUEST_ID +"&response_mode=form_post" +
-                    "&response_type=code&x-client-SKU=msal.js.node&x-client-VER=2.11.0&x-client-OS=linux&x-client-CPU=x64&client_info=1")
-                    .disableFollowRedirect() 
-                    .headers(Headers.getHeaders(9))                    
-                    .check(Feeders.saveApiCanary())
-                    .check(Feeders.saveSessionId())                    
-                    .check(Feeders.saveSFT())
-                    .check(Feeders.saveSCtx())
-                    .check(Feeders.saveCanary())
-                    .check(Feeders.saveClientRequestId())
+                        .get(AppConfig.UrlConfig.AUTH_URL + AppConfig.TenantConfig.AAD_TENANT_ID +"/oauth2/v2.0/authorize?" +
+                        "client_id="+ AppConfig.TenantConfig.CLIENT_ID +"&scope="+ AppConfig.TenantConfig.SCOPE +
+                        "&redirect_uri="+ AppConfig.TenantConfig.REDIRECT_URL + 
+                        "&client-request-id="+ AppConfig.TenantConfig.CLIENT_REQUEST_ID +"&response_mode=form_post" +
+                        "&response_type=code&x-client-SKU=msal.js.node&x-client-VER=2.11.0&x-client-OS=linux&x-client-CPU=x64&client_info=1")
+                        .disableFollowRedirect() 
+                        .headers(Headers.getHeaders(9))                    
+                        .check(Feeders.saveApiCanary())
+                        .check(Feeders.saveSessionId())                    
+                        .check(Feeders.saveSFT())
+                        .check(Feeders.saveSCtx())
+                        .check(Feeders.saveCanary())
+                        .check(Feeders.saveClientRequestId())
                 )
                 // .exec(session -> {
                 //     System.out.println("apiCanary = " + session.getString("apiCanary"));
@@ -118,36 +119,40 @@ public final class LoginScenario {
     
             .exec(
                 http("OPAL - sso - login-callback")
-                .post(AppConfig.UrlConfig.BASE_URL + "/sso/login-callback")
-                .headers(Headers.getHeaders(4))
-                .formParam("code", "#{TokenCode}")
-                .formParam("client_info", "#{getClientInfo}")
-                .formParam("session_state", "#{getSessionState}")
+                    .post(AppConfig.UrlConfig.BASE_URL + "/sso/login-callback")
+                    .headers(Headers.getHeaders(4))
+                    .formParam("code", "#{TokenCode}")
+                    .formParam("client_info", "#{getClientInfo}")
+                    .formParam("session_state", "#{getSessionState}")
             )
             .exec(
                 http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-            .exec(
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                    .headers(Headers.getHeaders(5))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                             .exec(
               http("OPAL - Session - Expiry")
               .get(AppConfig.UrlConfig.BASE_URL + "/session/expiry")
                 .headers(Headers.getHeaders(6))
             )
             .exec(
-              http("OPAL - API - User-state")
-              .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                .headers(Headers.getHeaders(7))
-                .check(Feeders.saveErrorDetails())
-                .check(bodyString().optional().saveAs("responseBody"))
-                .check(status().saveAs("httpStatus"))
-                .check(status().is(200))
-                .check(
-                    jsonPath("$.domains.fines.business_unit_users[*].business_unit_id")
-                        .findAll().saveAs("businessUnitIds"),
-                    jsonPath("$.domains.fines.business_unit_users[*].business_unit_user_id")
-                        .findAll().saveAs("businessUnitUserIds"),
-                    jsonPath("$.name").saveAs("getUserName"))
+                http("OPAL - API - User-state")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                    .headers(Headers.getHeaders(7))
+                    .check(Feeders.saveErrorDetails())
+                    .check(bodyString().optional().saveAs("responseBody"))
+                    .check(status().saveAs("httpStatus"))
+                    .check(status().is(200))
+                    .check(
+                        jsonPath("$.domains.fines.business_unit_users[*].business_unit_id")
+                            .findAll().saveAs("businessUnitIds"),
+                        jsonPath("$.domains.fines.business_unit_users[*].business_unit_user_id")
+                            .findAll().saveAs("businessUnitUserIds"),
+                        jsonPath("$.name").saveAs("getUserName"))
             )
             .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state"))
             .exitHereIfFailed() 
@@ -167,30 +172,51 @@ public final class LoginScenario {
 
             .exec(
                 http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-                        .exec(
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(5))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                
+                .exec(
                 http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-            .exec(
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(5))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                             .exec(
                 http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-            .exec(
-                http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-            .exec(
-                http("OPAL - sso - Authenticated")
-                .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                .headers(Headers.getHeaders(5))
-            )
-            .exec(
+                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(5))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                .exec(
+                    http("OPAL - sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(5))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                .exec(
+                    http("OPAL - sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(5))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()  
+                             .exec(
                 http("OPAL - Opal-fines-service - Business-units")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units")
                     .headers(Headers.getHeaders(12))
