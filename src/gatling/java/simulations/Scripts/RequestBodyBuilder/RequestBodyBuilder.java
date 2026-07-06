@@ -914,5 +914,20 @@ public class RequestBodyBuilder {
                 surname
             );
         }
+ public static String buildOffencesSearchRequestPayload(Session session) {
+
+
+            String offencesSearch = "airport";
+
+            return String.format(
+                "{\n" +
+                "  \"active_date\": \"2026-07-02T15:06:33.873Z\",\n" +
+                "  \"title\": \"%s\"\n" +
+                "  \"max_results\": 100\n" +               
+                "}",                
+                offencesSearch
+            );
+        }
+        
     }
 

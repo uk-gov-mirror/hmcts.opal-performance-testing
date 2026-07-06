@@ -18,22 +18,22 @@ public class CreateAccountScenarioBuild {
         return scenario(scenarioName)
             .group("OPAL Login Requests")
             .on(
-                exec(feed(Feeders.inputterUsers())
+                feed(Feeders.inputterUsers())
                     .exec(LoginScenario.LoginRequest())
-                    .repeat(1)
-                    .on(
-                        // exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
-                  //  exec(CreateAccountFineScenario.CreateAccountFineRequest())
-                    exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
+                    .repeat(1).on(
+                        exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
+                            .exec(CreateAccountFineScenario.CreateAccountFineRequest())
+                    )
+                //    exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
 
                     
-                    //.exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
+                 //   exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
                 
-                    )
+                    
                     // .exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
                     // .exec(CreateAccountFineScenario.CreateAccountFineRequest())
                     // .exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
-                )
+                //)
             );
     }
 }

@@ -79,30 +79,76 @@ public final class CreateAccountParentGuardianScenario {
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted"))
                 .exitHereIfFailed()
 
-                //Build draft account query parameters from business unit data in session (Publishing Failed)               
+                // //Build draft account query parameters from business unit data in session (Publishing Failed)               
+
+                // .exec(session ->
+                //     DraftAccountQueryBuilder.buildAndStore(
+                //         session,
+                //         "draftAccountFailedQueryParams",
+                //         List.of("Publishing Failed"),
+                //         "not_submitted_by",
+                //        false
+                //     )
+                // )                
+                // .exec(
+                //     http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Publishing Failed")
+                //         .get(session ->
+                //             AppConfig.UrlConfig.BASE_URL +
+                //             "/opal-fines-service/draft-accounts?" +
+                //             session.getString("draftAccountFailedQueryParams")
+                //         )
+                //         .headers(Headers.getHeaders(11))
+                //         .check(status().is(200))
+                // )
+                // .exitHereIfFailed() 
+
+                //Build draft account query parameters from business unit data in session (Rejected)               
 
                 .exec(session ->
                     DraftAccountQueryBuilder.buildAndStore(
                         session,
-                        "draftAccountFailedQueryParams",
-                        List.of("Publishing Failed"),
+                        "draftAccountRejectedQueryParams",
+                        List.of("Rejected"),
                         "not_submitted_by",
                        false
                     )
                 )                
                 .exec(
-                    http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Publishing Failed")
+                    http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Rejected")
                         .get(session ->
                             AppConfig.UrlConfig.BASE_URL +
                             "/opal-fines-service/draft-accounts?" +
-                            session.getString("draftAccountFailedQueryParams")
+                            session.getString("draftAccountRejectedQueryParams")
                         )
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))
                 )
-                .exitHereIfFailed() 
+                .exitHereIfFailed()
 
-                //Second call for draft account query parameters from business unit data in session (Publishing Failed)  
+                //Build draft account query parameters from business unit data in session (Rejected)               
+
+                .exec(session ->
+                    DraftAccountQueryBuilder.buildAndStore(
+                        session,
+                        "draftAccountRejectedQueryParams",
+                        List.of("Rejected"),
+                        "not_submitted_by",
+                       false
+                    )
+                )                
+                .exec(
+                    http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Rejected")
+                        .get(session ->
+                            AppConfig.UrlConfig.BASE_URL +
+                            "/opal-fines-service/draft-accounts?" +
+                            session.getString("draftAccountRejectedQueryParams")
+                        )
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))
+                )
+                .exitHereIfFailed()
+
+                //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
                 .exec(
                     http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted")
                         .get(session ->
