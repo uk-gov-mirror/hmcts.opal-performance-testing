@@ -200,7 +200,7 @@ public final class CreateAccountFixedScenario {
                         .check(status().is(200))
                 )
                 .exitHereIfFailed()
-                
+
                 //Build draft account query parameters from business unit data in session (Rejected)               
 
                 .exec(session ->
@@ -451,9 +451,11 @@ public final class CreateAccountFixedScenario {
                 )
 
             )
-            .group("Enter Issuing Authority and Court Details")
+
+
+            .group("Enter Offence Code")
             .on( 
-                //Entering Fixed Penalty details / Entering Issuing Authority and Court Details, then selecting Review Account button           
+            //Entering Fixed Penalty details / Entering Issuing Authority and Court Details, then selecting Review Account button           
                 pause(5,20)
                 .exec(session -> {
                     String offence = DataGenerator.generateRandomOFFENCE();
@@ -469,8 +471,12 @@ public final class CreateAccountFixedScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Offences"))
                 .exitHereIfFailed()  
-
-                .exec(
+            )
+            .group("Review Account")            
+            .on( 
+                
+                //Selecting Review Account button and entering details Fixed Penalty details / Issuing Authority and Court Details
+                exec(
                     http("OPAL - API - Users-state")
                     .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                     .headers(Headers.getHeaders(12))

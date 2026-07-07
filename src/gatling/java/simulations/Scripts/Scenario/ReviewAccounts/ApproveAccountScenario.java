@@ -248,7 +248,7 @@ public final class ApproveAccountScenario {
                 })
             )
 
-            .group("Select Account")
+            .group("Review Account")
             .on(
 
                 //Select account to Approve

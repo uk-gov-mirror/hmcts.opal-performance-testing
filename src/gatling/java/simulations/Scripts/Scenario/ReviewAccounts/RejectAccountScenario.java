@@ -212,7 +212,7 @@ public final class RejectAccountScenario {
                     }
                 )
             )
-            .group("Select Account")
+            .group("Review Account")
             .on(
                 //Select account to Approve
                 pause(20,60)
