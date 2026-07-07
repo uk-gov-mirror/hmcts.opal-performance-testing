@@ -451,8 +451,6 @@ public final class CreateAccountFixedScenario {
                 )
 
             )
-
-
             .group("Enter Offence Code")
             .on( 
             //Entering Fixed Penalty details / Entering Issuing Authority and Court Details, then selecting Review Account button           
@@ -474,7 +472,7 @@ public final class CreateAccountFixedScenario {
             )
             .group("Review Account")            
             .on( 
-                
+
                 //Selecting Review Account button and entering details Fixed Penalty details / Issuing Authority and Court Details
                 exec(
                     http("OPAL - API - Users-state")
@@ -539,9 +537,9 @@ public final class CreateAccountFixedScenario {
                     List<String> businessUnitUserIds =
                         session.getList("businessUnitUserIds");
 
-                    System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
-                    System.out.println("businessUnitIds = " + businessUnitIds);
-                    System.out.println("businessUnitUserIds = " + businessUnitUserIds);
+                    // System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
+                    // System.out.println("businessUnitIds = " + businessUnitIds);
+                    // System.out.println("businessUnitUserIds = " + businessUnitUserIds);
 
                     int index = businessUnitIds.indexOf(selectedBusinessUnitId);
 

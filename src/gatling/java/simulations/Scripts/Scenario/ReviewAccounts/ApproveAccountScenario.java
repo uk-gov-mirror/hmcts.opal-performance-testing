@@ -390,7 +390,7 @@ public final class ApproveAccountScenario {
 
                     return session.set("ApprovedAccountCount", count);
                 })
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts"))
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - Approve"))
                 .exitHereIfFailed()   
                 
                 .exec(

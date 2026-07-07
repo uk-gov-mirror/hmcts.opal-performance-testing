@@ -1,6 +1,7 @@
 package simulations.Scripts.Utilities;
 
 import io.gatling.javaapi.core.ChainBuilder;
+
 import static io.gatling.javaapi.core.CoreDsl.exec;
 
 import org.slf4j.Logger;
@@ -11,9 +12,22 @@ public class UserInfoLogger {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(UserInfoLogger.class);
 
-    private static boolean isGateway(int code) {
-        return code == 502 || code == 504;
+    private static boolean isGateway(Integer code) {
+        return code != null && (code == 502 || code == 504);
     }
+
+        public static ChainBuilder logSessionStatus(String stepName) {
+        return exec(session -> {
+
+                LOGGER.info(
+                "STEP: {} | session.isFailed()={}",
+                stepName,
+                session.isFailed()
+                );
+
+                return session;
+        });
+        }
 
     public static ChainBuilder logDetailedErrorMessage(String requestName) {
 
@@ -27,7 +41,17 @@ public class UserInfoLogger {
             String responseBody =
                     session.contains("responseBody")
                             ? session.getString("responseBody")
-                            : "N/A";           
+                            : "N/A";
+
+            String errorType =
+                    session.contains("errorType")
+                            ? session.getString("errorType")
+                            : "N/A";
+
+            String errorTitle =
+                    session.contains("errorTitle")
+                            ? session.getString("errorTitle")
+                            : "N/A";
 
             String errorStatus =
                     session.contains("errorStatus")
@@ -44,30 +68,67 @@ public class UserInfoLogger {
                             ? session.getString("Username")
                             : "N/A";
 
-            boolean gatewayError =
-                    statusCode != null && isGateway(statusCode);
 
-            // -------------------------
+            boolean gatewayError = isGateway(statusCode);
+
+
+            // ------------------------------------------------
+            // Determine THIS REQUEST result
+            // ------------------------------------------------
+            boolean requestSucceeded =
+                    statusCode != null &&
+                    statusCode >= 200 &&
+                    statusCode < 300 &&
+                    !gatewayError;
+
+
+            // ------------------------------------------------
+            // Diagnostic information
+            // ------------------------------------------------
+            LOGGER.info(
+                    """
+                    Request '{}'
+                    Session Failed: {}
+                    Request Successful: {}
+                    Gateway Error: {}
+                    Status Code: {}
+                    """,
+                    requestName,
+                    session.isFailed(),
+                    requestSucceeded,
+                    gatewayError,
+                    statusCode
+            );
+
+
+            // ------------------------------------------------
             // SUCCESS
-            // -------------------------
-            if (!session.isFailed() && !gatewayError) {
+            // ------------------------------------------------
+            if (requestSucceeded) {
 
                 LOGGER.info(
-                        "Request '{}' succeeded. User: {}. Status: {}",
+                        """
+                        Request '{}' SUCCEEDED
+
+                        Status Code: {}
+                        User: {}
+                        """,
                         requestName,
-                        userName,
-                        statusCode
+                        statusCode,
+                        userName
                 );
 
                 return session;
             }
 
-            // -------------------------
+
+            // ------------------------------------------------
             // GATEWAY ERROR
-            // -------------------------
+            // ------------------------------------------------
             if (gatewayError) {
 
-                LOGGER.error("""
+                LOGGER.error(
+                        """
                         Request '{}' FAILED (Gateway Error)
 
                         Status Code: {}
@@ -85,10 +146,12 @@ public class UserInfoLogger {
                 return session;
             }
 
-            // -------------------------
-            // FUNCTIONAL FAILURE 
-            // -------------------------
-            LOGGER.error("""
+
+            // ------------------------------------------------
+            // FUNCTIONAL FAILURE
+            // ------------------------------------------------
+            LOGGER.error(
+                    """
                     Request '{}' FAILED
 
                     Status Code: {}
@@ -104,11 +167,14 @@ public class UserInfoLogger {
                     """,
                     requestName,
                     statusCode,
+                    errorType,
+                    errorTitle,
                     errorStatus,
                     userName,
                     detail,
                     responseBody
             );
+
 
             return session;
         });

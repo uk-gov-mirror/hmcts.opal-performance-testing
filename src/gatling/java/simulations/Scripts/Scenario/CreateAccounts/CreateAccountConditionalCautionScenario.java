@@ -376,7 +376,6 @@ public final class CreateAccountConditionalCautionScenario {
                         .check(Feeders.saveBusinessUnitId())
 
                 )               
-                .exitHereIfFailed()                       
             )
             .group("Load Account Details")
             .on(
@@ -751,79 +750,109 @@ public final class CreateAccountConditionalCautionScenario {
                         .set("selectedProsecutorId", prosecutorIds.get(index))
                         .set("selectedProsecutorName", prosecutorNames.get(index));
                 })      
-                
                 .exec(session -> {
-                    Integer selectedBusinessUnitId =
-                        session.getInt("selectedBusinessUnitId");
 
-                    List<Integer> businessUnitIds =
-                        session.getList("businessUnitIds");
+                    Object selectedBusinessUnit =
+                            session.get("selectedBusinessUnitId");
+
+                    List<?> businessUnitIds =
+                            session.getList("businessUnitIds");
 
                     List<String> businessUnitUserIds =
-                        session.getList("businessUnitUserIds");
+                            session.getList("businessUnitUserIds");
 
-                    int index = businessUnitIds.indexOf(selectedBusinessUnitId);
 
-                    if (index == -1) {
-                        throw new RuntimeException(
-                            "No business unit user found for business unit "
-                                + selectedBusinessUnitId
-                        );
+                    // System.out.println("selectedBusinessUnitId = " + selectedBusinessUnit);
+                    // System.out.println("selectedBusinessUnitId type = "
+                    //         + selectedBusinessUnit.getClass().getName());
+
+                    // System.out.println("businessUnitIds = " + businessUnitIds);
+                    // System.out.println("businessUnitIds first type = "
+                    //         + businessUnitIds.get(0).getClass().getName());
+
+
+                    int index = -1;
+
+                    for (int i = 0; i < businessUnitIds.size(); i++) {
+
+                        if (businessUnitIds.get(i).toString()
+                                .equals(selectedBusinessUnit.toString())) {
+
+                            index = i;
+                            break;
+                        }
                     }
 
+                    if (index == -1) {
+
+                        throw new RuntimeException(
+                            """
+                            No business unit user found
+
+                            selectedBusinessUnitId = %s
+                            businessUnitIds = %s
+                            businessUnitUserIds = %s
+                            """.formatted(
+                                selectedBusinessUnit,
+                                businessUnitIds,
+                                businessUnitUserIds
+                            )
+                        );
+                    }
                     return session.set(
-                        "selectedBusinessUnitUserId",
-                        businessUnitUserIds.get(index)
+                            "selectedBusinessUnitUserId",
+                            businessUnitUserIds.get(index)
                     );
                 })
-                .exec(session -> {
-                    String selectedBusinessUnitId =
-                        session.get("selectedBusinessUnitId").toString();
-
-                    List<String> businessUnitIds =
-                        session.getList("businessUnitIds");
-
-                    List<String> businessUnitUserIds =
-                        session.getList("businessUnitUserIds");
-
-                    System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
-                    System.out.println("businessUnitIds = " + businessUnitIds);
-                    System.out.println("businessUnitUserIds = " + businessUnitUserIds);
-
-                    int index = businessUnitIds.indexOf(selectedBusinessUnitId);
-
-                    if (index == -1) {
-                        throw new RuntimeException(
-                            "No business unit user found for business unit "
-                                + selectedBusinessUnitId
-                        );
-                    }
-
-                    return session.set(
-                        "selectedBusinessUnitUserId",
-                        businessUnitUserIds.get(index)
-                    );
-                }) 
             )
+            //.exec(UserInfoLogger.logSessionStatus("Before Submit Draft Account"))
+
             .group("Submit Draft Account")
             .on(
                 //Selecting Submit for review button
                 pause(20,60)
+
                 .exec(session -> {
+                    try {
                     // Store the generated payload in the session
                     String draftAccountRequestPayload =
                         RequestBodyBuilder.BuildDraftAccountConditionalCautionRequestBody(session);
 
-                    // Create SHA-512 digest
-                    String contentDigest =
-                        ContentDigestGenerator.generateSha512ContentDigest(
-                            draftAccountRequestPayload
+                        System.out.println(
+                            "Draft Account Payload:\n" + draftAccountRequestPayload
                         );
 
-                  //  System.out.println("draftAccountRequestPayload (Conditional Caution) = " + draftAccountRequestPayload);
-                    return session.set("draftAccountRequestPayload", draftAccountRequestPayload)
-                                  .set("contentDigest", contentDigest);
-                })   
+                     // Create SHA-512 digest
+                            String contentDigest =
+                                ContentDigestGenerator.generateSha512ContentDigest(
+                                    draftAccountRequestPayload
+                                );
+
+                            ObjectMapper mapper = new ObjectMapper();
+
+                            // Convert directly into JsonNode WITHOUT readTree
+                            JsonNode json = mapper.readValue(draftAccountRequestPayload, JsonNode.class);
+
+                            String accountType = json.has("account_type")
+                                ? json.get("account_type").asText()
+                                : "UNKNOWN";
+
+                            String businessUnitId = json.has("business_unit_id")
+                                ? json.get("business_unit_id").asText()
+                                : "UNKNOWN";
+
+                            return session
+                                .set("draftAccountRequestPayload", draftAccountRequestPayload)
+                                .set("contentDigest", contentDigest)
+                                .set("createdAccountType", accountType)
+                                .set("createdBusinessUnitId", businessUnitId);
+
+                        } catch (Exception e) {
+                            System.err.println("Payload parsing failed: " + e.getMessage());
+                            return session.markAsFailed();
+                        }
+                    })
+        
                 .exec(
                     http("OPAL - Opal-fines-service - Draft-accounts")
                     .post(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/draft-accounts")
@@ -839,6 +868,9 @@ public final class CreateAccountConditionalCautionScenario {
                     AccountCounters.CONDITIONAL_CREATED.incrementAndGet();
                     return session;
                 })
+                
+                //.exec(UserInfoLogger.logSessionStatus("After draft account POST"))
+
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts"))
                 .exitHereIfFailed() 
 
