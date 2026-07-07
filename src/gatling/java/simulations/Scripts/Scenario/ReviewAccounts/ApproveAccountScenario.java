@@ -28,13 +28,40 @@ public final class ApproveAccountScenario {
 
     public static ChainBuilder ApproveAccountRequest() {
 
-        return group("OPAL Approve Account").on(
+        return group("OPAL Approve Account")
+        .on(
+            group("Create and Manage")
+            .on(
+                //Selecting Account tab:
                 exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
-                )                
+                ) 
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+
+                //Selecting Create and Manage Draft Accounts link    
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )           
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -42,7 +69,59 @@ public final class ApproveAccountScenario {
                         .check(status().is(200))                                         
                 )
                 .exitHereIfFailed() 
-
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                )  
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                )                
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                )                 
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
                 //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
                 
                 .exec(session ->
@@ -166,14 +245,34 @@ public final class ApproveAccountScenario {
                         submittedBys.get(selectedIndex))
                     .set("submittedByName",
                         submittedByNames.get(selectedIndex));
-            })
+                })
+            )
+
+            .group("Select Account")
+            .on(
+
+                //Select account to Approve
+                pause(20,60)
+
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                )  
-                //added
-                .pause(20,60)
+                ) 
+                .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                ) 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -235,9 +334,11 @@ public final class ApproveAccountScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Offences"))
                 .exitHereIfFailed()  
-
+            )
+            .group("Approve Account")
+            .on(
                 //Approve selected draft account
-                .pause(300,580)
+                pause(300,580)
                 .exec(session -> {
                     String draftAccountRequestPayload =
                         RequestBodyBuilder.BuildApproveAccountRequestBody(session);
@@ -293,20 +394,62 @@ public final class ApproveAccountScenario {
                 .exitHereIfFailed()   
                 
                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                ) 
+                .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
+                ) 
+                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                ) 
+                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                ) 
+                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
                 )                
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                 )
+                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                ) 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                )                
+                )
+                 .exec(
+                    http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                )                 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -343,6 +486,7 @@ public final class ApproveAccountScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))
                 )
+            )
         );            
     }
 }

@@ -188,7 +188,7 @@ public final class CreateAccountFineScenario {
                         .check(status().is(200))
                 )
                 .exitHereIfFailed()
-//Build draft account query parameters from business unit data in session (Rejected)               
+                //Build draft account query parameters from business unit data in session (Rejected)               
 
                 .exec(session ->
                     DraftAccountQueryBuilder.buildAndStore(
@@ -210,7 +210,7 @@ public final class CreateAccountFineScenario {
                         .check(status().is(200))
                 )
                 .exitHereIfFailed()
-                
+
                 //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
                     .exec(
                         http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted")
