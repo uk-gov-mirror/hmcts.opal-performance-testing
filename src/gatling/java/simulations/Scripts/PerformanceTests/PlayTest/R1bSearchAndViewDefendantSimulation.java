@@ -4,7 +4,7 @@ package simulations.Scripts.PerformanceTests.PlayTest;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.R1bSearchAndViewDefendantScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.R1bSearchandViewDefendantScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,7 +25,7 @@ public class R1bSearchAndViewDefendantSimulation extends Simulation {
 
     public R1bSearchAndViewDefendantSimulation() {
         setUp(
-            R1bSearchAndViewDefendantScenarioBuild.build(SCENARIO_NAME)
+            R1bSearchandViewDefendantScenarioBuild.build(SCENARIO_NAME)
                 .injectOpen(
                     rampUsers(AppConfig.PerformanceConfig.CHECKER_USERS)
                         .during(AppConfig.PerformanceConfig.getRampDuration())

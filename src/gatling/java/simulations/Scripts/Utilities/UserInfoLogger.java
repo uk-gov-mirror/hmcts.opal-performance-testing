@@ -85,20 +85,22 @@ public class UserInfoLogger {
             // ------------------------------------------------
             // Diagnostic information
             // ------------------------------------------------
-            LOGGER.info(
-                    """
-                    Request '{}'
-                    Session Failed: {}
-                    Request Successful: {}
-                    Gateway Error: {}
-                    Status Code: {}
-                    """,
-                    requestName,
-                    session.isFailed(),
-                    requestSucceeded,
-                    gatewayError,
-                    statusCode
-            );
+                if (AppConfig.LoggingConfig.ENABLE_DIAGNOSTIC_LOGGING) {
+                LOGGER.info(
+                        """
+                        Request '{}'
+                        Session Failed: {}
+                        Request Successful: {}
+                        Gateway Error: {}
+                        Status Code: {}
+                        """,
+                        requestName,
+                        session.isFailed(),
+                        requestSucceeded,
+                        gatewayError,
+                        statusCode
+                );
+                }
 
 
             // ------------------------------------------------

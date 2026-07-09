@@ -187,7 +187,7 @@ public class AppConfig {
 
 																	 
         public static final int INPUTTER_USERS = Integer.parseInt(
-            System.getProperty("performance.inputters", "2")
+            System.getProperty("performance.inputters", "1")
         );
 
         public static final int CHECKER_USERS = Integer.parseInt(
@@ -246,5 +246,13 @@ public class AppConfig {
         public static final int TOTAL_ACCOUNTS = 
             FIXED_ACCOUNTS + FINE_ACCOUNTS + CONDITIONAL_ACCOUNTS;
 
+    }
+
+    public static class LoggingConfig {
+
+           // Enable/disable diagnostic request logging
+        public static final boolean ENABLE_DIAGNOSTIC_LOGGING =
+                Boolean.parseBoolean(
+                        System.getProperty("enableDiagnosticLogging", "false"));
     }
 }

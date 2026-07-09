@@ -6,11 +6,11 @@ Set-Location -Path $targetPath
 
 # Execute the Gradle command
 & ".\gradlew.bat" runMAC_01aSimulation `
-    "-Dperformance.inputters=1" `
-    "-Dperformance.checkers=1" `
+    "-Dperformance.inputters=100" `
+    "-Dperformance.checkers=10" `
     "-Dperformance.existing=0" `
     "-Dperformance.rampup.minutes=2" `
-    "-Dperformance.duration.minutes=20"
+    "-Dperformance.duration.minutes=60"
 
 #Use this to kill tests
 #TASKKILL /F /IM java.exe 

@@ -8,7 +8,7 @@ import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 
-public class R1bSearchAndViewDefendantScenarioBuild {
+public class R1bSearchandViewDefendantScenarioBuild {
 
     public static ScenarioBuilder build(String scenarioName) {
         return scenario(scenarioName)
