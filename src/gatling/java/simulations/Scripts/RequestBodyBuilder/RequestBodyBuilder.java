@@ -708,14 +708,6 @@ public class RequestBodyBuilder {
         "    \"draft_account_id\": null,\n" +
         "    \"submitted_by\": \"%s\",\n" +
         "    \"submitted_by_name\": \"%s\",\n" +
-        // "    \"timeline_data\": [\n" +
-        // "        {\n" +
-        // "            \"reason_text\": null,\n" +
-        // "            \"status\": \"Submitted\",\n" +
-        // "            \"status_date\": \"%s\",\n" +
-        // "            \"username\": \"%s\"\n" +
-        // "        }\n" +
-        // "    ],\n" +
         "    \"version\": \"0\"\n" +
         "}",
         accountNoteText, accountNoteText, addressLine1, 

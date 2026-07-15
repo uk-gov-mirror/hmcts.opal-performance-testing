@@ -25,6 +25,8 @@ public class Feeders {
     public static final FeederBuilder<String> InputterUsers;
     //MH adding R1b things
     public static final FeederBuilder<String> SearchViewUsers;
+    public static final FeederBuilder<String> PGAccounts;
+    
 
     private static final AtomicInteger COUNTER;
     private static final Logger log = Logger.getLogger(Feeders.class.getName());
@@ -35,6 +37,8 @@ public class Feeders {
         CheckerUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.CHECKER_USERS_CSV).circular();
         InputterUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.INPUTTER_USERS_CSV).circular();
         SearchViewUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.SEARCHVIEW_USERS_CSV).circular(); //MH added this as well for R1b
+        PGAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.PG_ACCOUNTS_CSV).circular();
+
     } catch (Exception e) {
         System.err.println("Error loading CSV: " + e.getMessage());
         throw e;
@@ -58,7 +62,9 @@ public class Feeders {
         return SearchViewUsers;
     }
 
-
+    public static FeederBuilder<String> pGAccounts() {
+        return PGAccounts;
+    } 
 
     public static CheckBuilder.Final saveTokenCode() {
         return CoreDsl.css("input[name='code']", "value").saveAs("TokenCode");

@@ -317,7 +317,7 @@ public final class RejectAccountScenario {
                         .set("contentDigest", contentDigest);
                 })
                 .exec(
-                    http("OPAL - Opal-fines-service - Draft-accounts")
+                    http("OPAL - Opal-fines-service - Draft-accounts - Reject")
                     .patch(session -> AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/draft-accounts/" + session.get("selectedDraftAccountId"))
                     .headers(Headers.getHeaders(15))
                     .body(StringBody(session -> session.get("draftAccountRequestPayload"))).asJson()

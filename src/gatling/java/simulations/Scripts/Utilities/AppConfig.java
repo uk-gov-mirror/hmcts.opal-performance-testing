@@ -95,7 +95,7 @@ public class AppConfig {
             return NORMAL;
         }
     }
-   // ------------------------- URL Configuration -----------------------------
+// ------------------------- URL Configuration -----------------------------
     public static class UrlConfig {
         public static final String BASE_URL = getConfigProperty("url.rrems.base", "Secret1");
         public static final String AUTH_URL = getConfigProperty("url.auth.base", "Secret2");
@@ -161,6 +161,8 @@ public class AppConfig {
             public static final String INPUTTER_USERS_CSV = "InputterUsers.csv";
             //MH Adding some R1b stuff here
             public static final String SEARCHVIEW_USERS_CSV = "R1bAllUsers.csv"; //MH will want to change this once we break down the user file
+            public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; //MH will want to change this once we break down the user file
+
 
             public static final String USERS_FILE_PATH = Paths.get(USERS_CSV).toString();  
             public static final String CHECKER_USERS_FILE_PATH = Paths.get(CHECKER_USERS_CSV).toString();    
@@ -197,6 +199,10 @@ public class AppConfig {
         public static final int EXISTING_USERS = Integer.parseInt(
             System.getProperty("performance.existing", "2")
         );
+
+        public static final int SEARCH_VIEW_USERS = Integer.parseInt(
+            System.getProperty("performance.searchViewUsers", "1")
+        );        
 
         public static final int RAMP_DURATION_MINUTES = Integer.parseInt(
             System.getProperty("performance.rampup.minutes", "10")
@@ -247,7 +253,7 @@ public class AppConfig {
             FIXED_ACCOUNTS + FINE_ACCOUNTS + CONDITIONAL_ACCOUNTS;
 
     }
-
+    
     public static class LoggingConfig {
 
            // Enable/disable diagnostic request logging

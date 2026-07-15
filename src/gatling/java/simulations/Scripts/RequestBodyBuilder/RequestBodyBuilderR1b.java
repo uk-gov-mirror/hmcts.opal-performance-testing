@@ -76,6 +76,45 @@ public static final class DefendantAccountSearch {
                 .check(jsonPath("$.defendant_accounts[0].defendant_account_id").saveAs("defendant_account_id"))     
     );
     }
+
+    public static String BuildSearchParentandGuardianAccountRequestBody(Session session) {
+
+            String businessUnitIdsJson = session.get("getListBusinessUnitId") != null
+                    ? session.get("getListBusinessUnitId").toString()
+                    : "[]";
+
+
+            System.out.println("getListBusinessUnitId = " + session.get("getListBusinessUnitId"));
+            String forenames = session.getString("forename");
+            String surname = session.getString("surname");
+
+            return String.format(
+                "{\n" +
+                "  \"active_accounts_only\": true,\n" +
+                "  \"business_unit_ids\": %s,\n" +
+                "  \"consolidation_search\": false,\n" +
+                "  \"defendant\": {\n" +
+                "    \"address_line_1\": null,\n" +
+                "    \"birth_date\": null,\n" +
+                "    \"exact_match_forenames\": false,\n" +
+                "    \"exact_match_organisation_name\": null,\n" +
+                "    \"exact_match_surname\": false,\n" +
+                "    \"forenames\": \"%s\",\n" +
+                "    \"include_aliases\": false,\n" +
+                "    \"national_insurance_number\": null,\n" +
+                "    \"organisation\": false,\n" +
+                "    \"organisation_name\": null,\n" +
+                "    \"postcode\": null,\n" +
+                "    \"surname\": \"%s\"\n" +
+                "  },\n" +
+                "  \"reference_number\": null\n" +
+                "}",
+                businessUnitIdsJson,
+                forenames,
+                surname
+            );
+        }
+    
 }
 
 

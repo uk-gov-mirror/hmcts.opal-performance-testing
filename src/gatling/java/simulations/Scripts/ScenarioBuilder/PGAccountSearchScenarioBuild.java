@@ -1,0 +1,26 @@
+package simulations.Scripts.ScenarioBuilder;
+
+
+
+
+import simulations.Scripts.Scenario.Login.LoginScenario;
+import simulations.Scripts.Scenario.ParentAndGuardian.ChangeParentAndGuardianAccount;
+import simulations.Scripts.Utilities.Feeders;
+import io.gatling.javaapi.core.*;
+
+import static io.gatling.javaapi.core.CoreDsl.*;
+
+public class PGAccountSearchScenarioBuild {
+
+    public static ScenarioBuilder build(String scenarioName) {
+        return scenario(scenarioName)
+            .group("OPAL Login Requests")
+            .on(
+                feed(Feeders.searchViewUsers())
+                .feed(Feeders.pGAccounts())
+                    .exec(LoginScenario.LoginRequest())
+                    .repeat(1).on(
+                        exec(ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()))                       
+                ); 
+    }
+}

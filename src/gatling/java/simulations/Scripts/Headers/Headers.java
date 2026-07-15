@@ -248,7 +248,7 @@ public final class Headers {
             headers.put("sec-ch-ua-platform", "Windows");
             headers.put("Cache-Control", "max-age=0");
             headers.put("if-match", "0");
-            default:
+            //headers.put("want-content-digest", "sha-512");
             break; 
 
             //MH adding new header for R1b, don't know that this will fix my issue
@@ -290,7 +290,23 @@ public final class Headers {
             headers.put("Accept-Language", "en-US,en;q=0.9,en-GB;q=0.8");
             headers.put("request-id", "#{requestId}");
             headers.put("traceparent", "#{traceparent}");
-    break;
+            break;
+            
+            case TEST_18:
+            headers.put("Origin", "https://opal-frontend.test.apps.hmcts.net");
+            headers.put("Sec-Fetch-Dest", "empty");
+            headers.put("Sec-Fetch-Mode", "cors");
+            headers.put("Sec-Fetch-Site", "same-origin");
+            headers.put("Content-Digest", "#{contentDigest}");
+            headers.put("content-type", "application/json");
+            headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
+            headers.put("sec-ch-ua-mobile", "?0");
+            headers.put("sec-ch-ua-platform", "Windows");
+            headers.put("Cache-Control", "max-age=0");
+            headers.put("want-content-digest", "sha-512");
+
+            default:
+            break;
         }
 
         

@@ -221,6 +221,8 @@ public final class LoginScenario {
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/business-units")
                     .headers(Headers.getHeaders(12))
                     .check(status().is(200)) 
+                    .check(
+                        jsonPath("$.refData[?(@.opal_domain == 'Fines')].business_unit_id").findAll().saveAs("getListBusinessUnitId"))                
                 )               
             .exitHereIfFailed()
         );            
