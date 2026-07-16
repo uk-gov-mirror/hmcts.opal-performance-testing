@@ -38,6 +38,9 @@ public final class ChangeParentAndGuardianAccount {
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
+                        .check(
+                            jsonPath("$.domains.fines.business_unit_users[*].business_unit_id")
+                            .findAll().saveAs("getListBusinessUnitId"))  
                 )
                 .exec(
                     http("OPAL - Sso - Authenticated")
@@ -91,9 +94,24 @@ public final class ChangeParentAndGuardianAccount {
                         .headers(Headers.getHeaders(18))
                         .body(StringBody(session -> session.get("searchAccountRequestPayload"))).asJson()
                         .check(status().saveAs("httpStatus"))
-                        .check(status().is(201))               
+                        .check(status().is(201))  
+                        .check(
+                            jsonPath("$.defendant_accounts[?(@.business_unit_id == '82')].defendant_account_id")
+                                .find()
+                                .saveAs("getPGAccount")
+                        )            
                     )  
 
+                    .exec(session -> {
+                    System.out.println("getPGAccount = " + session.get("getPGAccount"));
+
+                   
+                    
+
+                    return session;
+                })              
+
+            
             // )
             //     .exec(
             //         http("request_4")

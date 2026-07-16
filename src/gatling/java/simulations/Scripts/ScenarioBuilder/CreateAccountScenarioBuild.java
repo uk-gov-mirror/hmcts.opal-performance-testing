@@ -21,9 +21,11 @@ public class CreateAccountScenarioBuild {
                 feed(Feeders.inputterUsers())
                     .exec(LoginScenario.LoginRequest())
                     .repeat(1).on(
-                        exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
-                        //exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
-                        //    .exec(CreateAccountFineScenario.CreateAccountFineRequest())
+                       // exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
+                        exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
+                   //         exec(CreateAccountFineScenario.CreateAccountFineRequest())
+                   //     exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
+
                     )
                 //    exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
 

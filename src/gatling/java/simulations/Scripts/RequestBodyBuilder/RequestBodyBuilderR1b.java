@@ -83,8 +83,6 @@ public static final class DefendantAccountSearch {
                     ? session.get("getListBusinessUnitId").toString()
                     : "[]";
 
-
-            System.out.println("getListBusinessUnitId = " + session.get("getListBusinessUnitId"));
             String forenames = session.getString("forename");
             String surname = session.getString("surname");
 

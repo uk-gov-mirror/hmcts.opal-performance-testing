@@ -16,7 +16,7 @@ public class PGAccountSearchScenarioBuild {
         return scenario(scenarioName)
             .group("OPAL Login Requests")
             .on(
-                feed(Feeders.searchViewUsers())
+                feed(Feeders.pGUsers())
                 .feed(Feeders.pGAccounts())
                     .exec(LoginScenario.LoginRequest())
                     .repeat(1).on(

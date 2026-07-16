@@ -20,7 +20,7 @@ public class PGSearchAccountSimulation extends Simulation {
     @Override
     public void before() {
         System.out.println("Simulation starting...");
-        System.out.println("User Count: " + AppConfig.PerformanceConfig.SEARCH_VIEW_USERS);
+        System.out.println("User Count: " + AppConfig.PerformanceConfig.PG_USERS_CSV);
         System.out.println("Ramp Duration: " + AppConfig.PerformanceConfig.getRampDuration());
     }    
 
@@ -30,7 +30,7 @@ public class PGSearchAccountSimulation extends Simulation {
         setUp(
             PGAccountSearchScenarioBuild.build(OPAL_LOGIN_TEST)
                 .injectOpen(
-                     rampUsers(AppConfig.PerformanceConfig.SEARCH_VIEW_USERS)
+                     rampUsers(AppConfig.PerformanceConfig.PG_USERS_CSV)
                 .during(AppConfig.PerformanceConfig.getRampDuration()))
                 .protocols(HttpProtocolConfig.build()))
                 .maxDuration(AppConfig.PerformanceConfig.getSimulationDuration())         

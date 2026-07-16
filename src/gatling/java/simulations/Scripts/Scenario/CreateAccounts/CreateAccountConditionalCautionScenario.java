@@ -5,6 +5,7 @@ import simulations.Scripts.Utilities.AccountCounters;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.DataGenerator;
+import simulations.Scripts.Utilities.DraftAccountSelector;
 import simulations.Scripts.Utilities.Feeders;
 import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.commons.stats.assertion.AssertionPath.Details;
@@ -154,30 +155,7 @@ public final class CreateAccountConditionalCautionScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams"))
                 .exitHereIfFailed()
-
-                // //Build draft account query parameters from business unit data in session (Publishing Failed)               
-
-                // .exec(session ->
-                //     DraftAccountQueryBuilder.buildAndStore(
-                //         session,
-                //         "draftAccountFailedQueryParams",
-                //         List.of("Publishing Failed"),
-                //         "not_submitted_by",
-                //        false
-                //     )
-                // )                
-                // .exec(
-                //     http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Publishing Failed")
-                //         .get(session ->
-                //             AppConfig.UrlConfig.BASE_URL +
-                //             "/opal-fines-service/draft-accounts?" +
-                //             session.getString("draftAccountFailedQueryParams")
-                //         )
-                //         .headers(Headers.getHeaders(11))
-                //         .check(status().is(200))
-                // )
-                // .exitHereIfFailed()
-                
+               
                 //Build draft account query parameters from business unit data in session (Rejected)               
 
                 .exec(session ->
@@ -233,69 +211,10 @@ public final class CreateAccountConditionalCautionScenario {
                         )
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))
-                             .check(
-                                   jsonPath("$.summaries").findAll().saveAs("summaries"))
-                                // jsonPath("$.summaries[*].draft_account_id").findAll().saveAs("draftAccountIds"),
-                                // jsonPath("$.summaries[*].business_unit_id").findAll().saveAs("businessUnitIds"),
-                                // jsonPath("$.summaries[*].account_status").findAll().saveAs("accountStatuses"),
-                                // jsonPath("$.summaries[*].submitted_by").findAll().saveAs("submittedBys"),
-                                // jsonPath("$.summaries[*].submitted_by_name").findAll().saveAs("submittedByNames")
-                            )                       
-                
-                            .exec(session -> {
-
-                                List<String> summaries = session.getList("summaries");
-
-                                if (summaries == null || summaries.isEmpty()) {
-                                    System.out.println("No summaries returned");
-                                    return session;
-                                }
-
-                                String rawJson = summaries.get(0);
-
-                                try {
-                                    ObjectMapper mapper = new ObjectMapper();
-
-                                    // Parse the summaries array
-                                    JsonNode arrayNode = mapper.readTree(rawJson);
-
-                                    // No accounts available
-                                    if (!arrayNode.isArray() || arrayNode.size() == 0) {
-
-                                        System.out.println(
-                                            "No submitted draft accounts available for user: "
-                                            + session.getString("username")
-                                            + " - continuing with account creation"
-                                        );
-
-                                        return session
-                                            .set("selectedDraftAccountId", "")
-                                            .set("selectedBusinessUnitId", "")
-                                            .set("accountStatus", "")
-                                            .set("submittedBy", "")
-                                            .set("submittedByName", "");
-                                    }                                    
-
-                                    // Randomly select one account from the array
-                                    JsonNode node = arrayNode.get(
-                                        ThreadLocalRandom.current().nextInt(arrayNode.size())
-                                    );
-
-                                    return session
-                                        .set("selectedDraftAccountId", node.get("draft_account_id").asText())
-                                        .set("selectedBusinessUnitId", node.get("business_unit_id").asText())
-                                        .set("accountStatus", node.get("account_status").asText())
-                                        .set("submittedBy", node.get("submitted_by").asText())
-                                        .set("submittedByName", node.get("submitted_by_name").asText());
-
-                                } catch (Exception e) {
-
-                                    System.err.println("Failed to parse summaries JSON: " + rawJson);
-                                    e.printStackTrace();
-
-                                    return session.markAsFailed();
-                                }
-                })
+                            .check(
+                                   jsonPath("$.summaries").findAll().saveAs("summaries")
+                            )
+                    ) 
             ) 
             .group("Initiate Account Creation").on(
 
