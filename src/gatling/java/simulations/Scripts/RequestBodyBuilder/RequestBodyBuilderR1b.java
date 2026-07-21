@@ -112,10 +112,95 @@ public static final class DefendantAccountSearch {
                 surname
             );
         }
-    
-}
+    public static String BuildDefendantAccountPartiesRequestBody(Session session) {
 
+            String addressLine1 = session.getString("getAddressLine1");
+            String addressLine2 = session.getString("getAddressLine2");
+            String primaryEmailAddress = session.getString("getPrimaryEmailAddress");
+            String employerAddressLine1 = session.getString("getEmployerAddressLine1");
+            String employerName = session.getString("getEmployerName");
+            String employerReference = session.getString("getEmployerReference");
+            String individualForenames = session.getString("getIndividualForenames");
+            String individualSurnames = session.getString("getIndividualSurnames");
+            String individualPartyId = session.getString("getIndividualPartyId");
+            String vehicleMakeAndModel = session.getString("getVehicleMakeAndModel");
+            String vehicleRegistration = session.getString("getVehicleRegistration");
 
+            //Random data:
+            String randomAddressline3 = session.getString("randomAddressline3");
 
+            session.set("randomAddressline3", DataGenerator.generateRandomAddress());
 
+                     
+            return String.format(
+                "{\n" +
+                "  \"address\": {\n" +
+                "    \"address_line_1\": \"%s\",\n" +
+                "    \"address_line_2\": \"%s\",\n" +
+                "    \"address_line_3\": \"%s\",\n" +
+                "    \"address_line_4\": null,\n" +
+                "    \"address_line_5\": null,\n" +
+                "    \"postcode\": null\n" +
+                "  },\n" +
+                "  \"contact_details\": {\n" +
+                "    \"home_telephone_number\": null,\n" +
+                "    \"mobile_telephone_number\": null,\n" +
+                "    \"primary_email_address\": \"%s\",\n" +
+                "    \"secondary_email_address\": null,\n" +
+                "    \"work_telephone_number\": null\n" +
+                "  },\n" +
+                "  \"defendant_account_party_type\": \"Parent/Guardian\",\n" +
+                "    \"employer_details\": {\n" +
+                "      \"employer_address\": {\n" +
+                "        \"address_line_1\": \"%s\",\n" +
+                "        \"address_line_2\": null,\n" +
+                "        \"address_line_3\": null,\n" +
+                "        \"address_line_4\": null,\n" +
+                "        \"address_line_5\": null,\n" +
+                "        \"postcode\": null\n" +
+                "      },\n" +
+                "      \"employer_email_address\": null,\n" +
+                "      \"employer_name\": \"%s\",\n" +
+                "      \"employer_reference\": \"%s\",\n" +
+                "      \"employer_telephone_number\": null\n" +
+                "    },\n" +
+                "    \"is_debtor\": true,\n" +
+                "    \"language_preferences\": {\n" +
+                "      \"document_language_preference\": null,\n" +
+                "      \"hearing_language_preference\": null\n" +
+                "    },\n" +
+                "    \"party_details\": {\n" +
+                "      \"individual_details\": {\n" +
+                "        \"age\": null,\n" +
+                "        \"date_of_birth\": \"\",\n" +
+                "        \"forenames\": \"%s\",\n" +
+                "        \"individual_aliases\": null,\n" +
+                "        \"national_insurance_number\": null,\n" +
+                "        \"surname\": \"%s\",\n" +
+                "        \"title\": null\n" +
+                "      },\n" +
+                "      \"organisation_details\": null,\n" +
+                "      \"organisation_flag\": false,\n" +
+                "      \"party_id\": \"%s\"\n" +
+                "    },\n" +
+                "    \"vehicle_details\": {\n" +
+                "      \"vehicle_make_and_model\": \"%s\",\n" +
+                "      \"vehicle_registration\": \"%s\"\n" +
+                "    }\n" +
+                "}",
+                addressLine1,
+                addressLine2,
+                randomAddressline3,
+                primaryEmailAddress,
+                employerAddressLine1,
+                employerName,
+                employerReference,
+                individualForenames,
+                individualSurnames,
+                individualPartyId,
+                vehicleMakeAndModel,
+                vehicleRegistration
+            );
+        }    
+    }
 }

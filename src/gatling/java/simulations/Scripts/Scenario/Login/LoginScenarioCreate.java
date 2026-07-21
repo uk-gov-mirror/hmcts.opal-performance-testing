@@ -86,7 +86,7 @@ public final class LoginScenarioCreate {
                 .formParam("lrtPartition", "")
                 .formParam("hisRegion", "")
                 .formParam("hisScaleUnit", "")
-                .formParam("passwd", "#{Password}")
+                .formParam("passwd", AppConfig.PerformanceConfig.USER_PASSWORD)
                 .formParam("ps", "2")
                 .formParam("psRNGCDefaultType", "")
                 .formParam("psRNGCEntropy", "")

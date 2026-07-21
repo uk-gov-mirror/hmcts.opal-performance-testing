@@ -4,7 +4,6 @@ import simulations.Scripts.Utilities.AccountCounters;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.SearchAccountScenarioBuild;
 import simulations.Scripts.ScenarioBuilder.CreateAccountScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,28 +35,28 @@ public class CreateAccountSimulation extends Simulation {
 
         System.out.println();
 
-        System.out.println("Fixed Accounts Created: "
-            + AccountCounters.FIXED_CREATED.get());
+        // System.out.println("Fixed Accounts Created: "
+        //     + AccountCounters.FIXED_CREATED.get());
 
-        System.out.println();
+        // System.out.println();
 
         System.out.println("Fine Accounts Created: "
             + AccountCounters.FINE_CREATED.get());
 
         System.out.println();
 
-        System.out.println("Conditional Accounts Created: "
-            + AccountCounters.CONDITIONAL_CREATED.get());
+        // System.out.println("Conditional Accounts Created: "
+        //     + AccountCounters.CONDITIONAL_CREATED.get());
 
-        System.out.println();
+        // System.out.println();
         
-        System.out.println("Approved Accounts: "
-            + AccountCounters.APPROVED.get());
+        // System.out.println("Approved Accounts: "
+        //     + AccountCounters.APPROVED.get());
 
-        System.out.println();
+        // System.out.println();
 
-        System.out.println("Rejected Accounts: "
-            + AccountCounters.REJECTED.get());
+        // System.out.println("Rejected Accounts: "
+        //     + AccountCounters.REJECTED.get());
 
         System.out.println("========================================");
     }

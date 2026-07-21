@@ -19,10 +19,17 @@ public class CreateAccountScenarioBuild {
             .group("OPAL Login Requests")
             .on(
                 feed(Feeders.inputterUsers())
+                
+                .exec(session -> session
+                    .set("username", session.getString("Username"))
+                    .set("password", session.getString("Password"))
+                    .set("accountType", session.getString("Account"))
+                    .set("createdAccountCount", 0)
+                )
                     .exec(LoginScenario.LoginRequest())
-                    .repeat(1).on(
-                       // exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
-                        exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
+                    .repeat(5).on(
+                        exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
+                   //     exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
                    //         exec(CreateAccountFineScenario.CreateAccountFineRequest())
                    //     exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
 

@@ -95,7 +95,7 @@ public class AppConfig {
             return NORMAL;
         }
     }
-// ------------------------- URL Configuration -----------------------------
+    // ------------------------- URL Configuration -----------------------------
     public static class UrlConfig {
         public static final String BASE_URL = getConfigProperty("url.rrems.base", "Secret1");
         public static final String AUTH_URL = getConfigProperty("url.auth.base", "Secret2");
@@ -161,7 +161,8 @@ public class AppConfig {
             public static final String INPUTTER_USERS_CSV = "InputterUsers.csv";
             //MH Adding some R1b stuff here
             public static final String SEARCHVIEW_USERS_CSV = "R1bAllUsers.csv"; //MH will want to change this once we break down the user file
-            public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; //MH will want to change this once we break down the user file
+            public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; 
+            public static final String PG_USERS_CSV = "PGUsers.csv"; 
 
 
             public static final String USERS_FILE_PATH = Paths.get(USERS_CSV).toString();  
@@ -189,11 +190,11 @@ public class AppConfig {
 
 																	 
         public static final int INPUTTER_USERS = Integer.parseInt(
-            System.getProperty("performance.inputters", "1")
+            System.getProperty("performance.inputters", "20")
         );
 
         public static final int CHECKER_USERS = Integer.parseInt(
-            System.getProperty("performance.checkers", "2")
+            System.getProperty("performance.checkers", "20")
         );
 
         public static final int EXISTING_USERS = Integer.parseInt(
@@ -203,14 +204,21 @@ public class AppConfig {
         public static final int SEARCH_VIEW_USERS = Integer.parseInt(
             System.getProperty("performance.searchViewUsers", "1")
         );        
+        public static final int PG_USERS_CSV = Integer.parseInt(
+            System.getProperty("performance.pGUsers", "1")
+        );  
+
 
         public static final int RAMP_DURATION_MINUTES = Integer.parseInt(
             System.getProperty("performance.rampup.minutes", "10")
         );
 //changed from max 60 to 7 to see if I can end a test anytime
         public static final int SIMULATION_DURATION_MINUTES = Integer.parseInt(
-            System.getProperty("performance.duration.minutes", "7")
-        );	
+            System.getProperty("performance.duration.minutes", "60")
+        );
+        
+        public static final String USER_PASSWORD =
+            System.getProperty("performance.UsersPassword", "test");  
 
         public static Duration getRampDuration() {
             return Duration.ofMinutes(RAMP_DURATION_MINUTES);

@@ -58,7 +58,7 @@ public final class Headers {
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-            headers.put("Referer","https://opal-frontend.test.apps.hmcts.net/");
+            headers.put("Referer",AppConfig.UrlConfig.BASE_URL);
             headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36");
 
 
@@ -151,7 +151,7 @@ public final class Headers {
             headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36");
             headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
             headers.put("Accept-Language", "en-US,en;q=0.9");
-            headers.put("Referer","https://opal-frontend.test.apps.hmcts.net/");
+            headers.put("Referer",AppConfig.UrlConfig.BASE_URL);
             headers.put("Sec-Fetch-Site", "cross-site");
             headers.put("Sec-Fetch-Mode", "navigate");
             headers.put("Sec-Fetch-Dest", "document");
@@ -225,7 +225,7 @@ public final class Headers {
         break; //MH I've added this break, don't know if you actually wanted it missing
 
             case TEST_14:
-            headers.put("Origin", "https://opal-frontend.test.apps.hmcts.net");
+            headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
             headers.put("Sec-Fetch-Dest", "empty");
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
@@ -237,7 +237,7 @@ public final class Headers {
             break; 
 
             case TEST_15:
-            headers.put("Origin", "https://opal-frontend.test.apps.hmcts.net");
+            headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
             headers.put("Sec-Fetch-Dest", "empty");
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
@@ -257,7 +257,7 @@ public final class Headers {
             headers.put("Sec-Fetch-Dest", "empty");
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
-            headers.put("Referer", "https://opal-frontend.test.apps.hmcts.net/");
+            headers.put("Referer", AppConfig.UrlConfig.BASE_URL);
             headers.put(
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
@@ -293,7 +293,7 @@ public final class Headers {
             break;
             
             case TEST_18:
-            headers.put("Origin", "https://opal-frontend.test.apps.hmcts.net");
+            headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
             headers.put("Sec-Fetch-Dest", "empty");
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
@@ -304,6 +304,24 @@ public final class Headers {
             headers.put("sec-ch-ua-platform", "Windows");
             headers.put("Cache-Control", "max-age=0");
             headers.put("want-content-digest", "sha-512");
+            break;
+
+            case TEST_19:
+            headers.put("Cache-Control", "max-age=0");
+            headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
+            headers.put("Sec-Fetch-Dest", "empty");
+            headers.put("Sec-Fetch-Mode", "cors");
+            headers.put("Sec-Fetch-Site", "same-origin");
+            headers.put("business-unit-id", "#{getBusinessUnitId}");
+            headers.put("Content-Digest", "#{contentDigest}");
+            headers.put("content-type", "application/json");
+            headers.put("if-match", "#{etag}");
+            headers.put("sec-ch-ua", "Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150");
+            headers.put("sec-ch-ua-mobile", "?0");
+            headers.put("sec-ch-ua-platform", "Windows");
+            headers.put("want-content-digest", "sha-512");
+            headers.put("Referer",AppConfig.UrlConfig.BASE_URL);
+
 
             default:
             break;

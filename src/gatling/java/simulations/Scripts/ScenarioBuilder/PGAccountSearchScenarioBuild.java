@@ -19,8 +19,9 @@ public class PGAccountSearchScenarioBuild {
                 feed(Feeders.pGUsers())
                 .feed(Feeders.pGAccounts())
                     .exec(LoginScenario.LoginRequest())
-                    .repeat(1).on(
-                        exec(ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()))                       
+                    .repeat(5).on(
+                        feed(Feeders.pGAccounts())
+                        .exec(ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()))                       
                 ); 
     }
 }
