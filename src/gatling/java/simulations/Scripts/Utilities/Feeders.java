@@ -27,6 +27,8 @@ public class Feeders {
     public static final FeederBuilder<String> SearchViewUsers;
     public static final FeederBuilder<String> PGAccounts;
     public static final FeederBuilder<String> PGUsers;
+    public static final FeederBuilder<String> MajorCreditorUsers;
+
 
 
 
@@ -41,6 +43,7 @@ public class Feeders {
         SearchViewUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.SEARCHVIEW_USERS_CSV).circular(); //MH added this as well for R1b
         PGAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.PG_ACCOUNTS_CSV).circular();
         PGUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.PG_USERS_CSV).circular();
+        MajorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MAJOR_CREDITOR_USERS_CSV).circular();
     } catch (Exception e) {
         System.err.println("Error loading CSV: " + e.getMessage());
         throw e;
@@ -70,6 +73,9 @@ public class Feeders {
 
         public static FeederBuilder<String> pGUsers() {
         return PGUsers;
+    }
+            public static FeederBuilder<String> majorCreditorUsers() {
+        return MajorCreditorUsers;
     }
 
     public static CheckBuilder.Final saveTokenCode() {

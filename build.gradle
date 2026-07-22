@@ -57,7 +57,8 @@ def simulations = [
     [task: 'runMAC_01aSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01aSimulation'],
     [task: 'runSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.SearchAccountSimulation'], //MH this comma is really important 
     [task: 'runR1bSearchAndViewDefendantSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.R1bSearchAndViewDefendantSimulation'],
-    [task: 'runPGSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.PGSearchAccountSimulation']
+    [task: 'runPGSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.PGSearchAccountSimulation'],
+    [task: 'runR1bSearchMajorCreditorSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.R1bSearchMajorCreditorSimulation']
 
 ]
 

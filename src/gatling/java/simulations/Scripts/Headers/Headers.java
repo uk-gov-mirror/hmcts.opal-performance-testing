@@ -203,11 +203,11 @@ public final class Headers {
             headers.put("Sec-Fetch-Dest", "empty");
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
-          //  headers.put("request-id", "|a4d8145674b44132a9331303de1b9516.9ec923d6645f4b42");
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-           // headers.put("traceparent", "00-a4d8145674b44132a9331303de1b9516-9ec923d6645f4b42-01");            
+                        headers.put("want-content-digest", "sha-512");
+
             break; 
 
             case TEST_13:
@@ -217,12 +217,10 @@ public final class Headers {
             headers.put("cache-control", "no-cache");
             headers.put("expires", "0");
             headers.put("pragma", "no-cache");
-        //    headers.put("request-id", "|a46d288395244ba59db15adbcdc068df.461dc629d7ec41f2");
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-        //    headers.put("traceparent", "00-a46d288395244ba59db15adbcdc068df-461dc629d7ec41f2-01");
-        break; //MH I've added this break, don't know if you actually wanted it missing
+            break; //MH I've added this break, don't know if you actually wanted it missing
 
             case TEST_14:
             headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
@@ -274,8 +272,8 @@ public final class Headers {
             headers.put("sec-ch-ua-platform", "\"Windows\"");
             headers.put("Accept-Language", "en-US,en;q=0.9,en-GB;q=0.8");
     // MH this one has request IDs
-            headers.put("request-id", "#{requestId}");
-            headers.put("traceparent", "#{traceparent}");
+    //        headers.put("request-id", "#{requestId}");
+    //        headers.put("traceparent", "#{traceparent}");
             break;
 
             case TEST_17:
@@ -288,8 +286,8 @@ public final class Headers {
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "\"Windows\"");
             headers.put("Accept-Language", "en-US,en;q=0.9,en-GB;q=0.8");
-            headers.put("request-id", "#{requestId}");
-            headers.put("traceparent", "#{traceparent}");
+        //    headers.put("request-id", "#{requestId}");
+        //    headers.put("traceparent", "#{traceparent}");
             break;
             
             case TEST_18:

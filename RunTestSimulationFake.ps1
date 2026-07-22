@@ -5,7 +5,7 @@ $targetPath = $PSScriptRoot
 Set-Location -Path $targetPath
 
 # Execute the Gradle command
-& ".\gradlew.bat" runPGSearchAccountSimulation `
+& ".\gradlew.bat" R1bSearchMajorCreditorSimulation `
 
 #Use this to kill tests
 #TASKKILL /F /IM java.exe

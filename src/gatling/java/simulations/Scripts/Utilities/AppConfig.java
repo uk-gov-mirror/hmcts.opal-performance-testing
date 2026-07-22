@@ -112,7 +112,6 @@ public class AppConfig {
 
 
 
-
     // ------------------------- Test Configuration -----------------------------
 
     public static class TestConfig {
@@ -163,7 +162,7 @@ public class AppConfig {
             public static final String SEARCHVIEW_USERS_CSV = "R1bAllUsers.csv"; //MH will want to change this once we break down the user file
             public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; 
             public static final String PG_USERS_CSV = "PGUsers.csv"; 
-
+            public static final String MAJOR_CREDITOR_USERS_CSV = "MajorCreditorUsers.csv"; 
 
             public static final String USERS_FILE_PATH = Paths.get(USERS_CSV).toString();  
             public static final String CHECKER_USERS_FILE_PATH = Paths.get(CHECKER_USERS_CSV).toString();    
@@ -194,7 +193,7 @@ public class AppConfig {
         );
 
         public static final int CHECKER_USERS = Integer.parseInt(
-            System.getProperty("performance.checkers", "20")
+            System.getProperty("performance.checkers", "1")
         );
 
         public static final int EXISTING_USERS = Integer.parseInt(
@@ -207,7 +206,9 @@ public class AppConfig {
         public static final int PG_USERS_CSV = Integer.parseInt(
             System.getProperty("performance.pGUsers", "1")
         );  
-
+        public static final int MAJOR_CREDITOR_USERS = Integer.parseInt(
+            System.getProperty("performance.majorCreditorUsers", "1")
+        );
 
         public static final int RAMP_DURATION_MINUTES = Integer.parseInt(
             System.getProperty("performance.rampup.minutes", "10")
@@ -218,7 +219,7 @@ public class AppConfig {
         );
         
         public static final String USER_PASSWORD =
-            System.getProperty("performance.UsersPassword", "test");  
+            System.getProperty("performance.UsersPassword", "OpalTester01");  
 
         public static Duration getRampDuration() {
             return Duration.ofMinutes(RAMP_DURATION_MINUTES);

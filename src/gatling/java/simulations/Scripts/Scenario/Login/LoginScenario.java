@@ -47,16 +47,6 @@ public final class LoginScenario {
                         .check(Feeders.saveCanary())
                         .check(Feeders.saveClientRequestId())
                 )
-                // .exec(session -> {
-                //     System.out.println("apiCanary = " + session.getString("apiCanary"));
-                //     System.out.println("sessionId = " + session.getString("sessionId"));
-                //     System.out.println("getSFT = " + session.getString("getSFT"));
-                //     System.out.println("getSCtx = " + session.getString("getSCtx"));
-                //     System.out.println("getCanary = " + session.getString("getCanary"));
-                //     System.out.println("getClientRequestId = " + session.getString("getClientRequestId"));
-                //     return session;
-                // })
-
                 .exec(session -> {
                     String loginRequestPayload = RequestBodyBuilder.buildLoginRequestBody(session);
                     return session.set("loginRequestPayload", loginRequestPayload);
@@ -156,17 +146,6 @@ public final class LoginScenario {
             )
             .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state"))
             .exitHereIfFailed() 
-            
-            // .exec(
-            //   http("OPAL - API - Users-state")
-            //   .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-            //     .headers(Headers.getHeaders(7))
-            //     .check(Feeders.saveErrorDetails())                
-
-            // )
-            // .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state"))
-            // .exitHereIfFailed() 
-
 
             // Search dashboard display from login.
 

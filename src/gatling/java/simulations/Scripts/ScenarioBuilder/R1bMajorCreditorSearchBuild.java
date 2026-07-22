@@ -16,7 +16,7 @@ public class R1bMajorCreditorSearchBuild {
             .group("Major Creditor Search and View")
              .on(
                 //MH Change this for the R1b users when they are set up! Should not be checkerUsers when run in anger!
-                exec(exec(feed(Feeders.checkerUsers()))
+                exec(exec(feed(Feeders.majorCreditorUsers()))
                 .exec(LoginScenario.LoginRequest())
                 .forever().on(
                 exec(R1bMajorCreditorSearchScenario.MajorCreditorSearch())

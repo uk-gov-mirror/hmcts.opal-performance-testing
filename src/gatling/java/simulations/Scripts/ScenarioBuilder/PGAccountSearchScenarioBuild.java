@@ -21,7 +21,9 @@ public class PGAccountSearchScenarioBuild {
                     .exec(LoginScenario.LoginRequest())
                     .repeat(5).on(
                         feed(Feeders.pGAccounts())
-                        .exec(ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()))                       
-                ); 
+                        .exec(ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()
+                        .pause(40,120))
+                    )
+            ); 
     }
 }
