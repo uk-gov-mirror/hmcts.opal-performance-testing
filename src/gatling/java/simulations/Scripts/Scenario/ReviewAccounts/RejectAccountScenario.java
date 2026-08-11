@@ -14,7 +14,7 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
+import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
 public final class RejectAccountScenario {
 

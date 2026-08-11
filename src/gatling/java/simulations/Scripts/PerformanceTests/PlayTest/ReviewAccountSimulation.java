@@ -1,8 +1,8 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
+import simulations.Scripts.ScenarioBuilder.Testing.ApproveAccountScenarioBuild;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.ApproveAccountScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
 

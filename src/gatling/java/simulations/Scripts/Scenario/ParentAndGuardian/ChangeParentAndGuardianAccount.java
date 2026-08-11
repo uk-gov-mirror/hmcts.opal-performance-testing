@@ -168,7 +168,7 @@ public final class ChangeParentAndGuardianAccount {
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{getPGAccount}/at-a-glance")
                         .headers(Headers.getHeaders(12))
                         .check(header("ETag").saveAs("etag")
-)
+                    )
                 )
                 .exec(
                     http("request_13")

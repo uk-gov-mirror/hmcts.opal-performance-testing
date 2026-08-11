@@ -1,10 +1,11 @@
-package simulations.Scripts.ScenarioBuilder;
+package simulations.Scripts.ScenarioBuilder.Testing;
 
 
 
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountConditionalCautionScenario;
-import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineScenario;
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineMajorCreditScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFixedScenario;
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineMinorCreditScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountParentGuardianScenario;
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Utilities.Feeders;
@@ -27,11 +28,12 @@ public class CreateAccountScenarioBuild {
                     .set("createdAccountCount", 0)
                 )
                     .exec(LoginScenario.LoginRequest())
-                    .repeat(5).on(
-                        exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())
-                   //     exec(CreateAccountFixedScenario.CreateAccountFixedRequest())
-                   //         exec(CreateAccountFineScenario.CreateAccountFineRequest())
-                   //     exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
+                    .repeat(1).on(
+                  //      exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest()),
+                  //      exec(CreateAccountFixedScenario.CreateAccountFixedRequest()),
+                        exec(CreateAccountFineMajorCreditScenario.CreateAccountFineRequest())
+                   //     exec(CreateAccountFineMinorCreditScenario.CreateAccountMinorCreditRequest()),
+                  //      exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
 
                     )
                 //    exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest())

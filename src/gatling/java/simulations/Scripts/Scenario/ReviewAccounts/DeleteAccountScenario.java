@@ -14,7 +14,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
+import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
 public final class DeleteAccountScenario {
 

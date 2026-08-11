@@ -1,8 +1,8 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
+import simulations.Scripts.ScenarioBuilder.Testing.ApproveAccountScenarioBuild;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.ApproveAccountScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,7 +11,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 public class ApproveAccountSimulation extends Simulation {   
 
     public static AtomicInteger global400ErrorCounter = new AtomicInteger(0);
-    private static final String OPAL_LOGIN_TEST = "Opal Manual Account Creation Test";
+    private static final String OPAL_LOGIN_TEST = "Opal Manual Account Approval Test";
 
     @Override
     public void before() {

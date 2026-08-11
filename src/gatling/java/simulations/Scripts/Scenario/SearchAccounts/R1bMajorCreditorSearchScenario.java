@@ -56,12 +56,12 @@ private R1bMajorCreditorSearchScenario() {
             )
             .pause(1)
             .exec(
-                http("request_11")
+                http("OPAL - Opal-fines-service - Major-creditor-accounts - Header-summary")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditor-accounts/#{creditor_account_id}/header-summary")
                     .headers(Headers.getHeaders(12))             
                 )                
             .exec(
-                http("request_12")                                      
+                http("OPAL - Opal-fines-service - Major-creditor-accounts - At-a-glance")                                      
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditor-accounts/#{creditor_account_id}/at-a-glance")
                     .headers(Headers.getHeaders(12))
                     .check(header("ETag").saveAs("etag")

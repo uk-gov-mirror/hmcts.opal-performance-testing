@@ -1,10 +1,10 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
+import simulations.Scripts.ScenarioBuilder.Testing.CreateAccountScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.Testing.DeleteAccountScenarioBuild;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.CreateAccountScenarioBuild;
-import simulations.Scripts.ScenarioBuilder.DeleteAccountScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
 

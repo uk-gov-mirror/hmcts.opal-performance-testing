@@ -90,13 +90,45 @@ public static final class DefendantAccountSearch {
                 "{\n" +
                 "  \"active_accounts_only\": true,\n" +
                 "  \"business_unit_ids\": %s,\n" +
+                "  \"creditor\": {\n" +
+                "    \"address_line_1\": null,\n" +
+                "    \"exact_match_forenames\": false,\n" +
+                "    \"exact_match_organisation_name\": null,\n" +
+                "    \"exact_match_surname\": false,\n" +
+                "    \"forenames\": \"%s\",\n" +
+                "    \"organisation\": false,\n" +
+                "    \"organisation_name\": null,\n" +
+                "    \"postcode\": null,\n" +
+                "    \"surname\": \"%s\"\n" +
+                "  }\n" +
+                "}",
+                businessUnitIdsJson,
+                forenames,
+                surname
+            );
+        }
+
+        public static String buildMinorCreditorSearchAccountRequestBody(Session session) {
+
+            String businessUnitIdsJson = session.get("businessUnitIds") != null
+                    ? session.get("businessUnitIds").toString()
+                    : "[]";
+
+            String forenames = session.getString("forename");
+            String surname = session.getString("surname");
+
+            return String.format(
+                "{\n" +
+                "  \"account_number\": null,\n" +
+                "  \"active_accounts_only\": false,\n" +
+                "  \"business_unit_ids\": %s,\n" +
                 "  \"consolidation_search\": false,\n" +
                 "  \"defendant\": {\n" +
                 "    \"address_line_1\": null,\n" +
                 "    \"birth_date\": null,\n" +
-                "    \"exact_match_forenames\": false,\n" +
+                "    \"exact_match_forenames\": null,\n" +
                 "    \"exact_match_organisation_name\": null,\n" +
-                "    \"exact_match_surname\": false,\n" +
+                "    \"exact_match_surname\": null,\n" +
                 "    \"forenames\": \"%s\",\n" +
                 "    \"include_aliases\": false,\n" +
                 "    \"national_insurance_number\": null,\n" +
@@ -112,7 +144,8 @@ public static final class DefendantAccountSearch {
                 surname
             );
         }
-    public static String BuildDefendantAccountPartiesRequestBody(Session session) {
+
+        public static String BuildDefendantAccountPartiesRequestBody(Session session) {
 
             String addressLine1 = session.getString("getAddressLine1");
             String addressLine2 = session.getString("getAddressLine2");
@@ -131,7 +164,7 @@ public static final class DefendantAccountSearch {
 
             session.set("randomAddressline3", DataGenerator.generateRandomAddress());
 
-                     
+                        
             return String.format(
                 "{\n" +
                 "  \"address\": {\n" +
@@ -201,6 +234,224 @@ public static final class DefendantAccountSearch {
                 vehicleMakeAndModel,
                 vehicleRegistration
             );
-        }    
+        }
+
+        public static String buildUpdateMinorCreditorAccountRequestBody(Session session) {
+
+            String getAddressLine1 = session.getString("getAddressLine1");
+            String getAddressLine2 = session.getString("getAddressLine2");
+
+            String randomAddressline3 = DataGenerator.generateRandomAddress();
+            session.set("randomAddressline3", randomAddressline3);
+
+            String getCreditorAccountId = session.getString("getCreditorAccountId");
+            String getIndividualForenames = session.getString("getIndividualForenames");
+            String getIndividualSurname = session.getString("getIndividualSurname");
+            String getIndividualTitle = session.getString("getIndividualTitle");
+            String getPartyId = session.getString("getPartyId");
+
+            String accountName = DataGenerator.generateRandomAccountName();
+            String accountNumber = DataGenerator.generateRandomAccountNumber();
+            String accountReference = DataGenerator.generateRandomAccountReference();
+            String sortCode = DataGenerator.generateRandomSortCode();
+
+            boolean holdPayment = false;
+            boolean payByBacs = true;
+
+            return String.format(
+                "{\n" +
+                "  \"address\": {\n" +
+                "    \"address_line_1\": \"%s\",\n" +
+                "    \"address_line_2\": \"%s\",\n" +
+                "    \"address_line_3\": \"%s\",\n" +
+                "    \"address_line_4\": null,\n" +
+                "    \"address_line_5\": null,\n" +
+                "    \"postcode\": null\n" +
+                "  },\n" +
+                "  \"creditor_account_id\": \"%s\",\n" +
+                "  \"party_details\": {\n" +
+                "    \"individual_details\": {\n" +
+                "      \"age\": null,\n" +
+                "      \"date_of_birth\": \"\",\n" +
+                "      \"forenames\": \"%s\",\n" +
+                "      \"individual_aliases\": null,\n" +
+                "      \"national_insurance_number\": null,\n" +
+                "      \"surname\": \"%s\",\n" +
+                "      \"title\": \"%s\"\n" +
+                "    },\n" +
+                "    \"organisation_details\": null,\n" +
+                "    \"organisation_flag\": false,\n" +
+                "    \"party_id\": \"%s\"\n" +
+                "  },\n" +
+                "  \"payment\": {\n" +
+                "    \"account_name\": \"%s\",\n" +
+                "    \"account_number\": \"%s\",\n" +
+                "    \"account_reference\": \"%s\",\n" +
+                "    \"hold_payment\": %b,\n" +
+                "    \"pay_by_bacs\": %b,\n" +
+                "    \"sort_code\": \"%s\"\n" +
+                "  }\n" +
+                "}",
+                getAddressLine1,
+                getAddressLine2,
+                randomAddressline3,
+                getCreditorAccountId,
+                getIndividualForenames,
+                getIndividualSurname,
+                getIndividualTitle,
+                getPartyId,
+                accountName,
+                accountNumber,
+                accountReference,
+                holdPayment,
+                payByBacs,
+                sortCode
+            );
+        }
+        
+
+        public static String BuildRemoveEnforcementRequestBody(Session session) {
+
+                DataGenerator randomStringGenerator = new DataGenerator();
+                String reasonText1 = randomStringGenerator.generateRandomString(10);
+
+            return String.format(
+                "{\n" +
+                " \"reason\": \"%s\"\n" +
+                "}",
+                reasonText1
+            );
+        }
+
+            public static String buildEnforcementRequestBody(Session session) {
+
+                String enforcement = session.get("enforcement") != null
+                        ? session.get("enforcement").toString()
+                        : "";
+
+                DataGenerator randomStringGenerator = new DataGenerator();
+                String reasonText1 = randomStringGenerator.generateRandomString(10);
+                String reasonText2 = randomStringGenerator.generateRandomString(10);
+
+
+                switch (enforcement.toLowerCase()) {
+
+                    case "NOENF":
+                        return String.format(
+                            "{\n" +
+                            "  \"enforcement_result_responses\": [\n" +
+                            "       {\n" +
+                            "           \"parameter_name\": \"reason\",\n" +
+                            "           \"response\": \"%s\"\n" +
+                            "       }\n" +
+                            "  ],\n" +
+                            "  \"result_id\": \"NOENF\"\n" +
+                            "}",
+                            reasonText1,
+                            reasonText2
+                        );
+
+                    case "COLLO":
+                        return String.format(
+                            "{\n" +
+                            "  \"enforcement_result_responses\": [\n" +
+                            "       {\n" +
+                            "           \"parameter_name\": \"reason\",\n" +
+                            "           \"response\": \"%s\"\n" +
+                            "       },\n" +
+                            "       {\n" +
+                            "           \"parameter_name\": \"collectiontype\",\n" +
+                            "           \"response\": \"Wages\"\n" +
+                            "       },\n" +
+                            "       {\n" +
+                            "           \"parameter_name\": \"reserveterms\",\n" +
+                            "           \"response\": \"%s\"\n" +
+                            "       },\n" +
+                            "  ],\n" +
+                            "  \"payment_terms\": {\n" +
+                            "       \"date_days_in_default_imposed\": \"2026-08-14\"\n" +
+                            "       \"days_in_default\": \"1\"\n" +
+                            "       \"effective_date\": \"2026-08-04\"\n" +
+                            "       \"extension\": \"true\"\n" +
+                            "       \"instalment_amount\": \"10.99\"\n" +
+                            "       \"instalment_period\": {\n" +
+                            "           \"instalment_period_code\": \"M\"\n" +
+                            "           \"instalment_period_display_name\": \"Monthly\"\n" +
+                            "       },\n" +
+                            "       \"lump_sum_amount\": \"null\"\n" +
+                            "       \"payment_terms_type\": {\n" +
+                            "           \"payment_terms_type_code\": \"I\"\n" +
+                            "           \"payment_terms_type_display_name\": \"Instalments\"\n" +
+                            "       },\n" +
+                            "       \"posted_details\": {\n" +
+                            "           \"posted_by\": \"\"\n" +
+                            "           \"posted_by_name\": \"\"\n" +
+                            "           \"posted_date\": \"\"\n" +
+                            "       },\n" +
+                            "       \"lump_sum_amount\": \"\"\n" +
+                            "   },\n" +
+                            "  \"result_id\": \"COLLO\"\n" +
+                            "}",
+                            reasonText1,
+                            reasonText2
+                        );
+
+                    case "test c":
+                        return String.format(
+                            "{\n" +
+                            "  ... your Test C request body ...\n" +
+                            "}",
+                            reasonText1
+                        );
+
+                    case "test d":
+                        return String.format(
+                            "{\n" +
+                            "  ... your Test D request body ...\n" +
+                            "}",
+                            reasonText1
+                        );
+
+                    default:
+                        throw new IllegalArgumentException(
+                            "Unknown enforcement type: " + enforcement
+                        );
+                }
+            }
+
+            public static String BuildSearchEnforcementAccountRequestBody(Session session) {
+
+            String businessUnitIdsJson = session.get("businessUnitIds") != null
+                    ? session.get("businessUnitIds").toString()
+                    : "[]";
+
+            String forenames = session.getString("forename");
+            String surname = session.getString("surname");
+
+            return String.format(
+                "{\n" +
+                "  \"active_accounts_only\": true,\n" +
+                "  \"business_unit_ids\": %s,\n" +
+                "  \"defendant\": {\n" +
+                "    \"address_line_1\": null,\n" +
+                "    \"birth_date\": null,\n" +
+                "    \"exact_match_forenames\": false,\n" +
+                "    \"exact_match_organisation_name\": null,\n" +
+                "    \"exact_match_surname\": false,\n" +
+                "    \"forenames\": \"%s\",\n" +
+                "    \"include_aliases\": false,\n" +
+                "    \"national_insurance_number\": null,\n" +
+                "    \"organisation\": false,\n" +
+                "    \"organisation_name\": null,\n" +
+                "    \"postcode\": null,\n" +
+                "    \"surname\": \"%s\"\n" +
+                "  },\n" +
+                "    \"reference_number\": null\n" +
+                "}",
+                businessUnitIdsJson,
+                forenames,
+                surname
+            );
+        }
     }
 }

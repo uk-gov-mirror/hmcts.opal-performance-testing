@@ -28,9 +28,12 @@ public class Feeders {
     public static final FeederBuilder<String> PGAccounts;
     public static final FeederBuilder<String> PGUsers;
     public static final FeederBuilder<String> MajorCreditorUsers;
+    public static final FeederBuilder<String> MinorCreditorUsers;
+    public static final FeederBuilder<String> AddEnforcementUsers;
 
-
-
+    //Data Changes on accounts
+    public static final FeederBuilder<String> DraftAccounts;
+    public static final boolean USE_CSV_DRAFT_ACCOUNT = false;
 
     private static final AtomicInteger COUNTER;
     private static final Logger log = Logger.getLogger(Feeders.class.getName());
@@ -44,6 +47,10 @@ public class Feeders {
         PGAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.PG_ACCOUNTS_CSV).circular();
         PGUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.PG_USERS_CSV).circular();
         MajorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MAJOR_CREDITOR_USERS_CSV).circular();
+        MinorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MINOR_CREDITOR_USERS_CSV).circular();
+        DraftAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.DRAFT_ACCOUNTS_CSV).circular();
+        AddEnforcementUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.ADD_ENFORCEMENT_USERS_CSV).circular();
+
     } catch (Exception e) {
         System.err.println("Error loading CSV: " + e.getMessage());
         throw e;
@@ -71,12 +78,21 @@ public class Feeders {
         return PGAccounts;
     } 
 
-        public static FeederBuilder<String> pGUsers() {
+    public static FeederBuilder<String> pGUsers() {
         return PGUsers;
     }
-            public static FeederBuilder<String> majorCreditorUsers() {
+    
+    public static FeederBuilder<String> majorCreditorUsers() {
         return MajorCreditorUsers;
     }
+
+        public static FeederBuilder<String> minorCreditorUsers() {
+        return MinorCreditorUsers;
+    }
+
+       public static FeederBuilder<String> addEnforcementUsers() {
+        return AddEnforcementUsers;
+    } 
 
     public static CheckBuilder.Final saveTokenCode() {
         return CoreDsl.css("input[name='code']", "value").saveAs("TokenCode");
@@ -185,4 +201,7 @@ public class Feeders {
     
         return feeder;
     } 
+
+
+
 }

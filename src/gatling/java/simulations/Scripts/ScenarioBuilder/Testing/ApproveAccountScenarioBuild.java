@@ -1,4 +1,4 @@
-package simulations.Scripts.ScenarioBuilder;
+package simulations.Scripts.ScenarioBuilder.Testing;
 
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Scenario.ReviewAccounts.ApproveAccountScenario;
@@ -15,14 +15,14 @@ public class ApproveAccountScenarioBuild {
             .on(
                 exec(feed(Feeders.checkerUsers()))
                 .exec(LoginScenario.LoginRequest())
-
+                .repeat(5).on(
                 // // 50/50 split between approve and reject
-                .randomSwitch()
+                randomSwitch()
                     .on(
                         percent(100.0).then(exec(ApproveAccountScenario.ApproveAccountRequest()))
                     //    percent(100.0).then(exec(RejectAccountScenario.RejectAccountRequest()))
                     )
 
-            );
+            ));
     }
 }

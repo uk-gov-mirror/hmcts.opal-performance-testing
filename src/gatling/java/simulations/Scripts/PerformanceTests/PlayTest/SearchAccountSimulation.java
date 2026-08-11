@@ -1,8 +1,8 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
+import simulations.Scripts.ScenarioBuilder.Testing.SearchAccountScenarioBuild;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.SearchAccountScenarioBuild;
 import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;

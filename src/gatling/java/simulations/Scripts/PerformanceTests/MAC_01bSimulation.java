@@ -6,9 +6,9 @@ import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
 import simulations.Scripts.Utilities.PerformanceRunInfo;
 import simulations.Scripts.Utilities.SimulationNames;
-import simulations.Scripts.ScenarioBuilder.CheckerUsersScenarioBuild;
-import simulations.Scripts.ScenarioBuilder.ExistingUsersScenarioBuild;
-import simulations.Scripts.ScenarioBuilder.InputterUsersScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.R1A.CheckerUsersScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.R1A.InputterUsersScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.Testing.ExistingUsersScenarioBuild;
 import io.gatling.javaapi.core.*;
 
 import java.util.concurrent.atomic.AtomicInteger;

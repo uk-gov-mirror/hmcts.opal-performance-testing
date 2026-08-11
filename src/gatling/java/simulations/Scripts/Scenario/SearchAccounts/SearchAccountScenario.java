@@ -1,7 +1,9 @@
 package simulations.Scripts.Scenario.SearchAccounts;
 
 import simulations.Scripts.Headers.Headers;
+import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
+import simulations.Scripts.Utilities.SearchType;
 import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
@@ -65,18 +67,10 @@ public final class SearchAccountScenario {
                 // })
 
                 //Search for accounts query parameters 
-                .exec(session -> {
-                    String searchAccountRequestPayload =
-                        RequestBodyBuilder.buildSearchAccountRequestBody(session);
-                    return session.set("searchAccountRequestPayload", searchAccountRequestPayload);
-                })   
                 .exec(
-                    http("OPAL - Opal-fines-service - Defendant-accounts - Search")
-                    .post(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/search")
-                    .headers(Headers.getHeaders(14)) 
-                    .body(StringBody(session -> session.get("searchAccountRequestPayload"))).asJson()
-                    .check(status().is(200)) 
-
+                    AccountSearch.search(
+                        SearchType.ACCOUNT
+                    )
                 )
                
         );            

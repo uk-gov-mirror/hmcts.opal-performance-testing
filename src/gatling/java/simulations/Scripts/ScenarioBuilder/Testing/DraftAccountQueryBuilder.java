@@ -1,4 +1,4 @@
-package simulations.Scripts.ScenarioBuilder;
+package simulations.Scripts.ScenarioBuilder.Testing;
 
 import io.gatling.javaapi.core.Session;
 

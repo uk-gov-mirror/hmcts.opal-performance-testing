@@ -206,7 +206,7 @@ public final class Headers {
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-                        headers.put("want-content-digest", "sha-512");
+            headers.put("want-content-digest", "sha-512");
 
             break; 
 

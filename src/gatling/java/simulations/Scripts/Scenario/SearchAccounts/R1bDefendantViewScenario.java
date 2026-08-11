@@ -47,11 +47,11 @@ public static ChainBuilder ViewDefendant() {
         .exec(
             http("Open account details page")
           
-            .get(session -> "https://opal-frontend.test.apps.hmcts.net/fines/account/defendant/"
+            .get(session -> AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/"
             + session.getString("defendant_account_id")
             + "/details")   
             
-            // .get("https://opal-frontend.test.apps.hmcts.net/fines/account/defendant/${defendant_account_id}/details")
+            // .get(AppConfig.UrlConfig.BASE_URL + " /fines/account/defendant/${defendant_account_id}/details")
                 //don't know if we need the headers on the get?
                .headers(Headers.getHeaders(16))
                 .check(status().is(200))
@@ -67,7 +67,7 @@ public static ChainBuilder ViewDefendant() {
     String id = session.getString("defendant_account_id");
     return session.set(
         "detailsPageUrl",
-        "https://opal-frontend.test.apps.hmcts.net/fines/account/defendant/" + id + "/details");
+        AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/" + id + "/details");
             })
 
             //MH debugging
@@ -90,7 +90,7 @@ public static ChainBuilder ViewDefendant() {
 
             .exec(
             http("Load header summary")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/header-summary")
+                .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/header-summary")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -103,7 +103,7 @@ public static ChainBuilder ViewDefendant() {
             
                 .exec(
             http("Load at a glance")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/at-a-glance")
+                .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/at-a-glance")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -115,8 +115,8 @@ public static ChainBuilder ViewDefendant() {
         .exec(
             http("Load Defendant")
             //Party ID needed here as well as the Defendant ID -DefID works for Fixed pen but not the other types for some reason?
-               // .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#defendant")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/defendant-account-parties/" + "#{defendant_account_party_id}")
+               // .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#defendant")
+                .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/defendant-account-parties/#{defendant_account_party_id}")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -127,8 +127,8 @@ public static ChainBuilder ViewDefendant() {
 
           .exec(
             http("Load Payment Terms")
-                //.get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#payment-terms")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/payment-terms/latest")
+                //.get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#payment-terms")
+                .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/payment-terms/latest")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -139,8 +139,8 @@ public static ChainBuilder ViewDefendant() {
 
           .exec(
             http("Load Enforcement")
-                //.get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#enforcement")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/enforcement-status")
+                //.get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#enforcement")
+                .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -154,7 +154,7 @@ public static ChainBuilder ViewDefendant() {
 
           .exec(
             http("Load Impositions")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#impositions")
+                .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/details#impositions")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -165,7 +165,7 @@ public static ChainBuilder ViewDefendant() {
 
           .exec(
             http("Load History")
-                .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#history-and-notes")
+                .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/details#history-and-notes")
                 //don't know if we need the headers on the get?
                 .headers(Headers.getHeaders(17))
                 .header("Referer", "#{detailsPageUrl}")
@@ -179,7 +179,7 @@ public static ChainBuilder ViewDefendant() {
 
     exec(
         http("Load fixed penalty")
-            .get("https://opal-frontend.test.apps.hmcts.net/opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/fixed-penalty")
+            .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/fixed-penalty")
             
             .headers(Headers.getHeaders(17))
             .header("Referer", "#{detailsPageUrl}")

@@ -1,8 +1,8 @@
-package simulations.Scripts.ScenarioBuilder;
+package simulations.Scripts.ScenarioBuilder.R1A;
 
 
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountConditionalCautionScenario;
-import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineScenario;
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineMajorCreditScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFixedScenario;
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Utilities.Feeders;
@@ -55,7 +55,7 @@ public class InputterUsersScenarioBuild {
                 .doIf(session ->
                     "FINE".equalsIgnoreCase(session.getString("accountType"))
                 ).then(
-                    exec(CreateAccountFineScenario.CreateAccountFineRequest())
+                    exec(CreateAccountFineMajorCreditScenario.CreateAccountFineRequest())
                 )
 
                 .doIf(session ->

@@ -216,5 +216,68 @@ public class DataGenerator {
         }
     return sb.toString();
     }
-    
+
+    public static String generateRandomAccountName() {
+    return generateRandomFirstName() + " " + generateRandomLastName();
+    }
+
+    public static String generateRandomAccountNumber() {
+        // 6-8 digits
+        int length = randomNumber(6, 8);
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        return sb.toString();
+    }
+
+    public static String generateRandomAccountReference() {
+        // e.g. REF7K29XQ
+        return "REF" + generateRandomAlphaNumeric(6);
+    }
+
+    public static String generateRandomSortCode() {
+        // 6 digits
+        StringBuilder sb = new StringBuilder(6);
+
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        return sb.toString();
+    }
+
+    private static String generateRandomAlphaNumeric(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return sb.toString();
+    }
+
+    public static String generateRandomAdultDateOfBirth() {
+    // Age between 18 and 100
+        int age = randomNumber(18, 100);
+
+        LocalDate dob = LocalDate.now()
+                .minusYears(age)
+                .minusDays(random.nextInt(365));
+
+        return dob.format(dateFormatter);
+    }
+    public static String generateRandomYouthDateOfBirth() {
+    // Age between 5 and 17
+        int age = randomNumber(5, 17);
+
+        LocalDate dob = LocalDate.now()
+                .minusYears(age)
+                .minusDays(random.nextInt(365));
+
+        return dob.format(dateFormatter);
+    }
 }

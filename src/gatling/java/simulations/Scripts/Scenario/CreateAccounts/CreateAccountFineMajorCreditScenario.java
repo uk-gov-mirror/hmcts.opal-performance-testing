@@ -21,11 +21,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
+import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
-public final class CreateAccountFineScenario {
+public final class CreateAccountFineMajorCreditScenario {
 
-    private CreateAccountFineScenario() {}
+    private CreateAccountFineMajorCreditScenario() {}
 
     public static ChainBuilder CreateAccountFineRequest() {
 
@@ -496,7 +496,19 @@ public final class CreateAccountFineScenario {
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                    )
+                         .check(
+                                jsonPath("$.refData[*].major_creditor_id").findAll().saveAs("getMajorCreditorIds"))               
+
+                    )                    
+                    .exec(session -> {
+                        List<String> majorCreditorIds = session.getList("getMajorCreditorIds");
+
+                        String selectedMajorCreditorId =
+                                majorCreditorIds.get(ThreadLocalRandom.current().nextInt(majorCreditorIds.size()));
+
+                        return session.set("selectedMajorCreditorId", selectedMajorCreditorId);
+                    })
+
                     .pause(5,20)
                     .exec(session -> {
                         String offence = DataGenerator.generateRandomOFFENCE();
@@ -740,7 +752,8 @@ public final class CreateAccountFineScenario {
                         try {
                             String draftAccountRequestPayload =
                                 RequestBodyBuilder.BuildDraftAccountFineRequestBody(session);
-                            
+                           // System.out.println("draftAccountRequestPayload = " + draftAccountRequestPayload);
+
                             // Create SHA-512 digest
                             String contentDigest =
                                 ContentDigestGenerator.generateSha512ContentDigest(

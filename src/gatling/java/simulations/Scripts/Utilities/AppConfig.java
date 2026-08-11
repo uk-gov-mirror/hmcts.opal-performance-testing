@@ -97,20 +97,18 @@ public class AppConfig {
     }
 // ------------------------- URL Configuration -----------------------------
    public static class UrlConfig {
-       public static final String BASE_URL = getConfigProperty("url.rrems.base", "https://opal-frontend.test.apps.hmcts.net");
-       public static final String AUTH_URL = getConfigProperty("url.auth.base", "https://login.microsoftonline.com/");
+        public static final String BASE_URL = getConfigProperty("url.rrems.base", "Secret1");
+        public static final String AUTH_URL = getConfigProperty("url.auth.base", "Secret2");
    }
    // ------------------------- Tenant Configuration -----------------------------
    public static class TenantConfig {
-       public static final String CLIENT_ID = getConfigProperty("tenant.client.id", "85258805-10e5-4cbd-a38e-61fc4e62627a");
-       public static final String CLIENT_REQUEST_ID = getConfigProperty("tenant.client.request.id", "7fa0e61d-a88e-487e-8047-d489889d97ea");
-       public static final String SCOPE = getConfigProperty("tenant.scope", "user.read%20openid%20profile%20offline_access");
-       public static final String REDIRECT_URL = getConfigProperty("tenant.redirect.url", "https%3A%2F%2Fopal-frontend.test.apps.hmcts.net%2Fsso%2Flogin-callback");
-       public static final String AAD_TENANT_ID = getConfigProperty("tenant.aad.tenant.id", "e575f663-b30a-4786-89ad-319842dfe853");
-       }
-
-
-
+        public static final String CLIENT_ID = getConfigProperty("tenant.client.id", "Secret3");
+        public static final String CLIENT_REQUEST_ID = getConfigProperty("tenant.client.request.id", "Secret4");
+        public static final String SCOPE = getConfigProperty("tenant.scope", "Secret5");
+        public static final String REDIRECT_URL = getConfigProperty("tenant.redirect.url", "Secret6");
+        public static final String AAD_TENANT_ID = getConfigProperty("tenant.aad.tenant.id", "Secret7");
+       
+    }
 
     // ------------------------- Test Configuration -----------------------------
 
@@ -163,12 +161,22 @@ public class AppConfig {
             public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; 
             public static final String PG_USERS_CSV = "PGUsers.csv"; 
             public static final String MAJOR_CREDITOR_USERS_CSV = "MajorCreditorUsers.csv"; 
+            public static final String DRAFT_ACCOUNTS_CSV = "DraftAccounts.csv";
+            public static final String MINOR_CREDITOR_USERS_CSV = "MinorCreditorUsers.csv";
+            public static final String ADD_ENFORCEMENT_USERS_CSV = "AmendingEnforcementsToAccountUsers.csv";
+
+
+
 
             public static final String USERS_FILE_PATH = Paths.get(USERS_CSV).toString();  
             public static final String CHECKER_USERS_FILE_PATH = Paths.get(CHECKER_USERS_CSV).toString();    
             public static final String INPUTTER_USERS_FILE_PATH = Paths.get(INPUTTER_USERS_CSV).toString();  
             //MH and here
             public static final String SEARCHVIEW_USERS_FILE_PATH = Paths.get(SEARCHVIEW_USERS_CSV).toString();  
+            public static final String DRAFT_ACCOUNTS_FILE_PATH = Paths.get(DRAFT_ACCOUNTS_CSV).toString();  
+            public static final String MAJOR_CREDITOR_USERS_FILE_PATH = Paths.get(MAJOR_CREDITOR_USERS_CSV).toString();  
+            public static final String MINOR_CREDITOR_USERS_FILE_PATH = Paths.get(MINOR_CREDITOR_USERS_CSV).toString();  
+            public static final String ADD_ENFORCEMENT_USERS_FILE_PATH = Paths.get(ADD_ENFORCEMENT_USERS_CSV).toString();  
 
         }
 
@@ -189,11 +197,11 @@ public class AppConfig {
 
 																	 
         public static final int INPUTTER_USERS = Integer.parseInt(
-            System.getProperty("performance.inputters", "20")
+            System.getProperty("performance.inputters", "1")
         );
 
         public static final int CHECKER_USERS = Integer.parseInt(
-            System.getProperty("performance.checkers", "1")
+            System.getProperty("performance.checkers", "20")
         );
 
         public static final int EXISTING_USERS = Integer.parseInt(
@@ -208,6 +216,9 @@ public class AppConfig {
         );  
         public static final int MAJOR_CREDITOR_USERS = Integer.parseInt(
             System.getProperty("performance.majorCreditorUsers", "1")
+        );
+        public static final int MINOR_CREDITOR_USERS = Integer.parseInt(
+            System.getProperty("performance.minorCreditorUsers", "1")
         );
 
         public static final int RAMP_DURATION_MINUTES = Integer.parseInt(

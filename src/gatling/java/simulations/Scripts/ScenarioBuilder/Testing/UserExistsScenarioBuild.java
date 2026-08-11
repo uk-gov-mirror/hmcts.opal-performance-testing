@@ -1,4 +1,4 @@
-package simulations.Scripts.ScenarioBuilder;
+package simulations.Scripts.ScenarioBuilder.Testing;
 
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Scenario.Login.UserExistsScenario;

@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
+import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
 public final class ApproveAccountScenario {
 
@@ -189,63 +189,117 @@ public final class ApproveAccountScenario {
                                 jsonPath("$.summaries[*].submitted_by_name").findAll().saveAs("submittedByNames")
                             )
 
-                )                
+                )    
+                
+                //Get draft account ID from CSV file instead of request.
+                .doIf(session -> Feeders.USE_CSV_DRAFT_ACCOUNT).then(
+                    feed(Feeders.DraftAccounts)
+                )
+
                 .exec(session -> {
-                // Lists returned from the draft account search response
-                List<String> draftAccountIds = session.getList("draftAccountIds");
-                List<String> businessUnitIds = session.getList("businessUnitIds");
-                List<String> accountStatuses = session.getList("accountStatuses");
-                List<String> submittedBys = session.getList("submittedBys");
-                List<String> submittedByNames = session.getList("submittedByNames");
-                
-                // Lists returned from the draft account search response
-                if (draftAccountIds == null || draftAccountIds.isEmpty()) {
-                    System.out.println("No draft accounts returned");
-                    return session.markAsFailed();
-                }
 
-                // Will hold the index of the account we successfully claim
-                int selectedIndex = -1;
-                
-                // Loop through available accounts and attempt to claim one
-                // We use a random index to spread users across different accounts
-                for (int i = 0; i < draftAccountIds.size(); i++) {
-                    
-                    // Select a random account from the returned list
-                    int randomIndex = ThreadLocalRandom.current()
-                        .nextInt(draftAccountIds.size());
+                    // Lists returned from the draft account search response
+                    List<String> draftAccountIds =
+                        session.getList("draftAccountIds");
 
-                    String candidateId = draftAccountIds.get(randomIndex);
+                    List<String> businessUnitIds =
+                        session.getList("businessUnitIds");
 
-                    // add() returns true only if not already claimed
-                    if (AccountCounters.CLAIMED_ACCOUNTS.add(candidateId)) {
-                        selectedIndex = randomIndex;
-                        break;
+                    List<String> accountStatuses =
+                        session.getList("accountStatuses");
+
+                    List<String> submittedBys =
+                        session.getList("submittedBys");
+
+                    List<String> submittedByNames =
+                        session.getList("submittedByNames");
+
+                    if (draftAccountIds == null || draftAccountIds.isEmpty()) {
+                        System.out.println("No draft accounts returned");
+                        return session.markAsFailed();
                     }
-                }
 
-                if (selectedIndex == -1) {
-                    System.out.println("No unclaimed draft accounts available");
-                    return session.markAsFailed();
-                }
+                    int selectedIndex = -1;
 
-                // System.out.println(
-                //     "Selected Draft Account ID = " +
-                //     draftAccountIds.get(selectedIndex)
-                // );
+                    if (Feeders.USE_CSV_DRAFT_ACCOUNT) {
 
-                return session
-                    .set("selectedDraftAccountId",
-                        draftAccountIds.get(selectedIndex))
-                    .set("selectedBusinessUnitId",
-                        businessUnitIds.get(selectedIndex))
-                    .set("accountStatus",
-                        accountStatuses.get(selectedIndex))
-                    .set("submittedBy",
-                        submittedBys.get(selectedIndex))
-                    .set("submittedByName",
-                        submittedByNames.get(selectedIndex));
+                        // This value was added to the session by Feeders.DraftAccounts
+                        String csvDraftAccountId =
+                            session.getString("selectedDraftAccountId");
+
+                        selectedIndex =
+                            draftAccountIds.indexOf(csvDraftAccountId);
+
+                        if (selectedIndex == -1) {
+                            System.out.println(
+                                "Draft Account ID from CSV not found in API response: "
+                                    + csvDraftAccountId
+                            );
+
+                            return session.markAsFailed();
+                        }
+
+                        // Prevent the same account being used twice
+                        if (!AccountCounters.CLAIMED_ACCOUNTS.add(csvDraftAccountId)) {
+                            System.out.println(
+                                "Draft Account ID already claimed: "
+                                    + csvDraftAccountId
+                            );
+
+                            return session.markAsFailed();
+                        }
+
+                    } else {
+
+                        // Randomly select an unclaimed account
+                        for (int i = 0; i < draftAccountIds.size(); i++) {
+
+                            int randomIndex =
+                                ThreadLocalRandom.current()
+                                    .nextInt(draftAccountIds.size());
+
+                            String candidateId =
+                                draftAccountIds.get(randomIndex);
+
+                            if (AccountCounters.CLAIMED_ACCOUNTS.add(candidateId)) {
+                                selectedIndex = randomIndex;
+                                break;
+                            }
+                        }
+
+                        if (selectedIndex == -1) {
+                            System.out.println(
+                                "No unclaimed draft accounts available"
+                            );
+
+                            return session.markAsFailed();
+                        }
+                    }
+
+                    // Used for both CSV and random selection
+                    return session
+                        .set(
+                            "selectedDraftAccountId",
+                            draftAccountIds.get(selectedIndex)
+                        )
+                        .set(
+                            "selectedBusinessUnitId",
+                            businessUnitIds.get(selectedIndex)
+                        )
+                        .set(
+                            "accountStatus",
+                            accountStatuses.get(selectedIndex)
+                        )
+                        .set(
+                            "submittedBy",
+                            submittedBys.get(selectedIndex)
+                        )
+                        .set(
+                            "submittedByName",
+                            submittedByNames.get(selectedIndex)
+                        );
                 })
+            
             )
 
             .group("Review Account")

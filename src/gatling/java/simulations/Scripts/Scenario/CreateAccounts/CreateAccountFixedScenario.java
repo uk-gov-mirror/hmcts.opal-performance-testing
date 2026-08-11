@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.ScenarioBuilder.DraftAccountQueryBuilder;
+import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
 public final class CreateAccountFixedScenario {
 
@@ -216,7 +216,7 @@ public final class CreateAccountFixedScenario {
                                jsonPath("$.summaries").findAll().saveAs("summaries"))
                 )  
             )
-            
+
             .group("Initiate Account Creation")
             .on(
 
