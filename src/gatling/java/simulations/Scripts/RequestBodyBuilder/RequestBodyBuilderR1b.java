@@ -355,7 +355,9 @@ public static final class DefendantAccountSearch {
                 case "INTL":
                 case "WDN":
                 case "NAP":
-                case "REM":                    
+                case "REM":
+                case "HTT": 
+                case "FSN":                   
 
                     return String.format(
                         "{\n" +
@@ -542,6 +544,29 @@ public static final class DefendantAccountSearch {
                         reasonText1,
                         enforcement
                     );
+
+                /*
+                * S136
+                */
+                case "S136":
+
+                     return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"test5\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"timeofrelease\",\n" +
+                        "      \"response\": \"14.30\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );
                 /*
                 * AEO
                 */
@@ -598,6 +623,44 @@ public static final class DefendantAccountSearch {
                         "    }\n" +
                         "  ],\n" +
                         "  \"result_id\": \"S18\"\n" +
+                        "}",
+                        reasonText1
+                    );
+
+                     /*
+                * UPWO
+                */
+                case "UPWO":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"noofhours\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"consecconcurrent\",\n" +
+                        "      \"response\": \"consecutive\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"completiondate\",\n" +
+                        "      \"response\": \"2026-08-05\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"supervisor\",\n" +
+                        "      \"response\": \"An officer of a local probation board\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"supervisingcourt\",\n" +
+                        "      \"response\": \"test\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"UPWO\"\n" +
                         "}",
                         reasonText1
                     );

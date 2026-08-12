@@ -97,7 +97,14 @@ public final class AmendingEnforcementsToAccountsScenario {
                         resultId.equalsIgnoreCase("CONF") ||
                         resultId.equalsIgnoreCase("FSN") ||
                         resultId.equalsIgnoreCase("WDN") ||
+                        resultId.equalsIgnoreCase("SC") ||
+                        resultId.equalsIgnoreCase("S136") ||
                         resultId.equalsIgnoreCase("NAP");
+
+                        System.out.println(
+                            "Existing Enforcement Result: [" + resultId + "]" +
+                            " | Should Add Enforcement: " + shouldAddEnforcement
+                        );
 
                     return session.set("shouldAddEnforcement", shouldAddEnforcement);
                 })

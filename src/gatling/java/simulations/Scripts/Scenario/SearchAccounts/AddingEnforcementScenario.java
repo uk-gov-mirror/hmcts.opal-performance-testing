@@ -77,6 +77,8 @@ public final class AddingEnforcementScenario {
                             resultId.equalsIgnoreCase("CONF") ||
                             resultId.equalsIgnoreCase("FSN") ||
                             resultId.equalsIgnoreCase("WDN") ||
+                            resultId.equalsIgnoreCase("SC") ||
+                            resultId.equalsIgnoreCase("S136") ||
                             resultId.equalsIgnoreCase("NAP")
                         );
                 })
