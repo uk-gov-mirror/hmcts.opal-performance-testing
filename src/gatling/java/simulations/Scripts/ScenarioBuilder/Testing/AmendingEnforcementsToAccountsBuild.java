@@ -7,19 +7,17 @@ import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 
-public class AddEnforcementsToAccountBuild {
+public class AmendingEnforcementsToAccountsBuild {
 
     public static ScenarioBuilder build(String scenarioName) {
         return scenario(scenarioName)
             .group("OPAL Login Requests")
             .on(
-                feed(Feeders.addEnforcementUsers())
+                feed(Feeders.amendEnforcementUsers())
                 
                 .exec(session -> session
                     .set("username", session.getString("Username"))
                     .set("password", session.getString("Password"))
-                    .set("accountType", session.getString("Account"))
-                    .set("createdAccountCount", 0)
                 )
                     .exec(LoginScenario.LoginRequest())
                     .exec(session -> session.set("loopCounter", 0)) // Initialize loop counter

@@ -3,19 +3,11 @@ package simulations.Scripts.Scenario.SearchAccounts;
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.ContentDigestGenerator;
-import simulations.Scripts.Utilities.Feeders;
 import simulations.Scripts.Utilities.SearchType;
-import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilderR1b;
 
 public final class AmendingEnforcementsToAccountsScenario {
 
@@ -93,17 +85,35 @@ public final class AmendingEnforcementsToAccountsScenario {
                                 .optional()
                                 .saveAs("enforcementActionResultId")
                         )
-                ) 
-            )
-            .doIf(session -> session.get("enforcementActionResultId") == null)
-                .then(
-                    exec(AddingEnforcementScenario.AddingEnforcementRequest())
-                )
+                    )
+                .exec(session -> {
 
-            .doIf(session -> session.get("enforcementActionResultId") != null)
-                .then(
-                    exec(RemovingEnforcementScenario.RemovingEnforcementRequest())
-                )          
+                    String resultId = session.get("enforcementActionResultId");
+
+                    boolean shouldAddEnforcement =
+                        resultId == null ||
+                        resultId.equalsIgnoreCase("CW") ||
+                        resultId.equalsIgnoreCase("REM") ||
+                        resultId.equalsIgnoreCase("CONF") ||
+                        resultId.equalsIgnoreCase("FSN") ||
+                        resultId.equalsIgnoreCase("WDN") ||
+                        resultId.equalsIgnoreCase("NAP");
+
+                    return session.set("shouldAddEnforcement", shouldAddEnforcement);
+                })
+
+                .doIfOrElse(session -> session.getBoolean("shouldAddEnforcement"))
+                    .then(
+                        exec(
+                            AddingEnforcementScenario.AddingEnforcementRequest()
+                        )
+                    )
+                    .orElse(
+                        exec(
+                            RemovingEnforcementScenario.RemovingEnforcementRequest()
+                        )
+                    ) 
+            )        
         ));            
     }
 }

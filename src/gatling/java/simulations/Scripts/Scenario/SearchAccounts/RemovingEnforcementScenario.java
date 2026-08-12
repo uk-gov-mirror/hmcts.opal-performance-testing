@@ -82,7 +82,7 @@ public final class RemovingEnforcementScenario {
                 )                
                 .exec(
                     http("OPAL - Opal-fines-service - Defendant-accounts - Remove-enf-hold")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/remove-enf-hold")
+                        .patch(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/remove-enf-hold")
                         .headers(Headers.getHeaders(19))
                         .body(StringBody(session -> session.get("removeEnforcementRequestPayload"))).asJson()
                         .check(status().saveAs("httpStatus"))

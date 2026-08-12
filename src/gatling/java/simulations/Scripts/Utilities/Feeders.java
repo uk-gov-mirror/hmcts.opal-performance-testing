@@ -29,7 +29,7 @@ public class Feeders {
     public static final FeederBuilder<String> PGUsers;
     public static final FeederBuilder<String> MajorCreditorUsers;
     public static final FeederBuilder<String> MinorCreditorUsers;
-    public static final FeederBuilder<String> AddEnforcementUsers;
+    public static final FeederBuilder<String> AmendEnforcementUsers;
 
     //Data Changes on accounts
     public static final FeederBuilder<String> DraftAccounts;
@@ -49,7 +49,7 @@ public class Feeders {
         MajorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MAJOR_CREDITOR_USERS_CSV).circular();
         MinorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MINOR_CREDITOR_USERS_CSV).circular();
         DraftAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.DRAFT_ACCOUNTS_CSV).circular();
-        AddEnforcementUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.ADD_ENFORCEMENT_USERS_CSV).circular();
+        AmendEnforcementUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.AMEND_ENFORCEMENT_USERS_CSV).circular();
 
     } catch (Exception e) {
         System.err.println("Error loading CSV: " + e.getMessage());
@@ -90,8 +90,8 @@ public class Feeders {
         return MinorCreditorUsers;
     }
 
-       public static FeederBuilder<String> addEnforcementUsers() {
-        return AddEnforcementUsers;
+       public static FeederBuilder<String> amendEnforcementUsers() {
+        return AmendEnforcementUsers;
     } 
 
     public static CheckBuilder.Final saveTokenCode() {

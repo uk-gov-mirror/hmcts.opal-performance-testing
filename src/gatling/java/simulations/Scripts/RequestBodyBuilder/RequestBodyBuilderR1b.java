@@ -323,101 +323,340 @@ public static final class DefendantAccountSearch {
             );
         }
 
-            public static String buildEnforcementRequestBody(Session session) {
+        public static String buildEnforcementRequestBody(Session session) {
 
-                String enforcement = session.get("enforcement") != null
-                        ? session.get("enforcement").toString()
-                        : "";
+            // Get enforcement from Gatling session
+            String enforcement = session.get("EnforcementId") != null
+                    ? session.get("EnforcementId").toString().trim().toUpperCase()
+                    : "";
+          
 
-                DataGenerator randomStringGenerator = new DataGenerator();
-                String reasonText1 = randomStringGenerator.generateRandomString(10);
-                String reasonText2 = randomStringGenerator.generateRandomString(10);
-
-
-                switch (enforcement.toLowerCase()) {
-
-                    case "NOENF":
-                        return String.format(
-                            "{\n" +
-                            "  \"enforcement_result_responses\": [\n" +
-                            "       {\n" +
-                            "           \"parameter_name\": \"reason\",\n" +
-                            "           \"response\": \"%s\"\n" +
-                            "       }\n" +
-                            "  ],\n" +
-                            "  \"result_id\": \"NOENF\"\n" +
-                            "}",
-                            reasonText1,
-                            reasonText2
-                        );
-
-                    case "COLLO":
-                        return String.format(
-                            "{\n" +
-                            "  \"enforcement_result_responses\": [\n" +
-                            "       {\n" +
-                            "           \"parameter_name\": \"reason\",\n" +
-                            "           \"response\": \"%s\"\n" +
-                            "       },\n" +
-                            "       {\n" +
-                            "           \"parameter_name\": \"collectiontype\",\n" +
-                            "           \"response\": \"Wages\"\n" +
-                            "       },\n" +
-                            "       {\n" +
-                            "           \"parameter_name\": \"reserveterms\",\n" +
-                            "           \"response\": \"%s\"\n" +
-                            "       },\n" +
-                            "  ],\n" +
-                            "  \"payment_terms\": {\n" +
-                            "       \"date_days_in_default_imposed\": \"2026-08-14\"\n" +
-                            "       \"days_in_default\": \"1\"\n" +
-                            "       \"effective_date\": \"2026-08-04\"\n" +
-                            "       \"extension\": \"true\"\n" +
-                            "       \"instalment_amount\": \"10.99\"\n" +
-                            "       \"instalment_period\": {\n" +
-                            "           \"instalment_period_code\": \"M\"\n" +
-                            "           \"instalment_period_display_name\": \"Monthly\"\n" +
-                            "       },\n" +
-                            "       \"lump_sum_amount\": \"null\"\n" +
-                            "       \"payment_terms_type\": {\n" +
-                            "           \"payment_terms_type_code\": \"I\"\n" +
-                            "           \"payment_terms_type_display_name\": \"Instalments\"\n" +
-                            "       },\n" +
-                            "       \"posted_details\": {\n" +
-                            "           \"posted_by\": \"\"\n" +
-                            "           \"posted_by_name\": \"\"\n" +
-                            "           \"posted_date\": \"\"\n" +
-                            "       },\n" +
-                            "       \"lump_sum_amount\": \"\"\n" +
-                            "   },\n" +
-                            "  \"result_id\": \"COLLO\"\n" +
-                            "}",
-                            reasonText1,
-                            reasonText2
-                        );
-
-                    case "test c":
-                        return String.format(
-                            "{\n" +
-                            "  ... your Test C request body ...\n" +
-                            "}",
-                            reasonText1
-                        );
-
-                    case "test d":
-                        return String.format(
-                            "{\n" +
-                            "  ... your Test D request body ...\n" +
-                            "}",
-                            reasonText1
-                        );
-
-                    default:
-                        throw new IllegalArgumentException(
-                            "Unknown enforcement type: " + enforcement
-                        );
-                }
+            // Stop early if enforcement is missing
+            if (enforcement.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "Enforcement value is NULL or EMPTY. " +
+                    "Check that 'enforcement' is being added to the Gatling Session."
+                );
             }
+
+            DataGenerator randomStringGenerator = new DataGenerator();
+
+            String reasonText1 = randomStringGenerator.generateRandomString(10);
+            String reasonText2 = randomStringGenerator.generateRandomString(10);
+
+            switch (enforcement) {
+
+                /*
+                * NOENF / CONF / INTL
+                * All use the same parameters.
+                */
+                case "NOENF":
+                case "CONF":
+                case "INTL":
+                case "WDN":
+                case "NAP":
+                case "REM":                    
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );                   
+
+
+                /*
+                * COLLO
+                */
+                case "COLLO":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"collectiontype\",\n" +
+                        "      \"response\": \"Wages\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reserveterms\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"payment_terms\": {\n" +
+                        "    \"date_days_in_default_imposed\": \"2026-08-14\",\n" +
+                        "    \"days_in_default\": \"1\",\n" +
+                        "    \"effective_date\": \"2026-08-04\",\n" +
+                        "    \"extension\": \"true\",\n" +
+                        "    \"instalment_amount\": \"10.99\",\n" +
+                        "    \"instalment_period\": {\n" +
+                        "      \"instalment_period_code\": \"M\",\n" +
+                        "      \"instalment_period_display_name\": \"Monthly\"\n" +
+                        "    },\n" +
+                        "    \"lump_sum_amount\": \"null\",\n" +
+                        "    \"payment_terms_type\": {\n" +
+                        "      \"payment_terms_type_code\": \"I\",\n" +
+                        "      \"payment_terms_type_display_name\": \"Instalments\"\n" +
+                        "    },\n" +
+                        "    \"posted_details\": {\n" +
+                        "      \"posted_by\": \"\",\n" +
+                        "      \"posted_by_name\": \"\",\n" +
+                        "      \"posted_date\": \"\"\n" +
+                        "    }\n" +
+                        "  },\n" +
+                        "  \"result_id\": \"COLLO\"\n" +
+                        "}",
+                        reasonText1,
+                        reasonText2
+                    );  
+
+                /*
+                * SC
+                */
+                case "SC":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"days_in_default\",\n" +
+                        "      \"response\": \"3\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"totalamount\",\n" +
+                        "      \"response\": \"9.99\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"paymentterms\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"SC\"\n" +
+                        "}",
+                        reasonText1
+                    );
+                   
+                /*
+                * CWN
+                */
+                case "CWN":
+                case "NAWT":
+                case "REW":
+
+                     return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"hearing_date\",\n" +
+                        "      \"response\": \"2026-08-12\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"court_code\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );
+                /*
+                * SUMM
+                */
+                case "SUMM":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"hearing_date\",\n" +
+                        "      \"response\": \"2026-08-12\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"court_code\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"prisondetention\",\n" +
+                        "      \"response\": \"prison\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"SUMM\"\n" +
+                        "}",
+                        reasonText1
+                    );
+                    
+                /*
+                * PGPAY
+                */
+                case "PGPAY":
+
+                     return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [],\n" +
+                        "  \"result_id\": \"PGPAY\"\n" +
+                        "}"
+                    );
+
+                /*
+                * PRIS
+                */
+                case "PRIS":
+
+                     return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"earliestreleasedate\",\n" +
+                        "      \"response\": \"2026-08-05\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"prisonandprisonnumber\",\n" +
+                        "      \"response\": \"A1234AA\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );
+                /*
+                * AEO
+                */
+                case "AEO":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"normal_deduction_rate\",\n" +
+                        "      \"response\": \"100.99\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"protectedearningsrate\",\n" +
+                        "      \"response\": \"100.99\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"payperiod\",\n" +
+                        "      \"response\": \"Monthly\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"AEO\"\n" +
+                        "}",
+                        reasonText1
+                    );
+
+                /*
+                * S18
+                */
+                case "S18":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"datesuspcom\",\n" +
+                        "      \"response\": \"2026-08-05\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"previouspaymentterms\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"replydate\",\n" +
+                        "      \"response\": \"2026-08-05\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"S18\"\n" +
+                        "}",
+                        reasonText1
+                    );
+                /*
+                * CW
+                */
+                case "CW":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"prison\",\n" +
+                        "      \"response\": \"Test\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"commitaldays\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"consecconcurrent\",\n" +
+                        "      \"response\": \"consecutive\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"detailsconsecutive\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"processserver\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"basisofcommital\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reasonnoaltused\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"CW\"\n" +
+                        "}",
+                        reasonText1
+                    );
+
+                /*
+                * Unknown enforcement
+                */
+                default:
+
+                    throw new IllegalArgumentException(
+                        "Unknown enforcement type: [" + enforcement + "]"
+                    );
+            }
+        }
 
             public static String BuildSearchEnforcementAccountRequestBody(Session session) {
 
@@ -452,6 +691,6 @@ public static final class DefendantAccountSearch {
                 forenames,
                 surname
             );
-        }
+        }        
     }
 }
