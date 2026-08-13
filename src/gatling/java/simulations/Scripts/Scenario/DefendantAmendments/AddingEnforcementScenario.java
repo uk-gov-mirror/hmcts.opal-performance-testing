@@ -1,4 +1,4 @@
-package simulations.Scripts.Scenario.SearchAccounts;
+package simulations.Scripts.Scenario.DefendantAmendments;
 
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AccountSearch;

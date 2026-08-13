@@ -1,6 +1,7 @@
 package simulations.Scripts.Scenario.SearchAccounts;
 
 import simulations.Scripts.Headers.Headers;
+import simulations.Scripts.Scenario.DefendantAmendments.AddingEnforcementScenario;
 import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.SearchType;
