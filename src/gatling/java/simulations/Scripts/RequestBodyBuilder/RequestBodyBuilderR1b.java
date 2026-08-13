@@ -323,29 +323,6 @@ public static final class DefendantAccountSearch {
             );
         }
 
-        public static String buildAmendCollectionOrderEnforcementRequestBody(Session session) {
-
-            String collectionOrderFlagValue = session.get("collectionOrderFlag") != null
-                    ? session.get("collectionOrderFlag").toString().trim()
-                    : "false";
-
-            boolean collectionOrderFlag = Boolean.parseBoolean(collectionOrderFlagValue);
-
-            // Invert the value
-            boolean amendedCollectionOrderFlag = !collectionOrderFlag;
-
-            return String.format(
-                "{\n" +
-                "  \"collection_order\": {\n" +
-                "    \"collection_order_date\": \"null\",\n" +
-                "    \"collection_order_flag\": \"%s\"\n" +
-                "  }\n" +
-                "}",
-                amendedCollectionOrderFlag
-            );
-        }
-        
-
         public static String buildEnforcementRequestBody(Session session) {
 
             // Get enforcement from Gatling session
