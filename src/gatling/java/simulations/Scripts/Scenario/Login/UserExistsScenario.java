@@ -2,14 +2,10 @@ package simulations.Scripts.Scenario.Login;
 
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class UserExistsScenario {
 

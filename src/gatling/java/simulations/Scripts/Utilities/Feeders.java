@@ -2,8 +2,6 @@ package simulations.Scripts.Utilities;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,7 +12,6 @@ import io.gatling.javaapi.core.CoreDsl;
 import io.gatling.javaapi.core.FeederBuilder;
 import io.gatling.javaapi.jdbc.JdbcDsl;
 import io.gatling.javaapi.core.CheckBuilder;
-import java.util.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 
 

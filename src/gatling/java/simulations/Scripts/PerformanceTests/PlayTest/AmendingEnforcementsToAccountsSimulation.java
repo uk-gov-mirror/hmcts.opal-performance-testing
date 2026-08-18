@@ -1,10 +1,7 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
 import simulations.Scripts.ScenarioBuilder.Testing.AmendingEnforcementsToAccountsBuild;
-import simulations.Scripts.ScenarioBuilder.Testing.CreateAccountScenarioBuild;
-import simulations.Scripts.Utilities.AccountCounters;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -2,18 +2,10 @@ package simulations.Scripts.Scenario.SearchAccounts;
 
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
-
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
-import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilderR1b; //MH this is not the file path. this is a class path, this is strange. I do not like it.
 
 public final class R1bDefendantAmmendmentsScenario {
 

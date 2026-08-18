@@ -6,7 +6,6 @@ import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.Feeders;
 import simulations.Scripts.Utilities.UserInfoLogger;
-import simulations.Scripts.Utilities.AccountCounters;
 
 import io.gatling.javaapi.core.*;
 

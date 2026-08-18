@@ -7,10 +7,6 @@ import static io.gatling.javaapi.core.CoreDsl.jsonPath;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.Session;
 import simulations.Scripts.Utilities.DataGenerator;
@@ -79,8 +75,8 @@ public static final class DefendantAccountSearch {
 
     public static String BuildSearchParentandGuardianAccountRequestBody(Session session) {
 
-            String businessUnitIdsJson = session.get("getListBusinessUnitId") != null
-                    ? session.get("getListBusinessUnitId").toString()
+            String businessUnitIdsJson = session.get("businessUnitIds") != null
+                    ? session.get("businessUnitIds").toString()
                     : "[]";
 
             String forenames = session.getString("forename");
@@ -88,19 +84,25 @@ public static final class DefendantAccountSearch {
 
             return String.format(
                 "{\n" +
-                "  \"active_accounts_only\": true,\n" +
+                "  \"account_number\": null,\n" +
+                "  \"active_accounts_only\": false,\n" +
                 "  \"business_unit_ids\": %s,\n" +
-                "  \"creditor\": {\n" +
+                "  \"consolidation_search\": false,\n" +
+                "  \"defendant\": {\n" +
                 "    \"address_line_1\": null,\n" +
-                "    \"exact_match_forenames\": false,\n" +
+                "    \"birth_date\": null,\n" +
+                "    \"exact_match_forenames\": null,\n" +
                 "    \"exact_match_organisation_name\": null,\n" +
-                "    \"exact_match_surname\": false,\n" +
+                "    \"exact_match_surname\": null,\n" +
                 "    \"forenames\": \"%s\",\n" +
+                "    \"include_aliases\": false,\n" +
+                "    \"national_insurance_number\": null,\n" +
                 "    \"organisation\": false,\n" +
                 "    \"organisation_name\": null,\n" +
                 "    \"postcode\": null,\n" +
                 "    \"surname\": \"%s\"\n" +
-                "  }\n" +
+                "  },\n" +
+                "  \"reference_number\": null\n" +
                 "}",
                 businessUnitIdsJson,
                 forenames,
@@ -145,19 +147,36 @@ public static final class DefendantAccountSearch {
             );
         }
 
+        
+
+        public static String BuildremovePGRequestBody(Session session) {
+
+             // Get defendant account party id from session
+            String defendant_account_id = session.get("defendant_account_id") != null
+                    ? session.get("defendant_account_id").toString().trim().toUpperCase()
+                    : "";
+
+            return String.format(
+                "{\n" +
+                " \"defendant_account_party_id\": \"%s\"\n" +
+                "}",
+                defendant_account_id
+            );
+        }
+
         public static String BuildDefendantAccountPartiesRequestBody(Session session) {
 
-            String addressLine1 = session.getString("getAddressLine1");
-            String addressLine2 = session.getString("getAddressLine2");
-            String primaryEmailAddress = session.getString("getPrimaryEmailAddress");
-            String employerAddressLine1 = session.getString("getEmployerAddressLine1");
-            String employerName = session.getString("getEmployerName");
-            String employerReference = session.getString("getEmployerReference");
-            String individualForenames = session.getString("getIndividualForenames");
-            String individualSurnames = session.getString("getIndividualSurnames");
-            String individualPartyId = session.getString("getIndividualPartyId");
-            String vehicleMakeAndModel = session.getString("getVehicleMakeAndModel");
-            String vehicleRegistration = session.getString("getVehicleRegistration");
+            String addressLine1 = session.getString("getAddressLine1") != null ? session.get("getAddressLine1").toString().trim().toUpperCase() : "";
+            String addressLine2 = session.getString("getAddressLine2") != null ? session.get("getAddressLine2").toString().trim().toUpperCase() : "";
+            String primaryEmailAddress = session.getString("getPrimaryEmailAddress") != null ? session.get("getPrimaryEmailAddress").toString().trim().toUpperCase() : "";
+            String employerAddressLine1 = session.getString("getEmployerAddressLine1") != null ? session.get("getEmployerAddressLine1").toString().trim().toUpperCase() : "";
+            String employerName = session.getString("getEmployerName") != null ? session.get("getEmployerName").toString().trim().toUpperCase() : "";
+            String employerReference = session.getString("getEmployerReference") != null ? session.get("getEmployerReference").toString().trim().toUpperCase() : "";
+            String individualForenames = session.getString("getIndividualForenames") != null ? session.get("getIndividualForenames").toString().trim().toUpperCase() : "";
+            String individualSurnames = session.getString("getIndividualSurnames") != null ? session.get("getIndividualSurnames").toString().trim().toUpperCase() : "";
+            String individualPartyId = session.getString("getIndividualPartyId") != null ? session.get("getIndividualPartyId").toString().trim().toUpperCase() : "";
+            String vehicleMakeAndModel = session.getString("getVehicleMakeAndModel") != null ? session.get("getVehicleMakeAndModel").toString().trim().toUpperCase() : "";
+            String vehicleRegistration = session.getString("getVehicleRegistration") != null ? session.get("getVehicleRegistration").toString().trim().toUpperCase() : "";
 
             //Random data:
             String randomAddressline3 = session.getString("randomAddressline3");
@@ -165,12 +184,13 @@ public static final class DefendantAccountSearch {
             session.set("randomAddressline3", DataGenerator.generateRandomAddress());
 
                         
-            return String.format(
+  return String.format(
                 "{\n" +
+                "  \"defendant_account_party\": {\n" +
                 "  \"address\": {\n" +
                 "    \"address_line_1\": \"%s\",\n" +
-                "    \"address_line_2\": \"%s\",\n" +
-                "    \"address_line_3\": \"%s\",\n" +
+                "    \"address_line_2\": null,\n" +
+                "    \"address_line_3\": null,\n" +
                 "    \"address_line_4\": null,\n" +
                 "    \"address_line_5\": null,\n" +
                 "    \"postcode\": null\n" +
@@ -183,21 +203,8 @@ public static final class DefendantAccountSearch {
                 "    \"work_telephone_number\": null\n" +
                 "  },\n" +
                 "  \"defendant_account_party_type\": \"Parent/Guardian\",\n" +
-                "    \"employer_details\": {\n" +
-                "      \"employer_address\": {\n" +
-                "        \"address_line_1\": \"%s\",\n" +
-                "        \"address_line_2\": null,\n" +
-                "        \"address_line_3\": null,\n" +
-                "        \"address_line_4\": null,\n" +
-                "        \"address_line_5\": null,\n" +
-                "        \"postcode\": null\n" +
-                "      },\n" +
-                "      \"employer_email_address\": null,\n" +
-                "      \"employer_name\": \"%s\",\n" +
-                "      \"employer_reference\": \"%s\",\n" +
-                "      \"employer_telephone_number\": null\n" +
-                "    },\n" +
-                "    \"is_debtor\": true,\n" +
+                "    \"employer_details\": null,\n" +            
+                "    \"is_debtor\": false,\n" +
                 "    \"language_preferences\": {\n" +
                 "      \"document_language_preference\": null,\n" +
                 "      \"hearing_language_preference\": null\n" +
@@ -205,35 +212,98 @@ public static final class DefendantAccountSearch {
                 "    \"party_details\": {\n" +
                 "      \"individual_details\": {\n" +
                 "        \"age\": null,\n" +
-                "        \"date_of_birth\": \"\",\n" +
+                "        \"date_of_birth\": null,\n" +
                 "        \"forenames\": \"%s\",\n" +
                 "        \"individual_aliases\": null,\n" +
                 "        \"national_insurance_number\": null,\n" +
                 "        \"surname\": \"%s\",\n" +
                 "        \"title\": null\n" +
                 "      },\n" +
-                "      \"organisation_details\": null,\n" +
                 "      \"organisation_flag\": false,\n" +
-                "      \"party_id\": \"%s\"\n" +
+                "      \"party_id\": \"\"\n" +
                 "    },\n" +
-                "    \"vehicle_details\": {\n" +
-                "      \"vehicle_make_and_model\": \"%s\",\n" +
-                "      \"vehicle_registration\": \"%s\"\n" +
+                "    \"vehicle_details\": null\n" +
                 "    }\n" +
                 "}",
                 addressLine1,
                 addressLine2,
                 randomAddressline3,
                 primaryEmailAddress,
-                employerAddressLine1,
-                employerName,
-                employerReference,
                 individualForenames,
                 individualSurnames,
-                individualPartyId,
-                vehicleMakeAndModel,
-                vehicleRegistration
+                individualPartyId
             );
+
+
+            // return String.format(
+            //     "{\n" +
+            //     "  \"address\": {\n" +
+            //     "    \"address_line_1\": \"%s\",\n" +
+            //     "    \"address_line_2\": \"%s\",\n" +
+            //     "    \"address_line_3\": \"%s\",\n" +
+            //     "    \"address_line_4\": null,\n" +
+            //     "    \"address_line_5\": null,\n" +
+            //     "    \"postcode\": null\n" +
+            //     "  },\n" +
+            //     "  \"contact_details\": {\n" +
+            //     "    \"home_telephone_number\": null,\n" +
+            //     "    \"mobile_telephone_number\": null,\n" +
+            //     "    \"primary_email_address\": \"%s\",\n" +
+            //     "    \"secondary_email_address\": null,\n" +
+            //     "    \"work_telephone_number\": null\n" +
+            //     "  },\n" +
+            //     "  \"defendant_account_party_type\": \"Parent/Guardian\",\n" +
+            //     "    \"employer_details\": {\n" +
+            //     "      \"employer_address\": {\n" +
+            //     "        \"address_line_1\": \"%s\",\n" +
+            //     "        \"address_line_2\": null,\n" +
+            //     "        \"address_line_3\": null,\n" +
+            //     "        \"address_line_4\": null,\n" +
+            //     "        \"address_line_5\": null,\n" +
+            //     "        \"postcode\": null\n" +
+            //     "      },\n" +
+            //     "      \"employer_email_address\": null,\n" +
+            //     "      \"employer_name\": \"%s\",\n" +
+            //     "      \"employer_reference\": \"%s\",\n" +
+            //     "      \"employer_telephone_number\": null\n" +
+            //     "    },\n" +
+            //     "    \"is_debtor\": true,\n" +
+            //     "    \"language_preferences\": {\n" +
+            //     "      \"document_language_preference\": null,\n" +
+            //     "      \"hearing_language_preference\": null\n" +
+            //     "    },\n" +
+            //     "    \"party_details\": {\n" +
+            //     "      \"individual_details\": {\n" +
+            //     "        \"age\": null,\n" +
+            //     "        \"date_of_birth\": \"\",\n" +
+            //     "        \"forenames\": \"%s\",\n" +
+            //     "        \"individual_aliases\": null,\n" +
+            //     "        \"national_insurance_number\": null,\n" +
+            //     "        \"surname\": \"%s\",\n" +
+            //     "        \"title\": null\n" +
+            //     "      },\n" +
+            //     "      \"organisation_details\": null,\n" +
+            //     "      \"organisation_flag\": false,\n" +
+            //     "      \"party_id\": \"%s\"\n" +
+            //     "    },\n" +
+            //     "    \"vehicle_details\": {\n" +
+            //     "      \"vehicle_make_and_model\": \"%s\",\n" +
+            //     "      \"vehicle_registration\": \"%s\"\n" +
+            //     "    }\n" +
+            //     "}",
+            //     addressLine1,
+            //     addressLine2,
+            //     randomAddressline3,
+            //     primaryEmailAddress,
+            //     employerAddressLine1,
+            //     employerName,
+            //     employerReference,
+            //     individualForenames,
+            //     individualSurnames,
+            //     individualPartyId,
+            //     vehicleMakeAndModel,
+            //     vehicleRegistration
+            // );
         }
 
         public static String buildUpdateMinorCreditorAccountRequestBody(Session session) {

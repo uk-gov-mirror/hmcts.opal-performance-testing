@@ -41,6 +41,19 @@ public class AccountSearch {
                             requestName =
                                 "OPAL - Defendant Accounts - Enforcement Search";
                         }
+ 
+                        case PGACCOUNT -> {
+
+                            payload =
+                                RequestBodyBuilderR1b.DefendantAccountSearch
+                                    .BuildSearchParentandGuardianAccountRequestBody(session);
+
+                            endpoint =
+                                "/opal-fines-service/defendant-accounts/search";
+
+                            requestName =
+                                "OPAL - Defendant Accounts - Enforcement Search";
+                        }
 
                         case MINOR_CREDITOR -> {
 

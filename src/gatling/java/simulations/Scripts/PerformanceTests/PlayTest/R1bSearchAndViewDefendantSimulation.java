@@ -3,12 +3,8 @@ package simulations.Scripts.PerformanceTests.PlayTest;
 
 import simulations.Scripts.ScenarioBuilder.R1B.R1bSearchandViewDefendantScenarioBuild;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
 import io.gatling.javaapi.core.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-
 import static io.gatling.javaapi.core.CoreDsl.*;
 
 public class R1bSearchAndViewDefendantSimulation extends Simulation {

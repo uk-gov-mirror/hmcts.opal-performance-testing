@@ -6,8 +6,6 @@ import simulations.Scripts.Scenario.SearchAccounts.R1bMinorCreditorSearchScenari
 import simulations.Scripts.Utilities.Feeders;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
-
 public class R1bMinorCreditorSearchBuild {
 
     public static ScenarioBuilder build(String scenarioName) {

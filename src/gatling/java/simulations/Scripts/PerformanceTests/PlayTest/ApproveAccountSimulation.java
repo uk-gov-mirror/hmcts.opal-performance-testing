@@ -19,10 +19,7 @@ public class ApproveAccountSimulation extends Simulation {
         System.out.println("User Count: " + AppConfig.PerformanceConfig.CHECKER_USERS);
         System.out.println("Ramp Duration: " + AppConfig.PerformanceConfig.getRampDuration());
     }    
-// 2 and 6 simple
-// 5 and 15 complex
 
-//Added the MaxDuration
     public ApproveAccountSimulation() {
         setUp(
             ApproveAccountScenarioBuild.build(OPAL_LOGIN_TEST)

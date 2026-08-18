@@ -9,11 +9,8 @@ import io.gatling.javaapi.core.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
 
 public final class SearchAccountScenario {
 

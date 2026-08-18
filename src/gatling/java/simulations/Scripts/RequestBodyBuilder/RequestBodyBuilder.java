@@ -51,26 +51,14 @@ public class RequestBodyBuilder {
         // Generate random values using DataGenerator
         String forename = DataGenerator.generateRandomFirstName();
         String surname = DataGenerator.generateRandomLastName();
-        String croNumber = DataGenerator.generateRandomCRONumber();
         String employeeRef = DataGenerator.generateRandomEmployeeReference();
-        String employerPhone = "0161" + DataGenerator.generateRandomNumber(1000000, 9999999);
         String vehicleReg = DataGenerator.generateRandomVehicleRegistration();
         String nin = DataGenerator.generateRandomNationalInsuranceNumber();
-        String pncId = DataGenerator.generateRandomPNCId();
-        String prisonNumber = DataGenerator.generateRandomPrisonNumber();
-        String businessPhone = "0207" + DataGenerator.generateRandomNumber(1000000, 9999999);
-        String homePhone = "0208" + DataGenerator.generateRandomNumber(1000000, 9999999);
-        String mobilePhone = "07700" + DataGenerator.generateRandomNumber(100000, 999999);
         String fpRegNumber = DataGenerator.generateRandomFPRegistrationNumber();
         String noticeNumber = DataGenerator.generateRandomNoticeNumber();
-        String email1 = session.get("generatedEmail1") != null ? session.get("generatedEmail1").toString() : (forename.toLowerCase() + "." + surname.toLowerCase() + "@example.com");
-        String employerCompanyName = session.get("generatedEmployerCompanyName") != null ? session.get("generatedEmployerCompanyName").toString() : DataGenerator.generateRandomEmployerName();
         String addressLine1 = session.get("generatedAddressLine1") != null ? session.get("generatedAddressLine1").toString() : DataGenerator.generateRandomAddress();
         String addressLine2 = session.get("generatedAddressLine2") != null ? session.get("generatedAddressLine2").toString() : DataGenerator.generateRandomCity();
-        String vehicleMake = session.get("generatedVehicleMake") != null ? session.get("generatedVehicleMake").toString() : DataGenerator.generateRandomVehicleMake();
         String prosecutorCaseRef = session.get("generatedProsecutorCaseRef") != null ? session.get("generatedProsecutorCaseRef").toString() : ("CASE" + DataGenerator.generateRandomNumber(100000, 999999));
-        String employerAddressLine1 = session.get("generatedEmployerAddressLine1") != null ? session.get("generatedEmployerAddressLine1").toString() : DataGenerator.generateRandomAddress();
-        String employerAddressLine2 = session.get("generatedEmployerAddressLine2") != null ? session.get("generatedEmployerAddressLine2").toString() : DataGenerator.generateRandomCity();
         String accountNoteText = "Account review for " + forename + " " + surname;
         String adultDob = DataGenerator.generateRandomAdultDateOfBirth();
 
@@ -226,7 +214,6 @@ public class RequestBodyBuilder {
         String courtId = session.get("getCourtId") != null ? session.get("getCourtId").toString() : ""; 
         String prosecutorId = session.get("selectedProsecutorId") != null ? session.get("selectedProsecutorId").toString() : ""; 
         String prosecutorName = session.get("selectedProsecutorName") != null ? session.get("selectedProsecutorName").toString() : ""; 
-        String todaydate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         String majorCreditorId = session.get("selectedMajorCreditorId") != null ? session.get("selectedMajorCreditorId").toString() : ""; 
 
         // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
@@ -395,7 +382,6 @@ public class RequestBodyBuilder {
         String courtId = session.get("getCourtId") != null ? session.get("getCourtId").toString() : ""; 
         String prosecutorId = session.get("selectedProsecutorId") != null ? session.get("selectedProsecutorId").toString() : ""; 
         String prosecutorName = session.get("selectedProsecutorName") != null ? session.get("selectedProsecutorName").toString() : ""; 
-        String todaydate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
 
         // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
@@ -410,7 +396,6 @@ public class RequestBodyBuilder {
         String vehicleMake = session.get("generatedVehicleMake") != null ? session.get("generatedVehicleMake").toString() : DataGenerator.generateRandomVehicleMake();
         String prosecutorCaseRef = session.get("generatedProsecutorCaseRef") != null ? session.get("generatedProsecutorCaseRef").toString() : ("CASE" + DataGenerator.generateRandomNumber(100000, 999999));
         String employerAddressLine1 = session.get("generatedEmployerAddressLine1") != null ? session.get("generatedEmployerAddressLine1").toString() : DataGenerator.generateRandomAddress();
-        String employerAddressLine2 = session.get("generatedEmployerAddressLine2") != null ? session.get("generatedEmployerAddressLine2").toString() : DataGenerator.generateRandomCity();
         String accountNoteText = "Account review for " + forename + " " + surname;
         String pgAddressLine1 = session.get("generatedPGAddressLine1") != null ? session.get("generatedPGAddressLine1").toString() : DataGenerator.generateRandomAddress();
         String pgAddressLine2 = session.get("generatedPGAddressLine2") != null ? session.get("generatedPGAddressLine2").toString() : DataGenerator.generateRandomAddress();
@@ -569,6 +554,159 @@ public class RequestBodyBuilder {
 		courtId, prosecutorId, prosecutorName, prosecutorCaseRef, 
         businessUnitId, businessUnitUserIds, userName);
     }
+
+    public static String BuildDraftAccountYouthRequestBody(Session session) {
+
+        String userName = session.get("getUserName") != null ? session.get("getUserName").toString() : "";
+        String businessUnitId = session.get("selectedBusinessUnitId") != null ? session.get("selectedBusinessUnitId").toString() : "";
+        String businessUnitUserIds = session.get("selectedBusinessUnitUserId") != null ? session.get("selectedBusinessUnitUserId").toString() : ""; 
+        String courtId = session.get("getCourtId") != null ? session.get("getCourtId").toString() : ""; 
+        String prosecutorId = session.get("selectedProsecutorId") != null ? session.get("selectedProsecutorId").toString() : ""; 
+        String prosecutorName = session.get("selectedProsecutorName") != null ? session.get("selectedProsecutorName").toString() : ""; 
+
+
+        // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
+        String forename = session.get("generatedForename") != null ? session.get("generatedForename").toString() : DataGenerator.generateRandomFirstName();
+        String surname = session.get("generatedSurname") != null ? session.get("generatedSurname").toString() : DataGenerator.generateRandomLastName();
+        String vehicleReg = session.get("generatedVehicleReg") != null ? session.get("generatedVehicleReg").toString() : DataGenerator.generateRandomVehicleRegistration();
+        String email1 = session.get("generatedEmail1") != null ? session.get("generatedEmail1").toString() : (forename.toLowerCase() + "." + surname.toLowerCase() + "@example.com");
+        String employerCompanyName = session.get("generatedEmployerCompanyName") != null ? session.get("generatedEmployerCompanyName").toString() : DataGenerator.generateRandomEmployerName();
+        String employeeRef = session.get("generatedEmployeeRef") != null ? session.get("generatedEmployeeRef").toString() : DataGenerator.generateRandomEmployeeReference();
+        String addressLine1 = session.get("generatedAddressLine1") != null ? session.get("generatedAddressLine1").toString() : DataGenerator.generateRandomAddress();
+        String addressLine2 = session.get("generatedAddressLine2") != null ? session.get("generatedAddressLine2").toString() : DataGenerator.generateRandomCity();
+        String vehicleMake = session.get("generatedVehicleMake") != null ? session.get("generatedVehicleMake").toString() : DataGenerator.generateRandomVehicleMake();
+        String prosecutorCaseRef = session.get("generatedProsecutorCaseRef") != null ? session.get("generatedProsecutorCaseRef").toString() : ("CASE" + DataGenerator.generateRandomNumber(100000, 999999));
+        String employerAddressLine1 = session.get("generatedEmployerAddressLine1") != null ? session.get("generatedEmployerAddressLine1").toString() : DataGenerator.generateRandomAddress();
+        String accountNoteText = "Account review for " + forename + " " + surname;
+        String youthDob = DataGenerator.generateRandomYouthDateOfBirth();
+
+        return String.format(
+        "{\n" +
+        "    \"account\": {\n" +
+        "            \"account_notes\": [\n" +
+        "             {\n" +
+        "                \"account_note_serial\": 3,\n" +
+        "                \"account_note_text\": \"%s\",\n" +
+        "                \"note_type\": \"AC\"\n" +
+        "              },\n" +
+        "              {\n" +
+        "                \"account_note_serial\": 2,\n" +
+        "                \"account_note_text\": \"%s\",\n" +
+        "                \"note_type\": \"AA\"\n" +
+        "              }\n" +
+        "            ],\n" +
+        "        \"account_sentence_date\": \"2026-01-14\",\n" + 
+        "        \"account_type\": \"Fine\",\n" +
+        "        \"collection_order_date\": null,\n" +
+        "        \"collection_order_made\": null,\n" +
+        "        \"collection_order_made_today\": null,\n" +
+        "        \"defendant\": {\n" +
+        "            \"address_line_1\": \"%s\",\n" +
+        "            \"address_line_2\": \"%s\",\n" +
+        "            \"address_line_3\": null,\n" +
+        "            \"address_line_4\": null,\n" +
+        "            \"address_line_5\": null,\n" +
+        "            \"company_flag\": false,\n" +
+        "            \"company_name\": null,\n" +
+        "            \"cro_number\": null,\n" +
+        "            \"custody_status\": null,\n" +
+        "            \"debtor_detail\": {\n" +
+        "                 \"aliases\": null,\n" +
+        "                 \"document_language\": null,\n" +
+        "                 \"employee_reference\": \"%s\",\n" +
+        "                 \"employer_address_line_1\": \"%s\",\n" +
+        "                 \"employer_address_line_2\": null,\n" +
+        "                 \"employer_address_line_3\": null,\n" +
+        "                 \"employer_address_line_4\": null,\n" +
+        "                 \"employer_address_line_5\": null,\n" +
+        "                 \"employer_company_name\": \"%s\",\n" +
+        "                 \"employer_email_address\": null,\n" +
+        "                 \"employer_post_code\": null,\n" +
+        "                 \"employer_telephone_number\": null,\n" +
+        "                 \"hearing_language\": null,\n" +
+        "                 \"vehicle_make\": \"%s\",\n" +
+        "                 \"vehicle_registration_mark\": \"%s\"\n" +
+        "            },\n" +
+        "            \"dob\": \"%s\",\n" +
+        "            \"driving_licence_number\": null,\n" +
+        "            \"email_address_1\": \"%s\",\n" +
+        "            \"email_address_2\": null,\n" +  
+        "            \"ethnicity_observed\": null,\n" +
+        "            \"ethnicity_self_defined\": null,\n" +
+        "            \"forenames\": \"%s\",\n" +
+        "            \"gender\": null,\n" +
+        "            \"interpreter_lang\": null,\n" +
+        "            \"national_insurance_number\": null,\n" +
+        "            \"nationality_1\": null,\n" +
+        "            \"nationality_2\": null,\n" + 
+        "            \"occupation\": null,\n" +
+        "            \"parent_guardian\": null,\n" +                        
+        "            \"pnc_id\": null,\n" +
+        "            \"post_code\": null,\n" +
+        "            \"prison_number\": null,\n" +
+        "            \"surname\": \"%s\",\n" +
+        "            \"telephone_number_business\": null,\n" +
+        "            \"telephone_number_home\": null,\n" +
+        "            \"telephone_number_mobile\": null,\n" +
+        "            \"title\": \"Mr\"\n" +
+        "        },\n" +
+        "        \"defendant_type\": \"adultOrYouthOnly\",\n" +
+        "        \"enforcement_court_id\": %s,\n" +
+        "        \"fp_ticket_detail\": null,\n" +
+        "        \"offences\": [\n" +
+        "            {\n" +
+        "                \"date_of_sentence\": \"2026-01-14\",\n" +
+        "                \"imposing_court_id\": null,\n" +
+        "                \"impositions\": [\n" +
+        "                    {\n" +
+        "                        \"amount_imposed\": 500,\n" +
+        "                        \"amount_paid\": 200,\n" +
+        "                        \"major_creditor_id\": null,\n" +
+        "                        \"minor_creditor\": null,\n" +
+        "                        \"result_id\": \"FVS\"\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"offence_id\": 33369\n" +
+        "            }\n" +
+        "        ],\n" +
+        "        \"originator_id\": %s,\n" +
+        "        \"originator_name\": \"%s\",\n" +
+        "        \"originator_type\": \"NEW\",\n" +
+        "        \"payment_card_request\": null,\n" +
+        "        \"payment_terms\": {\n" +
+        "            \"default_days_in_jail\": null,\n" +
+        "            \"effective_date\": \"2026-01-14\",\n" +
+        "            \"enforcements\": [\n" +
+        "                {\n" +
+        "                    \"enforcement_result_responses\": null,\n" +
+        "                    \"result_id\": \"COLLO\"\n" +
+        "                }\n" +
+        "            ],\n" +             
+        "            \"instalment_amount\": null,\n" +
+        "            \"instalment_period\": null,\n" +
+        "            \"lump_sum_amount\": null,\n" +
+        "            \"payment_terms_type_code\": \"B\"\n" +
+        "        },\n" +
+        "        \"prosecutor_case_reference\": \"%s\",\n" +
+        "        \"suspended_committal_date\": null\n" +
+        "    },\n" +    
+        "    \"account_snapshot\": null,\n" +
+        "    \"account_status\": \"Submitted\",\n" +
+        "    \"account_status_date\": null,\n" +
+        "    \"account_status_message\": null,\n" +
+        "    \"account_type\": \"Fine\",\n" +
+        "    \"business_unit_id\": %s,\n" +
+        "    \"created_at\": null,\n" +
+        "    \"draft_account_id\": null,\n" +
+        "    \"submitted_by\": \"%s\",\n" +
+        "    \"submitted_by_name\": \"%s\",\n" +  
+        "    \"version\": \"0\"\n" +
+        "}",
+        accountNoteText, accountNoteText, 
+		addressLine1, addressLine2,  employeeRef, employerAddressLine1, employerCompanyName, 
+        vehicleMake, vehicleReg, youthDob, email1, forename, surname, courtId, prosecutorId, 
+        prosecutorName, prosecutorCaseRef, businessUnitId, businessUnitUserIds, userName); 
+    }
     
 public static String BuildDraftAccountMinorCreditorRequestBody(Session session) {
 
@@ -578,7 +716,6 @@ public static String BuildDraftAccountMinorCreditorRequestBody(Session session) 
         String courtId = session.get("getCourtId") != null ? session.get("getCourtId").toString() : ""; 
         String prosecutorId = session.get("selectedProsecutorId") != null ? session.get("selectedProsecutorId").toString() : ""; 
         String prosecutorName = session.get("selectedProsecutorName") != null ? session.get("selectedProsecutorName").toString() : ""; 
-        String todaydate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
 
         // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
@@ -752,14 +889,12 @@ public static String BuildDraftAccountMinorCreditorRequestBody(Session session) 
         String courtId = session.get("getCourtId") != null ? session.get("getCourtId").toString() : ""; 
         String prosecutorId = session.get("selectedProsecutorId") != null ? session.get("selectedProsecutorId").toString() : ""; 
         String prosecutorName = session.get("selectedProsecutorName") != null ? session.get("selectedProsecutorName").toString() : ""; 
-        String todaydate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         
         
         // Retrieve reused data from session (generated in BuildDraftAccountRequestBody)
         String forename = session.get("generatedForename") != null ? session.get("generatedForename").toString() : DataGenerator.generateRandomFirstName();
         String surname = session.get("generatedSurname") != null ? session.get("generatedSurname").toString() : DataGenerator.generateRandomLastName();
-        String nin = session.get("generatedNin") != null ? session.get("generatedNin").toString() : DataGenerator.generateRandomNationalInsuranceNumber();
         String vehicleReg = session.get("generatedVehicleReg") != null ? session.get("generatedVehicleReg").toString() : DataGenerator.generateRandomVehicleRegistration();
         String email1 = session.get("generatedEmail1") != null ? session.get("generatedEmail1").toString() : (forename.toLowerCase() + "." + surname.toLowerCase() + "@example.com");
         String employerCompanyName = session.get("generatedEmployerCompanyName") != null ? session.get("generatedEmployerCompanyName").toString() : DataGenerator.generateRandomEmployerName();

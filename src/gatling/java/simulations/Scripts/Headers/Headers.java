@@ -4,8 +4,6 @@ import simulations.Scripts.Utilities.AppConfig;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
 /**
  * Manages HTTP headers for different types of requests in the application.
 @ -13,244 +12,206 @@ import java.util.Objects;

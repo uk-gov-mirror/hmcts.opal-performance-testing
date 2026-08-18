@@ -2,18 +2,11 @@ package simulations.Scripts.Scenario.SearchAccounts;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.gatling.javaapi.core.ChainBuilder;
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilderR1b;
 import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
-import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.SearchType;
 
 public class R1bMinorCreditorSearchScenario {

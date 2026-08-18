@@ -1,7 +1,6 @@
 package simulations.Scripts.ScenarioBuilder.Testing;
 
 
-import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Scenario.Login.LoginScenarioCreate;
 import simulations.Scripts.Utilities.Feeders;
 import io.gatling.javaapi.core.*;
