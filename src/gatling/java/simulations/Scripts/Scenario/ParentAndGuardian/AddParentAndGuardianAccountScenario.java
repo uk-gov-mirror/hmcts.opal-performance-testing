@@ -60,7 +60,7 @@ public final class AddParentAndGuardianAccountScenario {
                     try {
                         String defendantAccountPartiesRequestPayload =
                             RequestBodyBuilderR1b.DefendantAccountSearch.BuildDefendantAccountPartiesRequestBody(session);
-                            System.err.println("Payload: " + defendantAccountPartiesRequestPayload);
+                           // System.err.println("Payload: " + defendantAccountPartiesRequestPayload);
 
                         // Create SHA-512 digest
                         String contentDigest =

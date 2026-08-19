@@ -37,16 +37,25 @@ public final class AmendYouthAccountScenario {
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
-                )                  
+                )   
+                
+                .exec(session -> {
+                    System.out.println(
+                        "AmendYouthAccount - Searching for accountId: [" +
+                        session.get("accountId") +
+                        "]"
+                    );
+                    return session;
+                })
             .group("Search Account").on(
                
                 //Selecting search button 
-                // .pause(20,60)
-                exec(
+                pause(20,60)
+                .exec(
                     AccountSearch.search(
                         SearchType.PGACCOUNT,
                     jsonPath(
-                            "$.defendant_accounts[?(@.defendant_account_id == '#{AccountId1}')].defendant_account_id"
+                            "$.defendant_accounts[?(@.defendant_account_id == '#{accountId}')].defendant_account_id"
                     )
                     .find()
                     .saveAs("defendant_account_id"))

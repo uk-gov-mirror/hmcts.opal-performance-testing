@@ -55,7 +55,7 @@ public final class ChangeParentAndGuardianAccount {
                 .exec(session -> {
                     try {
                         String defendantAccountPartiesRequestPayload =
-                            RequestBodyBuilderR1b.DefendantAccountSearch.BuildDefendantAccountPartiesRequestBody(session);
+                            RequestBodyBuilderR1b.DefendantAccountSearch.BuildUpdateDefendantAccountPartiesRequestBody(session);
                         //    System.err.println("Payload: " + defendantAccountPartiesRequestPayload);
 
                         // Create SHA-512 digest

@@ -1,6 +1,4 @@
 package simulations.Scripts.Utilities;
-
-import static io.gatling.javaapi.core.CoreDsl.tsv;
 											  
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -159,11 +157,11 @@ public class AppConfig {
             //MH Adding some R1b stuff here
             public static final String SEARCHVIEW_USERS_CSV = "R1bAllUsers.csv"; //MH will want to change this once we break down the user file
             public static final String PG_ACCOUNTS_CSV = "PGAccounts.csv"; 
-            public static final String PG_USERS_CSV = "PGUsers.csv"; 
+            public static final String PG_USERS_CSV = "AmendingYouthAccountsUsers.csv"; 
             public static final String MAJOR_CREDITOR_USERS_CSV = "MajorCreditorUsers.csv"; 
             public static final String DRAFT_ACCOUNTS_CSV = "DraftAccounts.csv";
             public static final String MINOR_CREDITOR_USERS_CSV = "MinorCreditorUsers.csv";
-            public static final String ADD_ENFORCEMENT_USERS_CSV = "AmendingEnforcementsToAccountUsers.csv";
+            public static final String AMEND_ENFORCEMENT_USERS_CSV = "AmendingEnforcementsToAccountUsers.csv";
 
 
 
@@ -176,7 +174,7 @@ public class AppConfig {
             public static final String DRAFT_ACCOUNTS_FILE_PATH = Paths.get(DRAFT_ACCOUNTS_CSV).toString();  
             public static final String MAJOR_CREDITOR_USERS_FILE_PATH = Paths.get(MAJOR_CREDITOR_USERS_CSV).toString();  
             public static final String MINOR_CREDITOR_USERS_FILE_PATH = Paths.get(MINOR_CREDITOR_USERS_CSV).toString();  
-            public static final String ADD_ENFORCEMENT_USERS_FILE_PATH = Paths.get(ADD_ENFORCEMENT_USERS_CSV).toString();  
+            public static final String AMEND_ENFORCEMENT_USERS_FILE_PATH = Paths.get(AMEND_ENFORCEMENT_USERS_CSV).toString();  
 
         }
 
@@ -197,11 +195,11 @@ public class AppConfig {
 
 																	 
         public static final int INPUTTER_USERS = Integer.parseInt(
-            System.getProperty("performance.inputters", "1")
+            System.getProperty("performance.inputters", "100")
         );
 
         public static final int CHECKER_USERS = Integer.parseInt(
-            System.getProperty("performance.checkers", "20")
+            System.getProperty("performance.checkers", "100")
         );
 
         public static final int EXISTING_USERS = Integer.parseInt(
@@ -219,6 +217,10 @@ public class AppConfig {
         );
         public static final int MINOR_CREDITOR_USERS = Integer.parseInt(
             System.getProperty("performance.minorCreditorUsers", "1")
+        );
+
+                public static final int AMEND_USERS = Integer.parseInt(
+            System.getProperty("performance.amend", "1")
         );
 
         public static final int RAMP_DURATION_MINUTES = Integer.parseInt(

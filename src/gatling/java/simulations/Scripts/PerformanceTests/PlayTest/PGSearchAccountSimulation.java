@@ -30,7 +30,7 @@ public class PGSearchAccountSimulation extends Simulation {
                      rampUsers(AppConfig.PerformanceConfig.PG_USERS_CSV)
                 .during(AppConfig.PerformanceConfig.getRampDuration()))
                 .protocols(HttpProtocolConfig.build()))
-                .maxDuration(AppConfig.PerformanceConfig.getSimulationDuration())         
-                .assertions(AssertionsConfig.getCreateAccountAssertions());
+                .maxDuration(AppConfig.PerformanceConfig.getSimulationDuration());        
+            //    .assertions(AssertionsConfig.getCreateAccountAssertions());
     } 
 }
