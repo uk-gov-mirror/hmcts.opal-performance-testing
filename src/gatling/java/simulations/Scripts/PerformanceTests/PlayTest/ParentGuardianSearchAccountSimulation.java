@@ -3,13 +3,13 @@ package simulations.Scripts.PerformanceTests.PlayTest;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.AssertionsConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
-import simulations.Scripts.ScenarioBuilder.R1B.PGAccountSearchScenarioBuild;
+import simulations.Scripts.ScenarioBuilder.R1B.ParentGuardianAccountSearchScenarioBuild;
 import io.gatling.javaapi.core.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 
-public class PGSearchAccountSimulation extends Simulation {   
+public class ParentGuardianSearchAccountSimulation extends Simulation {   
 
     public static AtomicInteger global400ErrorCounter = new AtomicInteger(0);
     private static final String OPAL_LOGIN_TEST = "Opal Manual Account Creation Test";
@@ -23,9 +23,9 @@ public class PGSearchAccountSimulation extends Simulation {
 
 
 
-    public PGSearchAccountSimulation() {
+    public ParentGuardianSearchAccountSimulation() {
         setUp(
-            PGAccountSearchScenarioBuild.build(OPAL_LOGIN_TEST)
+            ParentGuardianAccountSearchScenarioBuild.build(OPAL_LOGIN_TEST)
                 .injectOpen(
                      rampUsers(AppConfig.PerformanceConfig.PG_USERS_CSV)
                 .during(AppConfig.PerformanceConfig.getRampDuration()))

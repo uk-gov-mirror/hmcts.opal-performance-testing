@@ -20,11 +20,8 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .headers(Headers.getHeaders(11))
         )         
         .exec(
-            http("Open account details page")
-          
-            .get(session -> AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/"
-            + session.getString("defendant_account_id")
-            + "/details")   
+            http("Open account details page")          
+            .get(session -> AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/" + session.getString("defendant_account_id") + "/details")   
             
             // .get(AppConfig.UrlConfig.BASE_URL + " /fines/account/defendant/${defendant_account_id}/details")
                 //don't know if we need the headers on the get?
@@ -32,38 +29,38 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .check(status().is(200))
             
                 //MH debugging
-             .check(status().saveAs("actualStatus"))
-            .check(bodyString().saveAs("responseBody"))
-            
-            )
+                .check(status().saveAs("actualStatus"))
+                .check(bodyString().saveAs("responseBody"))            
+        )
 
-//MH getting the referrer value for the later calls from this page
-            .exec(session -> {
-    String id = session.getString("defendant_account_id");
-    return session.set(
-        "detailsPageUrl",
-        AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/" + id + "/details");
-            })
+        //MH getting the referrer value for the later calls from this page
+        .exec(session -> {
+                String id = session.getString("defendant_account_id");
+                return session.set(
+                    "detailsPageUrl",
+                    AppConfig.UrlConfig.BASE_URL + "/fines/account/defendant/" + id + "/details");
+                        })
 
-            //MH debugging
-            .exec(session -> {
+        //MH debugging
+        .exec(session -> {
 
-    System.out.println("===== HEADER SUMMARY DEBUG =====");
-    System.out.println("URL defendant_account_id = " +
-        session.getString("defendant_account_id"));
+                System.out.println("===== HEADER SUMMARY DEBUG =====");
+                System.out.println("URL defendant_account_id = " +
+                    session.getString("defendant_account_id"));
 
-    System.out.println("STATUS = " +
-        session.getString("actualStatus"));
+                System.out.println("STATUS = " +
+                    session.getString("actualStatus"));
 
-    System.out.println("BODY = " +
-        session.getString("responseBody"));
+                System.out.println("BODY = " +
+                    session.getString("responseBody"));
 
-    return session;
-    })
+                return session;
+            }
+        )
                  
-                .pause(15,30)
+        .pause(15,30)
 
-            .exec(
+        .exec(
             http("Load header summary")
                 .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/header-summary")
                 //don't know if we need the headers on the get?
@@ -74,9 +71,9 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .check(jsonPath("$.account_type").saveAs("account_type"))
                 //turns out we also need the party ID
                 .check(jsonPath("$.defendant_account_party_id").saveAs("defendant_account_party_id"))
-                )
-            
-                .exec(
+        )
+        
+        .exec(
             http("Load at a glance")
                 .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/at-a-glance")
                 //don't know if we need the headers on the get?
@@ -112,7 +109,7 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
 
         .pause(15,30)
 
-          .exec(
+        .exec(
             http("Load Enforcement")
                 //.get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/" + "#{defendant_account_id}" + "/details#enforcement")
                 .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
@@ -122,12 +119,12 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .check(status().is(200))
         )
 
-         .pause(15,30)
+        .pause(15,30)
 
-//impositions and History notes are not recording for some reason, may need to confirm development and permissions
-//HOWEVER there doesn't appear to be any data on those tabs on the accounts I've looked at so it may be as simple as that and the get requetss would be fine?
+        //impositions and History notes are not recording for some reason, may need to confirm development and permissions
+        //HOWEVER there doesn't appear to be any data on those tabs on the accounts I've looked at so it may be as simple as that and the get requetss would be fine?
 
-          .exec(
+        .exec(
             http("Load Impositions")
                 .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/details#impositions")
                 //don't know if we need the headers on the get?
@@ -136,9 +133,9 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .check(status().is(200))
         )
 
-         .pause(15,30)
+        .pause(15,30)
 
-          .exec(
+        .exec(
             http("Load History")
                 .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/details#history-and-notes")
                 //don't know if we need the headers on the get?
@@ -147,22 +144,20 @@ public static ChainBuilder R1bDefendantAmmendmentsRequest() {
                 .check(status().is(200))
         )
 
-.pause(15,30)
+        .pause(15,30)
 
-//if this is a Fixed penalty account (from the header) then also go to the fixed penalty page
-        .doIf(session -> "Fixed Penalty".equals(session.getString("account_type"))).then(
-
-    exec(
-        http("Load fixed penalty")
-            .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/fixed-penalty")
-            
-            .headers(Headers.getHeaders(17))
-            .header("Referer", "#{detailsPageUrl}")
-            .check(status().is(200))
-    )
-        )
-
-    ); //this is the end of return group("R1b View Defendant") MH-(The semi-colon is very important) (guess what compile error I had)
-}
-
+        //if this is a Fixed penalty account (from the header) then also go to the fixed penalty page
+        .doIf(session -> "Fixed Penalty".equals(session.getString("account_type")))
+            .then(
+                exec(
+                http("Load fixed penalty")
+                    .get(AppConfig.UrlConfig.BASE_URL + " /opal-fines-service/defendant-accounts/#{defendant_account_id}/fixed-penalty")
+                    
+                    .headers(Headers.getHeaders(17))
+                    .header("Referer", "#{detailsPageUrl}")
+                    .check(status().is(200))
+                )
+            )
+        ); //this is the end of return group("R1b View Defendant") MH-(The semi-colon is very important) (guess what compile error I had)
+    }
 }

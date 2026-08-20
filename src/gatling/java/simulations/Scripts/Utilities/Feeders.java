@@ -27,7 +27,10 @@ public class Feeders {
     public static final FeederBuilder<String> MajorCreditorUsers;
     public static final FeederBuilder<String> MinorCreditorUsers;
     public static final FeederBuilder<String> AmendEnforcementUsers;
+    public static final FeederBuilder<String> DefendantSearchAccounts;
+    public static final FeederBuilder<String> DefendantSearchUsers;
 
+    
     //Data Changes on accounts
     public static final FeederBuilder<String> DraftAccounts;
     public static final boolean USE_CSV_DRAFT_ACCOUNT = false;
@@ -47,6 +50,8 @@ public class Feeders {
         MinorCreditorUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.MINOR_CREDITOR_USERS_CSV).circular();
         DraftAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.DRAFT_ACCOUNTS_CSV).circular();
         AmendEnforcementUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.AMEND_ENFORCEMENT_USERS_CSV).circular();
+        DefendantSearchAccounts = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.DEFENDANTSEARCHACCOUNTS_CSV).circular();
+        DefendantSearchUsers = CoreDsl.csv(AppConfig.FileConfig.CsvFiles.DEFENDANTSEARCH_USERS_CSV).circular();
 
     } catch (Exception e) {
         System.err.println("Error loading CSV: " + e.getMessage());
@@ -83,13 +88,19 @@ public class Feeders {
         return MajorCreditorUsers;
     }
 
-        public static FeederBuilder<String> minorCreditorUsers() {
+    public static FeederBuilder<String> minorCreditorUsers() {
         return MinorCreditorUsers;
     }
 
-       public static FeederBuilder<String> amendEnforcementUsers() {
+    public static FeederBuilder<String> amendEnforcementUsers() {
         return AmendEnforcementUsers;
     } 
+    public static FeederBuilder<String> defendantSearchAccounts() {
+        return DefendantSearchAccounts;
+    }
+    public static FeederBuilder<String> defendantSearchUsers() {
+        return DefendantSearchUsers;
+    }
 
     public static CheckBuilder.Final saveTokenCode() {
         return CoreDsl.css("input[name='code']", "value").saveAs("TokenCode");

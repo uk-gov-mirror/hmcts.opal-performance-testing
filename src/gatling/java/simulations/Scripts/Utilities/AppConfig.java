@@ -104,8 +104,7 @@ public class AppConfig {
         public static final String CLIENT_REQUEST_ID = getConfigProperty("tenant.client.request.id", "Secret4");
         public static final String SCOPE = getConfigProperty("tenant.scope", "Secret5");
         public static final String REDIRECT_URL = getConfigProperty("tenant.redirect.url", "Secret6");
-        public static final String AAD_TENANT_ID = getConfigProperty("tenant.aad.tenant.id", "Secret7");
-       
+        public static final String AAD_TENANT_ID = getConfigProperty("tenant.aad.tenant.id", "Secret7");       
     }
 
     // ------------------------- Test Configuration -----------------------------
@@ -162,8 +161,8 @@ public class AppConfig {
             public static final String DRAFT_ACCOUNTS_CSV = "DraftAccounts.csv";
             public static final String MINOR_CREDITOR_USERS_CSV = "MinorCreditorUsers.csv";
             public static final String AMEND_ENFORCEMENT_USERS_CSV = "AmendingEnforcementsToAccountUsers.csv";
-
-
+            public static final String DEFENDANTSEARCHACCOUNTS_CSV = "DefendantSearchAccounts.csv";
+            public static final String DEFENDANTSEARCH_USERS_CSV = "DefendantSearchUsers.csv";
 
 
             public static final String USERS_FILE_PATH = Paths.get(USERS_CSV).toString();  
@@ -175,6 +174,8 @@ public class AppConfig {
             public static final String MAJOR_CREDITOR_USERS_FILE_PATH = Paths.get(MAJOR_CREDITOR_USERS_CSV).toString();  
             public static final String MINOR_CREDITOR_USERS_FILE_PATH = Paths.get(MINOR_CREDITOR_USERS_CSV).toString();  
             public static final String AMEND_ENFORCEMENT_USERS_FILE_PATH = Paths.get(AMEND_ENFORCEMENT_USERS_CSV).toString();  
+            public static final String DEFENDANTSEARCHACCOUNTS_FILE_PATH = Paths.get(DEFENDANTSEARCHACCOUNTS_CSV).toString();  
+            public static final String DEFENDANTSEARCH_USERS_FILE_PATH = Paths.get(DEFENDANTSEARCH_USERS_CSV).toString();  
 
         }
 
@@ -249,7 +250,7 @@ public class AppConfig {
     public static class ProxyConfig {
         public static final String HOST = getConfigProperty("proxy.host", "127.0.0.1");
         public static final int PORT = getConfigPropertyAsInt("proxy.port", 8888);
-        public static final boolean ENABLED = getConfigPropertyAsBoolean("proxy.enabled", true);
+        public static final boolean ENABLED = getConfigPropertyAsBoolean("proxy.enabled", false);
     }//changed proxy to false/true for fiddler values
 
     public static final class TestingConfig {

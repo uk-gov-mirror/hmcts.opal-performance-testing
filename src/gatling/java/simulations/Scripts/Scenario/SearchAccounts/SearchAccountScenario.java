@@ -20,57 +20,17 @@ public final class SearchAccountScenario {
     public static ChainBuilder SearchAccountRequest() {
 
         return group("OPAL Search Account").on(
-                exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )
-                
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )
-                .exitHereIfFailed() 
-
-                .exec(
-                    http("OPAL - Opal-fines-service - Business-units")
-                        .get(session -> AppConfig.UrlConfig.BASE_URL  + "/opal-fines-service/business-units")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))
-                        .check(
-                        jsonPath("$.refData[?(@.opal_domain == 'Fines')].business_unit_id").findAll().saveAs("getListBusinessUnitId"))
-                )
-                .pause(2, 5)
-                
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )               
-                
-                // .exec(session -> {
-                //     System.out.println("BU LIST = " + session.get("getListBusinessUnitId"));
-                //     return session;
-                // })
 
                 //Search for accounts query parameters 
-                .exec(
+                exec(
                     AccountSearch.search(
-                        SearchType.ACCOUNT
-                    )
+                        SearchType.ACCOUNT,
+                    jsonPath("$.count").saveAs("search_count"),
+                    jsonPath("$.defendant_accounts[0].defendant_account_id").exists(),
+                    jsonPath("$.defendant_accounts[0].defendant_account_id").saveAs("defendant_account_id"))
+
                 )
-               
-        );            
+            );            
     }
 }
                      

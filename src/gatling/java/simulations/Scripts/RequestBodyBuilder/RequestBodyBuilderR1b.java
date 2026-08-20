@@ -67,7 +67,6 @@ public static final class DefendantAccountSearch {
                 .body(StringBody(session -> buildDefendantSearchAccountRequestBody(session))).asJson() //MH change here because it wasn't working, I've had a number of the named wrong
                 .check(status().is(200))
                 .check(jsonPath("$.count").saveAs("search_count"))
-                //.check(jsonPath("$.defendant_accounts[*].defendant_account_id").findAll().saveAs("defendant_account_ids"))
                 .check(jsonPath("$.defendant_accounts[0].defendant_account_id").exists())
                 .check(jsonPath("$.defendant_accounts[0].defendant_account_id").saveAs("defendant_account_id"))     
     );
@@ -167,48 +166,14 @@ public static final class DefendantAccountSearch {
         public static String BuildDefendantAccountPartiesRequestBody(Session session) {
 
             String addressLine1 = session.get("generatedAddressLine1") != null ? session.get("generatedAddressLine1").toString() : DataGenerator.generateRandomAddress();
-
             String addressLine2 = session.get("generatedAddressLine2") != null ? session.get("generatedAddressLine2").toString() : DataGenerator.generateRandomAddress();
-
             String adultDob = DataGenerator.generateRandomAdultDateOfBirth();
-
-            String primaryEmailAddress = session.get("getPrimaryEmailAddress") != null
-                    ? session.get("getPrimaryEmailAddress").toString().trim().toUpperCase()
-                    : "";
-
-            String employerAddressLine1 = session.get("getEmployerAddressLine1") != null
-                    ? session.get("getEmployerAddressLine1").toString().trim().toUpperCase()
-                    : "";
-
-            String employerName = session.get("getEmployerName") != null
-                    ? session.get("getEmployerName").toString().trim().toUpperCase()
-                    : "";
-
-            String employerReference = session.get("getEmployerReference") != null
-                    ? session.get("getEmployerReference").toString().trim().toUpperCase()
-                    : "";
-
+            String primaryEmailAddress = session.get("getPrimaryEmailAddress") != null ? session.get("getPrimaryEmailAddress").toString().trim().toUpperCase() : "";
             String forename = session.get("generatedForename") != null ? session.get("generatedForename").toString() : DataGenerator.generateRandomFirstName();
-            
             String surname = session.get("generatedSurname") != null ? session.get("generatedSurname").toString() : DataGenerator.generateRandomLastName();
-
-            String individualPartyId = session.get("getIndividualPartyId") != null
-                    ? session.get("getIndividualPartyId").toString().trim().toUpperCase()
-                    : "";
-
-            String vehicleMakeAndModel = session.get("getVehicleMakeAndModel") != null
-                    ? session.get("getVehicleMakeAndModel").toString().trim().toUpperCase()
-                    : "";
-
-            String vehicleRegistration = session.get("getVehicleRegistration") != null
-                    ? session.get("getVehicleRegistration").toString().trim().toUpperCase()
-                    : "";
-
             // Generate random address
             String randomAddressline3 = DataGenerator.generateRandomAddress();
-
-            session = session.set("randomAddressline3", randomAddressline3);
-           
+            session = session.set("randomAddressline3", randomAddressline3);           
                         
            return String.format(
                 "{\n" +

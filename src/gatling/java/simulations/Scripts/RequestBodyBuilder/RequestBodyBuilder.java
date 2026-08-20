@@ -1190,8 +1190,8 @@ public static String BuildDraftAccountMinorCreditorRequestBody(Session session) 
                     ? session.get("getListBusinessUnitId").toString()
                     : "[]";
 
-            String forenames = "s";
-            String surname = "s";
+            String forenames = session.getString("forename");
+            String surname = session.getString("surname");
 
             return String.format(
                 "{\n" +

@@ -190,11 +190,9 @@ public final class Headers {
             headers.put("cache-control", "no-cache");
             headers.put("expires", "0");
             headers.put("pragma", "no-cache");
-           // headers.put("request-id", "|a4d8145674b44132a9331303de1b9516.3303b477b1de4ee8");
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-           // headers.put("traceparent", "00-a4d8145674b44132a9331303de1b9516-3303b477b1de4ee8-01");
             break;
 
             case TEST_12:
@@ -218,7 +216,7 @@ public final class Headers {
             headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "Windows");
-            break; //MH I've added this break, don't know if you actually wanted it missing
+            break; 
 
             case TEST_14:
             headers.put("Origin", AppConfig.UrlConfig.BASE_URL);
@@ -254,24 +252,11 @@ public final class Headers {
             headers.put("Sec-Fetch-Mode", "cors");
             headers.put("Sec-Fetch-Site", "same-origin");
             headers.put("Referer", AppConfig.UrlConfig.BASE_URL);
-            headers.put(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                "Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
-                        );
-            headers.put(
-                "sec-ch-ua",
-                "\"Chromium\";v=\"148\", " +
-                "\"Microsoft Edge\";v=\"148\", " +
-                "\"Not/A)Brand\";v=\"99\""
-                        );
+            headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36");
+            headers.put("sec-ch-ua", "\"Chromium\";v=\"148\", \"Microsoft Edge\";v=\"148\", \"Not/A)Brand\";v=\"99\"");
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "\"Windows\"");
             headers.put("Accept-Language", "en-US,en;q=0.9,en-GB;q=0.8");
-    // MH this one has request IDs
-    //        headers.put("request-id", "#{requestId}");
-    //        headers.put("traceparent", "#{traceparent}");
             break;
 
             case TEST_17:
@@ -284,8 +269,6 @@ public final class Headers {
             headers.put("sec-ch-ua-mobile", "?0");
             headers.put("sec-ch-ua-platform", "\"Windows\"");
             headers.put("Accept-Language", "en-US,en;q=0.9,en-GB;q=0.8");
-        //    headers.put("request-id", "#{requestId}");
-        //    headers.put("traceparent", "#{traceparent}");
             break;
             
             case TEST_18:
@@ -317,8 +300,6 @@ public final class Headers {
             headers.put("sec-ch-ua-platform", "Windows");
             headers.put("want-content-digest", "sha-512");
             headers.put("Referer",AppConfig.UrlConfig.BASE_URL);
-
-
             default:
             break;
         }

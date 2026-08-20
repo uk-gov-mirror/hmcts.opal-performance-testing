@@ -14,7 +14,7 @@ public class R1bSearchAndViewDefendantSimulation extends Simulation {
     @Override
     public void before() {
         System.out.println("Simulation starting...");
-        System.out.println("User Count: " + AppConfig.PerformanceConfig.CHECKER_USERS);
+        System.out.println("User Count: " + AppConfig.PerformanceConfig.SEARCH_VIEW_USERS);
         System.out.println("Ramp Duration: " + AppConfig.PerformanceConfig.getRampDuration());
         System.out.println("Simulation Duration: " + AppConfig.PerformanceConfig.getSimulationDuration());
     }
@@ -23,10 +23,11 @@ public class R1bSearchAndViewDefendantSimulation extends Simulation {
         setUp(
             R1bSearchandViewDefendantScenarioBuild.build(SCENARIO_NAME)
                 .injectOpen(
-                    rampUsers(AppConfig.PerformanceConfig.CHECKER_USERS)
+                    rampUsers(AppConfig.PerformanceConfig.SEARCH_VIEW_USERS)
                         .during(AppConfig.PerformanceConfig.getRampDuration())
                 )
                 .protocols(HttpProtocolConfig.build())
-        ).maxDuration(AppConfig.PerformanceConfig.getSimulationDuration());
+        );
+        //.maxDuration(AppConfig.PerformanceConfig.getSimulationDuration());
     }
 }

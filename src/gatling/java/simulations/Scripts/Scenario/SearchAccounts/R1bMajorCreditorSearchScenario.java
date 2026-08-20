@@ -7,7 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import simulations.Scripts.Headers.Headers;
+import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
+import simulations.Scripts.Utilities.SearchType;
 
 public class R1bMajorCreditorSearchScenario {
 private R1bMajorCreditorSearchScenario() {
@@ -31,26 +33,24 @@ private R1bMajorCreditorSearchScenario() {
                     System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
 
                 return session.set("selectedBusinessUnitId", selectedBusinessUnitId);
-            })
-            .exitHereIfFailed()
+            })            
 
+
+            // Get major creditors for business unit
             .exec(
-                http("Get major creditors for business unit")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors")
-                    .queryParam("businessUnit", "#{selectedBusinessUnitId}")
+                http("OPAL - Opal-fines-service - Major-creditors")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors").queryParam("businessUnit", "#{selectedBusinessUnitId}")
                     .check(status().is(200))
                     .check(
-                        jsonPath("$.refData[*].creditor_account_id")
-                            .saveAs("creditor_account_id")
-                    )
+                        jsonPath("$.refData[*].creditor_account_id").saveAs("creditor_account_id"))
                     .check(
-                        jsonPath("$.refData[*].name")
-                            .saveAs("major_creditor_name")
-                    )
+                        jsonPath("$.refData[*].name").saveAs("major_creditor_name"))
             )
-                        .pause(1)
+            .pause(1)
+            
+            // Open major creditor defendant view (Basically the Major Creditor search)
             .exec(
-                http("Open major creditor defendant view")
+                http("OPAL - Fines - Account - Details")
                     .get(AppConfig.UrlConfig.BASE_URL + "/fines/account/#{creditor_account_id}/details")
                     .check(status().is(200))
             )
