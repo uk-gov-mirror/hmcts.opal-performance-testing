@@ -49,20 +49,33 @@ def registerSimulationTask(taskName, simulationClassName) {
 //MH wish I had known this existed before I spent 20min bashing my head against the wall trying to figure out how to run the R1b simulation.
 def simulations = [
 
+
+    //Tests to run to check scenarios work
     [task: 'runLoginSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.LoginSimulation'],
+
+    //R1A
     [task: 'runCreateAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.CreateAccountSimulation'],
     [task: 'runApproveAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.ApproveAccountSimulation'],
-    [task: 'runUserExistsSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.UserExistsSimulation'],
+    [task: 'runUserExistsSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.UserExistsSimulation'],    
     [task: 'runDeleteAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.DeleteAccountSimulation'],
-    [task: 'runMAC_01aSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01aSimulation'],
-    [task: 'runSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.SearchAccountSimulation'], //MH this comma is really important 
+    
+    //R1B
+    [task: 'runSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.SearchAccountSimulation'], 
     [task: 'runR1bSearchAndViewDefendantSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.R1bSearchAndViewDefendantSimulation'],
     [task: 'runPGSearchAccountSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.PGSearchAccountSimulation'],
     [task: 'runR1bSearchMajorCreditorSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.R1bSearchMajorCreditorSimulation'],
     [task: 'runR1bSearchMinorCreditorSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.R1bSearchMinorCreditorSimulation'],
-    [task: 'runAmendingEnforcementsToAccountsSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.AmendingEnforcementsToAccountsSimulation']
+    [task: 'runAmendingEnforcementsToAccountsSimulation', class: 'simulations.Scripts.PerformanceTests.PlayTest.AmendingEnforcementsToAccountsSimulation'],
+
+
+    // Simulations to run the Performance tests
+    [task: 'runMAC_01aSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01aSimulation'],
+    [task: 'runMAC_01bSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01bSimulation'],
 
 ]
+
+
+MAC_01bSimulation
 
 // Register tasks dynamically
 simulations.each { simulation ->

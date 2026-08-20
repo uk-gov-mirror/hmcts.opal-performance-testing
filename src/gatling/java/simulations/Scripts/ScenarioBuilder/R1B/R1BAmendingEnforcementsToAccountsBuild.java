@@ -1,4 +1,4 @@
-package simulations.Scripts.ScenarioBuilder.Testing;
+package simulations.Scripts.ScenarioBuilder.R1B;
 
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Scenario.SearchAccounts.AmendingEnforcementsToAccountsScenario;
@@ -7,7 +7,7 @@ import io.gatling.javaapi.core.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 
-public class AmendingEnforcementsToAccountsBuild {
+public class R1BAmendingEnforcementsToAccountsBuild {
 
     public static ScenarioBuilder build(String scenarioName) {
         return scenario(scenarioName)
@@ -22,7 +22,9 @@ public class AmendingEnforcementsToAccountsBuild {
                     .exec(LoginScenario.LoginRequest())
                     .exec(session -> session.set("loopCounter", 0)) // Initialize loop counter
                     .repeat(1).on(
-                         exec(session -> {
+                        exec(exec(feed(Feeders.amendEnforcementUsers())
+
+                        .exec(session -> {
                         // Increment the loop counter
                             int iteration = session.getInt("loopCounter") + 1;
         
@@ -64,9 +66,9 @@ public class AmendingEnforcementsToAccountsBuild {
                             // Update the loop counter in the session for the next iteration
                             return session.set("loopCounter", iteration);
                         }
-                    )
+                    ))
                     .exec(AmendingEnforcementsToAccountsScenario.AmendingEnforcementsToAccountsRequest())
                     )
-            );
+            ));
     }
 }
