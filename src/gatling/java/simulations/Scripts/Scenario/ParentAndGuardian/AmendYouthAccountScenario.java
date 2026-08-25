@@ -84,55 +84,78 @@ public final class AmendYouthAccountScenario {
                         )
                 )
 
-                // Check whether Parent Guardian exists
-                .exec(session -> {
+             // Check whether Parent Guardian exists
+            .exec(session -> {
 
-                    Object parentGuardianPartyId = session.get("getParentGuardianPartyId");
+                Object parentGuardianPartyId = session.get("getParentGuardianPartyId");
 
-                    boolean shouldAddPG = parentGuardianPartyId == null;
+                boolean shouldAddPG = parentGuardianPartyId == null;
 
-                    System.out.println(
-                        "Existing PG Account: [" + parentGuardianPartyId + "]" +
-                        " | Should Add PG: " + shouldAddPG
-                    );
+                System.out.println(
+                    "Existing PG Account: [" + parentGuardianPartyId + "]" +
+                    " | Should Add PG: " + shouldAddPG
+                );
 
-                    return session.set("shouldAddPG", shouldAddPG);
-                })
+                return session.set("shouldAddPG", shouldAddPG);
+            })
 
-                .exec(
-                    http("OPAL - Opal-fines-service - Defendant-accounts - At-a-glance")
-                        .get(AppConfig.UrlConfig.BASE_URL
-                            + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/at-a-glance")
-                        .headers(Headers.getHeaders(12))
-                        .check(
-                            header("ETag").saveAs("etag")
+            .exec(
+                http("OPAL - Opal-fines-service - Defendant-accounts - At-a-glance")
+                    .get(AppConfig.UrlConfig.BASE_URL
+                        + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/at-a-glance")
+                    .headers(Headers.getHeaders(12))
+                    .check(
+                        header("ETag").saveAs("etag")
+                    )
+            )
+
+            .doIfOrElse(session -> session.getBoolean("shouldAddPG"))
+                .then(
+                    exec(
+                        AddParentAndGuardianAccountScenario
+                            .AddParentAndGuardianAccountRequest()
+                    )
+                    .exec(session -> {
+
+                        int count = session.getInt("addedPGCount");
+
+                        System.out.println("PG ACTION: ADDED");
+
+                        return session.set("addedPGCount", count + 1);
+                    })
+                )
+                .orElse(
+                    randomSwitch()
+                        .on(
+                            percent(50.0).then(
+                                exec(
+                                    RemoveParentAndGuardianAccountScenario.RemoveParentAndGuardianAccountRequest()
+                                )
+                                .exec(session -> {
+
+                                    int count = session.getInt("removedPGCount");
+
+                                    System.out.println("PG ACTION: REMOVED");
+
+                                    return session.set("removedPGCount", count + 1);
+                                })
+                            ),
+
+                            percent(50.0).then(
+                                exec(
+                                    ChangeParentAndGuardianAccount.ChangeParentAndGuardianAccountRequest()
+                                )
+                                .exec(session -> {
+
+                                    int count = session.getInt("changedPGCount");
+
+                                    System.out.println("PG ACTION: CHANGED");
+
+                                    return session.set("changedPGCount", count + 1);
+                                })
+                            )
                         )
                 )
-
-                .doIfOrElse(session -> session.getBoolean("shouldAddPG"))
-                    .then(
-                        exec(
-                            AddParentAndGuardianAccountScenario
-                                .AddParentAndGuardianAccountRequest()
-                        )
-                    )
-                    .orElse(
-                        randomSwitch()
-                            .on(
-                                percent(50.0).then(
-                                    exec(
-                                        RemoveParentAndGuardianAccountScenario
-                                            .RemoveParentAndGuardianAccountRequest()
-                                    )
-                                ),
-                                percent(50.0).then(
-                                    exec(
-                                        ChangeParentAndGuardianAccount
-                                            .ChangeParentAndGuardianAccountRequest()
-                                    )
-                                )
-                            )
-                    )
                 
                 .exec(
                     http("OPAL - Opal-fines-service - Major-creditor-accounts - At-a-glance")

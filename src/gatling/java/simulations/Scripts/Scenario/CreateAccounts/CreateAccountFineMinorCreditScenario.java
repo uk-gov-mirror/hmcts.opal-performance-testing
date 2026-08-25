@@ -45,62 +45,8 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
                 )  
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-
+               
                 //Selecting Create and Manage Draft Accounts link
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )  
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))                                         
-                )                
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -108,13 +54,18 @@ public final class CreateAccountFineMinorCreditScenario {
                         .check(status().is(200))                                         
                 )                 
                 .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
                 )
-
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                )                 
+               
                 // Displays the created accounts by filters.    
                 //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
                 .exec(session ->
@@ -223,21 +174,6 @@ public final class CreateAccountFineMinorCreditScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed() 
-
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )                    
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -256,14 +192,7 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
+                )               
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -301,14 +230,7 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
+                )                
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
             ) 
@@ -323,14 +245,7 @@ public final class CreateAccountFineMinorCreditScenario {
                             .headers(Headers.getHeaders(12))
                             .check(status().saveAs("httpStatus"))
                             .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                            .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                            .headers(Headers.getHeaders(12))
-                            .check(status().saveAs("httpStatus"))
-                            .check(status().is(200))
-                    )
+                    )                    
                     .exec(
                         http("OPAL - Sso - Authenticated")
                             .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -374,14 +289,7 @@ public final class CreateAccountFineMinorCreditScenario {
                             .headers(Headers.getHeaders(11))
                             .check(status().saveAs("httpStatus"))
                             .check(status().is(200))
-                    )                    
-                    .exec(
-                        http("OPAL - API - Users-state")
-                            .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                            .headers(Headers.getHeaders(12))
-                            .check(status().saveAs("httpStatus"))
-                            .check(status().is(200))
-                    )                   
+                    )            
                 )
                                 
                 .group("Enter Defendant Contact Details").on(
@@ -395,14 +303,7 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
+                    )                   
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - API - Users-state")) 
 
                     .exec(
@@ -434,15 +335,7 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                    )                      
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )                 
-
+                    ) 
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                     .exitHereIfFailed()  
                 )   
@@ -464,21 +357,7 @@ public final class CreateAccountFineMinorCreditScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
+                    )                    
                     .exec(
                         http("OPAL - Opal-fines-service - Results")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/results?result_ids=FCOMP&result_ids=FVS&result_ids=FCOST&result_ids=FCPC&result_ids=FO&result_ids=FCC&result_ids=FVEBD&result_ids=FFR")
@@ -590,28 +469,7 @@ public final class CreateAccountFineMinorCreditScenario {
                             .check(status().is(200))
                     )
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                    .exitHereIfFailed()  
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
-                    .exec(
-                        http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )      
+                    .exitHereIfFailed() 
                     .exec(
                         http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -638,14 +496,6 @@ public final class CreateAccountFineMinorCreditScenario {
                             .check(status().saveAs("httpStatus"))
                             .check(status().is(200))
                     )
-
-                    .exec(
-                        http("OPAL - API - Users-state")
-                            .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                            .headers(Headers.getHeaders(12))
-                            .check(status().saveAs("httpStatus"))
-                            .check(status().is(200))
-                    ) 
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                     .exitHereIfFailed()  
                                                     
@@ -665,14 +515,6 @@ public final class CreateAccountFineMinorCreditScenario {
                             .check(status().saveAs("httpStatus"))
                             .check(status().is(200))
                     )
-
-                    .exec(
-                        http("OPAL - API - Users-state")
-                            .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                            .headers(Headers.getHeaders(12))
-                            .check(status().saveAs("httpStatus"))
-                            .check(status().is(200))
-                    ) 
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                     .exitHereIfFailed()  
                     
@@ -830,14 +672,6 @@ public final class CreateAccountFineMinorCreditScenario {
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                 )

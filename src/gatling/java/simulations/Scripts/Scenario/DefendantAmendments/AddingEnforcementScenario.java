@@ -24,7 +24,9 @@ public final class AddingEnforcementScenario {
             group("Adding Enforcement to Account").on(
             
                 //Selecting Add Enforcement to add:
-                exec(
+                pause(10,20)
+
+                .exec(
                     http("OPAL - API - Users-state")
                         .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                         .headers(Headers.getHeaders(12))
@@ -46,6 +48,7 @@ public final class AddingEnforcementScenario {
                 ) 
                 
                 //Selecting Enforcement option to add
+                .pause(10,20)
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -119,6 +122,7 @@ public final class AddingEnforcementScenario {
                 ) 
                 
                 // Adding Enforcement option details and selecting Add
+                .pause(10,20)
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")

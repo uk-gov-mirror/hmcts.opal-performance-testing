@@ -1,4 +1,4 @@
-package simulations.Scripts.Scenario.SearchAccounts;
+package simulations.Scripts.Scenario.DefendantAmendments;
 
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AppConfig;
@@ -23,8 +23,9 @@ public final class RemovingEnforcementScenario {
         .on( 
             group("Removing Enforcements").on(
             
-                //Selecting Remove Enforcement to add:
-                exec(
+                //Selecting Remove Enforcement:
+                pause(10,20)
+                .exec(
                     http("OPAL - API - Users-state")
                         .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                         .headers(Headers.getHeaders(12))

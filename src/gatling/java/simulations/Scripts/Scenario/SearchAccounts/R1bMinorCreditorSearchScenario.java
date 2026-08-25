@@ -30,8 +30,7 @@ private R1bMinorCreditorSearchScenario() {
                         .findAll()
                         .saveAs("creditor_account_id")
                 )
-            )         
-
+            )
             .exec(
                 http("OPAL - Fines - Account - Minor-creditor - Details")
                     .get(AppConfig.UrlConfig.BASE_URL + "/fines/account/minor-creditor/#{creditor_account_id}/details")

@@ -123,27 +123,22 @@ public static final class DefendantAccountSearch {
                 "  \"account_number\": null,\n" +
                 "  \"active_accounts_only\": false,\n" +
                 "  \"business_unit_ids\": %s,\n" +
-                "  \"consolidation_search\": false,\n" +
-                "  \"defendant\": {\n" +
+                "  \"creditor\": {\n" +
                 "    \"address_line_1\": null,\n" +
-                "    \"birth_date\": null,\n" +
                 "    \"exact_match_forenames\": null,\n" +
                 "    \"exact_match_organisation_name\": null,\n" +
                 "    \"exact_match_surname\": null,\n" +
                 "    \"forenames\": \"%s\",\n" +
-                "    \"include_aliases\": false,\n" +
-                "    \"national_insurance_number\": null,\n" +
                 "    \"organisation\": false,\n" +
                 "    \"organisation_name\": null,\n" +
                 "    \"postcode\": null,\n" +
                 "    \"surname\": \"%s\"\n" +
-                "  },\n" +
-                "  \"reference_number\": null\n" +
+                "  }\n" +
                 "}",
                 businessUnitIdsJson,
                 forenames,
                 surname
-            );
+            );           
         }
 
         

@@ -70,12 +70,10 @@ def simulations = [
 
     // Simulations to run the Performance tests
     [task: 'runMAC_01aSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01aSimulation'],
-    [task: 'runMAC_01bSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01bSimulation'],
+    [task: 'runMAC_01bSimulation', class: 'simulations.Scripts.PerformanceTests.MAC_01bSimulation']
 
 ]
 
-
-MAC_01bSimulation
 
 // Register tasks dynamically
 simulations.each { simulation ->

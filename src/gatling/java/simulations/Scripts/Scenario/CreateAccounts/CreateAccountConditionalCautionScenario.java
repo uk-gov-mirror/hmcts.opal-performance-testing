@@ -48,24 +48,18 @@ public final class CreateAccountConditionalCautionScenario {
                         .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-            
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                    )
+                .exitHereIfFailed()
                
-                //Selecting Create and Manage Draft Accounts link
+                //Selecting Create and Manage Draft Accounts link               
                 .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                 )
+                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                .exitHereIfFailed()    
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -75,58 +69,13 @@ public final class CreateAccountConditionalCautionScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-                
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                        .headers(Headers.getHeaders(11))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )                
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
                 )                 
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
+               
                 // Displays the created accounts by filters.    
                  //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
                 
@@ -237,20 +186,6 @@ public final class CreateAccountConditionalCautionScenario {
                 .exitHereIfFailed()  
                 
                 .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )                    
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )          
-                .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
@@ -258,8 +193,7 @@ public final class CreateAccountConditionalCautionScenario {
                         .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                  
+                .exitHereIfFailed() 
 
                 //Selecting new account radio button
                 .pause(5,20)
@@ -270,14 +204,7 @@ public final class CreateAccountConditionalCautionScenario {
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
+                )            
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -314,14 +241,7 @@ public final class CreateAccountConditionalCautionScenario {
                         .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                )
+                .exitHereIfFailed() 
             )
             .group("Police and court details")
             .on(
@@ -340,14 +260,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .headers(Headers.getHeaders(11))
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
-                )
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )
+                )               
                 .pause(5,20)
                 .exec(
                     http("OPAL - Opal-fines-service - Courts")
@@ -382,18 +295,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                 
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                 
+                .exitHereIfFailed()    
             )
             .group("Enter Contact Details")
             .on(
@@ -416,15 +318,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )
+                .exitHereIfFailed() 
             )
 
             .group("Enter Employer Details")
@@ -447,15 +341,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )    
+                .exitHereIfFailed() 
             )
             
             .group("Add Offence")
@@ -479,22 +365,8 @@ public final class CreateAccountConditionalCautionScenario {
                     .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed() 
-                
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                ) 
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                ) 
+                .exitHereIfFailed()
+               
                 .exec(
                     http("OPAL - Opal-fines-service - Results")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/results?result_ids=FCOMP&result_ids=FVS&result_ids=FCOST&result_ids=FCPC&result_ids=FO&result_ids=FCC&result_ids=FVEBD&result_ids=FFR")
@@ -505,14 +377,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/major-creditors?businessUnit=#{selectedBusinessUnitId}")
                     .headers(Headers.getHeaders(12))
                 )                
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                ) 
-
+               
                 .pause(3,5)                
                 .exec(session -> {
                     String offence = DataGenerator.generateRandomOFFENCE();
@@ -575,13 +440,6 @@ public final class CreateAccountConditionalCautionScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )                             
             )
                  
             .group("Add Comments and notes").on(
@@ -604,14 +462,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .check(status().is(200))
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )       
+                .exitHereIfFailed()
             )  
             .group("Review Account")
             .on(
@@ -634,14 +485,6 @@ public final class CreateAccountConditionalCautionScenario {
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                 .exitHereIfFailed()  
-
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )  
                 .exec(
                     http("OPAL - Opal-fines-service - Major-creditors")
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/prosecutors?business_unit=#{selectedBusinessUnitId}")
@@ -677,16 +520,6 @@ public final class CreateAccountConditionalCautionScenario {
 
                     List<String> businessUnitUserIds =
                             session.getList("businessUnitUserIds");
-
-
-                    // System.out.println("selectedBusinessUnitId = " + selectedBusinessUnit);
-                    // System.out.println("selectedBusinessUnitId type = "
-                    //         + selectedBusinessUnit.getClass().getName());
-
-                    // System.out.println("businessUnitIds = " + businessUnitIds);
-                    // System.out.println("businessUnitIds first type = "
-                    //         + businessUnitIds.get(0).getClass().getName());
-
 
                     int index = -1;
 
@@ -816,14 +649,7 @@ public final class CreateAccountConditionalCautionScenario {
                     .headers(Headers.getHeaders(12))
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
-                ) 
-                .exec(
-                    http("OPAL - API - Users-state")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                    .headers(Headers.getHeaders(12))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )               
+                )                 
                 .exec(
                     http("OPAL - Sso - Authenticated")
                     .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")

@@ -24,8 +24,8 @@ public final class AmendCollectionOrderEnforcementScenario {
             group("Amend the Collection Oder for Enforcements").on(
             
                 //Selecting Add Enforcement to add:
-
-                exec(
+                pause(10,20)
+                .exec(
                     http("OPAL - Opal-fines-service - Defendant-accounts - Enforcement-status")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
                         .headers(Headers.getHeaders(12))
@@ -88,6 +88,7 @@ public final class AmendCollectionOrderEnforcementScenario {
                 )              
                 
                 //Selecting Enforcement option to add
+                .pause(10,20)
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")

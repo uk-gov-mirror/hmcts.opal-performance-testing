@@ -23,7 +23,8 @@ public final class AmendingEnforcementsToAccountsScenario {
             group("Searching Accounts")
             .on(
                 //Search for accounts query parameters 
-                exec(
+                pause(10,20)
+                .exec(
                     AccountSearch.search(
                         SearchType.ENFORCEMENT,
                     jsonPath(
@@ -34,8 +35,8 @@ public final class AmendingEnforcementsToAccountsScenario {
                 )                    
             )
             .group("Selecting Account").on(
-
-                exec(
+                pause(10,20)
+                .exec(
                     http("OPAL - API - Users-state")
                         .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
                         .headers(Headers.getHeaders(12))
@@ -123,14 +124,12 @@ public final class AmendingEnforcementsToAccountsScenario {
                         .on(
                             percent(50.0).then(
                                 exec(
-                                    AmendCollectionOrderEnforcementScenario
-                                        .AmendCollectionOrderEnforcementRequest()
+                                    AmendCollectionOrderEnforcementScenario.AmendCollectionOrderEnforcementRequest()
                                 )
                             ),
                             percent(50.0).then(
                                 exec(
-                                    RemovingEnforcementScenario
-                                        .RemovingEnforcementRequest()
+                                    RemovingEnforcementScenario.RemovingEnforcementRequest()
                                 )
                             )
                         )

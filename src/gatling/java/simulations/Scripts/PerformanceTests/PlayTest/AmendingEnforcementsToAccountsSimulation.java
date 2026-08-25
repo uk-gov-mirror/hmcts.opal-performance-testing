@@ -1,6 +1,6 @@
 package simulations.Scripts.PerformanceTests.PlayTest;
 
-import simulations.Scripts.ScenarioBuilder.Testing.AmendingEnforcementsToAccountsBuild;
+import simulations.Scripts.ScenarioBuilder.R1B.R1BAmendingEnforcementsToAccountsBuild;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.HttpProtocolConfig;
 import io.gatling.javaapi.core.*;
@@ -24,7 +24,7 @@ public class AmendingEnforcementsToAccountsSimulation extends Simulation {
 
     public AmendingEnforcementsToAccountsSimulation() {
         setUp(
-            AmendingEnforcementsToAccountsBuild.build(OPAL_LOGIN_TEST)
+            R1BAmendingEnforcementsToAccountsBuild.build(OPAL_LOGIN_TEST)
                 .injectOpen(
                      rampUsers(AppConfig.PerformanceConfig.AMEND_USERS)
                 .during(AppConfig.PerformanceConfig.getRampDuration()))
