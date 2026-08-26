@@ -5,6 +5,7 @@ import simulations.Scripts.Utilities.AccountCounters;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.DataGenerator;
+import simulations.Scripts.Utilities.DraftAccountPayloadProcessor;
 import simulations.Scripts.Utilities.Feeders;
 import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.javaapi.core.*;
@@ -391,30 +392,10 @@ public final class CreateAccountFixedScenario {
                         String draftAccountRequestPayload =
                             RequestBodyBuilder.BuildDraftAccountRequestBody(session);
                 
-                        // Create SHA-512 digest
-                        String contentDigest =
-                            ContentDigestGenerator.generateSha512ContentDigest(
+                        return DraftAccountPayloadProcessor.process(
+                                session,
                                 draftAccountRequestPayload
                             );
-
-                        ObjectMapper mapper = new ObjectMapper();
-
-                        // Convert directly into JsonNode WITHOUT readTree
-                        JsonNode json = mapper.readValue(draftAccountRequestPayload, JsonNode.class);
-
-                        String accountType = json.has("account_type")
-                            ? json.get("account_type").asText()
-                            : "UNKNOWN";
-
-                        String businessUnitId = json.has("business_unit_id")
-                            ? json.get("business_unit_id").asText()
-                            : "UNKNOWN";
-
-                        return session
-                            .set("draftAccountRequestPayload", draftAccountRequestPayload)
-                            .set("contentDigest", contentDigest)
-                            .set("createdAccountType", accountType)
-                            .set("createdBusinessUnitId", businessUnitId);
 
                     } catch (Exception e) {
                         System.err.println("Payload parsing failed: " + e.getMessage());

@@ -8,14 +8,72 @@ import java.util.Random;
  * Utility class for generating random test data for various fields.
  */
 public class DataGenerator {
+    
     private static final Random random = new Random();
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
-    private static final String[] FIRST_NAMES = {"John", "Jane", "Michael", "Sarah", "David", "Emma", "Robert", "Lisa", "James", "Mary"};
-    private static final String[] LAST_NAMES = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"};
-    private static final String[] STREETS = {"Main Street", "Oak Avenue", "Elm Road", "Park Lane", "High Street", "Church Street", "School Road", "Castle Drive"};
-    private static final String[] CITIES = {"London", "Manchester", "Birmingham", "Leeds", "Glasgow", "Sheffield", "Bristol", "Edinburgh"};
-    private static final String[] POSTCODES = {"SW1A 1AA", "M1 1AD", "B1 1BD", "LS1 1UR", "G2 1BB", "S1 1WA", "BS1 3AQ", "EH8 8DX"};
+    private static final String[] FIRST_NAMES = {
+        "John", "Jane", "Michael", "Sarah", "David", "Emma", "Robert", "Lisa", "James", "Mary",
+        "Daniel", "Emily", "William", "Olivia", "Thomas", "Sophie", "George", "Amelia", "Charles", "Grace",
+        "Joseph", "Ella", "Edward", "Charlotte", "Henry", "Jessica", "Samuel", "Lucy", "Jack", "Mia",
+        "Alexander", "Isla", "Matthew", "Ava", "Daniel", "Lily", "Oscar", "Freya", "Harry", "Isabella",
+        "Arthur", "Poppy", "Theo", "Sienna", "Leo", "Daisy", "Muhammad", "Florence", "Archie", "Alice",
+        "Joshua", "Evie", "Frederick", "Phoebe", "Ethan", "Sofia", "Isaac", "Ruby", "Edward", "Isabelle",
+        "Noah", "Ella", "Oscar", "Chloe", "Finley", "Poppy", "Max", "Rosie", "Sebastian", "Millie",
+        "Adam", "Willow", "Lucas", "Evelyn", "Henry", "Elsie", "Benjamin", "Sophie", "Theodore", "Matilda",
+        "Harrison", "Harriet", "Archie", "Emily", "Teddy", "Elizabeth", "Dylan", "Layla", "Riley", "Erin",
+        "Jacob", "Holly", "Logan", "Georgia", "Toby", "Ellie", "Reuben", "Maisie", "Finley", "Abigail",
+        "Liam", "Molly", "Mason", "Jessica", "Hugo", "Amelie", "Reggie", "Esme", "Jenson", "Scarlett",
+        "Arlo", "Isabelle", "Louis", "Ivy", "Jude", "Violet", "Tommy", "Lola", "Frankie", "Eliza"
+    };
+
+    private static final String[] LAST_NAMES = {
+        "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+        "Wilson", "Taylor", "Anderson", "Thomas", "Moore", "Jackson", "Martin", "Thompson", "White", "Harris",
+        "Clark", "Lewis", "Robinson", "Walker", "Young", "Hall", "Allen", "Wright", "King", "Scott",
+        "Green", "Baker", "Adams", "Nelson", "Hill", "Ramirez", "Campbell", "Mitchell", "Roberts", "Carter",
+        "Phillips", "Evans", "Turner", "Torres", "Parker", "Collins", "Edwards", "Stewart", "Sanchez", "Morris",
+        "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera", "Cooper", "Richardson",
+        "Cox", "Howard", "Ward", "Peterson", "Gray", "Watson", "Brooks", "Bennett", "Wood", "Barnes",
+        "Ross", "Henderson", "Coleman", "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores",
+        "Washington", "Butler", "Simmons", "Foster", "Gonzalez", "Bryant", "Alexander", "Russell", "Griffin", "Diaz",
+        "Hayes", "Myers", "Ford", "Hamilton", "Graham", "Sullivan", "Wallace", "Woods", "Cole", "West",
+        "Jordan", "Owens", "Reynolds", "Fisher", "Ellis", "Harrison", "Gibson", "McDonald", "Cruz", "Marshall",
+        "Ortiz", "Gomez", "Murray", "Freeman", "Wells", "Webb", "Simpson", "Stevens", "Tucker", "Porter",
+        "Hunter", "Hicks", "Crawford", "Henry", "Boyd", "Mason", "Morales", "Kennedy", "Warren", "Dixon",
+        "Ramos", "Reyes", "Burns", "Gordon", "Shaw", "Holmes", "Rice", "Robertson", "Hunt", "Black",
+        "Daniels", "Palmer", "Mills", "Nichols", "Grant", "Knight", "Ferguson", "Rose", "Stone", "Hawkins"
+    };
+
+    private static final String[] STREETS = {
+        "Main Street", "Oak Avenue", "Elm Road", "Park Lane", "High Street", "Church Street", "School Road", "Castle Drive", "Victoria Road",
+        "Station Road", "Church Road", "Mill Lane", "King Street", "Queen Street", "George Street", "Albert Road", "Albert Street", "Victoria Street",
+        "London Road", "Manchester Road", "Liverpool Road", "Leeds Road", "Bristol Road", "York Road", "Cambridge Road",  "Oxford Road",  "Richmond Road",
+        "Windsor Road", "Park Road", "Garden Street", "Rose Lane", "Church Lane", "Green Lane",  "Mill Road", "Station Lane", "Market Street", "High Road",
+        "New Road", "West Street", "East Street", "North Street", "South Street", "Broad Street", "Bridge Street", "Waterloo Road", "Victoria Lane", "Regent Street",
+        "Kingston Road", "Harrow Road", "Wellington Road", "Clarence Street", "Grove Road", "Woodland Drive", "Meadow Lane", "Willow Drive", "Hawthorn Road",  "Rosemary Lane",
+        "Chestnut Avenue", "Beech Road", "Maple Avenue",  "Ash Grove", "Cedar Road", "Pine Street", "Birch Avenue", "Elm Avenue", "Oak Road", "Lime Street",
+        "Hazel Drive", "Sycamore Road", "Poplar Avenue", "Brook Lane", "River Road", "Valley Road", "Hill Street", "Park View", "The Crescent", "The Avenue",
+        "The Grove", "The Close", "The Gardens", "The Green"
+    };
+
+    private static final String[] CITIES = {
+        "London", "Manchester", "Birmingham", "Leeds", "Glasgow", "Sheffield", "Bristol","Edinburgh", "Liverpool", "Newcastle", "Nottingham", "Cardiff",
+        "Leicester", "Coventry", "Bradford", "Stoke-on-Trent", "Wolverhampton", "Plymouth", "Derby", "Southampton", "Portsmouth", "Brighton", "Reading",
+        "Oxford", "Cambridge", "York", "Bath", "Exeter", "Norwich", "Sunderland", "Hull", "Preston", "Bolton", "Blackpool", "Salford", "Wigan", "Stockport",
+        "Oldham", "Rochdale", "Huddersfield", "Wakefield", "Doncaster", "Middlesbrough", "Milton Keynes", "Northampton", "Luton", "Swindon", "Ipswich", 
+        "Colchester", "Chelmsford", "Canterbury", "Peterborough", "Lincoln", "Worcester", "Gloucester", "Salisbury", "Carlisle", "Lancaster", "Chester", 
+        "Durham", "Inverness", "Dundee", "Aberdeen", "Stirling", "Perth", "Swansea", "Newport","Bangor"
+    };
+
+    private static final String[] POSTCODES = {
+        "SW1A 1AA", "M1 1AD", "B1 1BD", "LS1 1UR", "G2 1BB", "S1 1WA", "BS1 3AQ", "EH8 8DX", "L1 1AA", "NE1 1AD", "NG1 1AA", "CF10 1AA", "LE1 1AA",
+        "CV1 1AA", "BD1 1AA", "ST1 1AA", "WV1 1AA", "PL1 1AA", "DE1 1AA", "SO14 1AA", "PO1 1AA", "BN1 1AA", "RG1 1AA", "OX1 1AA", "CB1 1AA", "YO1 1AA", 
+        "BA1 1AA", "EX1 1AA", "NR1 1AA", "SR1 1AA", "HU1 1AA", "PR1 1AA", "BL1 1AA", "FY1 1AA", "M5 1AA", "WN1 1AA", "SK1 1AA", "OL1 1AA", "OL16 1AA",
+        "HD1 1AA", "WF1 1AA", "DN1 1AA", "TS1 1AA", "MK9 1AA", "NN1 1AA", "LU1 1AA", "SN1 1AA", "IP1 1AA", "CO1 1AA", "CM1 1AA",  "CT1 1AA", "PE1 1AA", 
+        "LN1 1AA", "WR1 1AA", "GL1 1AA", "SP1 1AA", "CA1 1AA", "LA1 1AA",  "CH1 1AA", "DH1 1AA", "IV1 1AA", "DD1 1AA", "AB10 1AA", "FK8 1AA", "PH1 1AA", 
+        "SA1 1AA", "NP20 1AA", "LL55 1AA"
+    };
     private static final String[] VEHICLE_MAKES = {"Ford", "BMW", "Volkswagen", "Audi", "Toyota", "Honda", "Mercedes-Benz", "Vauxhall"};
     private static final String[] EMPLOYERS = {"Tech Corp", "Finance Ltd", "Health Services", "Retail Group", "Manufacturing Co", "Education Board", "Transport Inc"};
     private static final String[] GENDERS = {"Male", "Female", "Other"};

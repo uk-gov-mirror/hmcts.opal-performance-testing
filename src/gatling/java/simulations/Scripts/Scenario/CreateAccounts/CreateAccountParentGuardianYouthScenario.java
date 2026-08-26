@@ -2,9 +2,11 @@ package simulations.Scripts.Scenario.CreateAccounts;
 
 import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.Utilities.AccountCounters;
+import simulations.Scripts.Utilities.AccountType;
 import simulations.Scripts.Utilities.AppConfig;
 import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.DataGenerator;
+import simulations.Scripts.Utilities.DraftAccountPayloadProcessor;
 import simulations.Scripts.Utilities.Feeders;
 import simulations.Scripts.Utilities.UserInfoLogger;
 import io.gatling.javaapi.core.*;
@@ -21,11 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilder;
 import simulations.Scripts.ScenarioBuilder.Testing.DraftAccountQueryBuilder;
 
-public final class CreateAccountYouthScenario {
+public final class CreateAccountParentGuardianYouthScenario {
 
-    private CreateAccountYouthScenario() {}
+    private CreateAccountParentGuardianYouthScenario() {}
 
-    public static ChainBuilder CreateAccountYouthRequest() {
+    public static ChainBuilder createAccountRequest(AccountType accountType) {
 
         return group("OPAL Create Manual Youth Account")
         .on(            
@@ -45,7 +47,7 @@ public final class CreateAccountYouthScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
                 ) 
-                //Selecting Create and Manage Draft Accounts link            
+                //Selecting Create and Manage Draft Accounts link
                 .exec(
                     http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -63,7 +65,7 @@ public final class CreateAccountYouthScenario {
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))                                         
-                )                 
+                )
                 
                 // Displays the created accounts by filters.    
                 //Build draft account query parameters from business unit data in session (Submitted / Resubmitted) 
@@ -336,6 +338,7 @@ public final class CreateAccountYouthScenario {
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                     )
+
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                     .exitHereIfFailed()  
                 )   
@@ -471,7 +474,13 @@ public final class CreateAccountYouthScenario {
                     )
                     .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
                     .exitHereIfFailed() 
-                    
+                    .exec(
+                        http("OPAL - API - Users-state")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                        .headers(Headers.getHeaders(12))
+                        .check(status().saveAs("httpStatus"))
+                        .check(status().is(200))
+                    )					 
                     .exec(
                         http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
@@ -558,10 +567,6 @@ public final class CreateAccountYouthScenario {
                         List<String> businessUnitUserIds =
                             session.getList("businessUnitUserIds");
 
-                        // System.out.println("selectedBusinessUnitId = " + selectedBusinessUnitId);
-                        // System.out.println("businessUnitIds = " + businessUnitIds);
-                        // System.out.println("businessUnitUserIds = " + businessUnitUserIds);
-
                         int index = businessUnitIds.indexOf(selectedBusinessUnitId);
 
                         if (index == -1) {
@@ -579,43 +584,27 @@ public final class CreateAccountYouthScenario {
                 )
                 .group("Submit Draft Account").on(
                     exec(session -> {
-                        try {
-                            String draftAccountRequestPayload =
+
+                        String draftAccountRequestPayload;
+
+                        if (accountType == AccountType.PARENT_GUARDIAN) {
+
+                            draftAccountRequestPayload =
+                                RequestBodyBuilder.BuildDraftAccountParentGuardianRequestBody(session);
+
+                        } else {
+
+                            draftAccountRequestPayload =
                                 RequestBodyBuilder.BuildDraftAccountYouthRequestBody(session);
-                            
-                            // Create SHA-512 digest
-                            String contentDigest =
-                                ContentDigestGenerator.generateSha512ContentDigest(
-                                    draftAccountRequestPayload
-                                );
-
-                            ObjectMapper mapper = new ObjectMapper();
-
-                            // Convert directly into JsonNode WITHOUT readTree
-                            JsonNode json = mapper.readValue(draftAccountRequestPayload, JsonNode.class);
-
-                            String accountType = json.has("account_type")
-                                ? json.get("account_type").asText()
-                                : "UNKNOWN";
-
-                            String businessUnitId = json.has("business_unit_id")
-                                ? json.get("business_unit_id").asText()
-                                : "UNKNOWN";
-
-                            return session
-                                .set("draftAccountRequestPayload", draftAccountRequestPayload)
-                                .set("contentDigest", contentDigest)
-                                .set("createdAccountType", accountType)
-                                .set("createdBusinessUnitId", businessUnitId);
-
-                        } catch (Exception e) {
-                            System.err.println("Payload parsing failed: " + e.getMessage());
-                            return session.markAsFailed();
                         }
+
+                        return DraftAccountPayloadProcessor.process(
+                            session,
+                            draftAccountRequestPayload
+                        );
                     })
-                    
-                    //Selecting Submit for review button 
-                    .pause(20,60)
+                    // Submit for review
+                    .pause(20, 60)
                     .exec(
                         http("OPAL - Opal-fines-service - Draft-accounts")
                         .post(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/draft-accounts")
@@ -640,8 +629,13 @@ public final class CreateAccountYouthScenario {
                     // =======================================================
                     .exec(session -> {
 
-                        int count = session.getInt("createdAccountCount") + 1;
+                        int count;
 
+                        if (session.contains("createdAccountCount")) {
+                            count = session.getInt("createdAccountCount") + 1;
+                        } else {
+                            count = 1;
+                        }
                         System.out.println(
                             "\n========== DRAFT ACCOUNT CREATED ==========\n" +
                             "User: " + session.getString("username") + "\n" +
@@ -653,30 +647,30 @@ public final class CreateAccountYouthScenario {
                         );
 
                         return session.set("createdAccountCount", count);
-                })
-                .exec(
-                    http("OPAL - Sso - Authenticated")
-                    .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
-                    .headers(Headers.getHeaders(11))
-                    .check(status().saveAs("httpStatus"))
-                    .check(status().is(200))
-                )
-                .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
-                .exitHereIfFailed()  
-                 .exec(
-                    http("OPAL - API - Users-state")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
-                        .headers(Headers.getHeaders(12))
-                        .check(status().saveAs("httpStatus"))
-                        .check(status().is(200))
-                ) 
-                .exec(
-                    http("OPAL - Sso - Authenticated")
+                    })
+                    .exec(
+                        http("OPAL - Sso - Authenticated")
                         .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
                         .headers(Headers.getHeaders(11))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
-                )
+                    )
+                    .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Sso - Authenticated"))
+                    .exitHereIfFailed()  
+                    .exec(
+                        http("OPAL - API - Users-state")
+                            .get(AppConfig.UrlConfig.BASE_URL + "/api/user-state")
+                            .headers(Headers.getHeaders(12))
+                            .check(status().saveAs("httpStatus"))
+                            .check(status().is(200))
+                    ) 
+                    .exec(
+                        http("OPAL - Sso - Authenticated")
+                            .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                            .headers(Headers.getHeaders(11))
+                            .check(status().saveAs("httpStatus"))
+                            .check(status().is(200))
+                    )
             ) 
                         
         );            

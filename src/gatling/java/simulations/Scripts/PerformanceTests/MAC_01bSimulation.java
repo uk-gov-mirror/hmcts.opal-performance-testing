@@ -92,11 +92,11 @@ public class MAC_01bSimulation extends Simulation {
 
             //     ),
  
-            R1bSearchandViewDefendantScenarioBuild.build(SimulationNames.MAC_01B_TEST + " - Search and View accounts")
-                .injectOpen(
-                    rampUsers(AppConfig.PerformanceConfig.SEARCH_VIEW_USERS)
-                        .during(AppConfig.PerformanceConfig.getRampDuration())
-                )
+            // R1bSearchandViewDefendantScenarioBuild.build(SimulationNames.MAC_01B_TEST + " - Search and View accounts")
+            //     .injectOpen(
+            //         rampUsers(AppConfig.PerformanceConfig.SEARCH_VIEW_USERS)
+            //             .during(AppConfig.PerformanceConfig.getRampDuration())
+            //     ),
 
             // ParentGuardianAccountSearchScenarioBuild.build(SimulationNames.MAC_01B_TEST + " - Search for Youth accounts with, without Parent and Guardian")
             //     .injectOpen(

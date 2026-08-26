@@ -78,7 +78,8 @@ public final class AmendingEnforcementsToAccountsScenario {
             )
 
             .group("Selecting Enforcement tab").on(
-                exec(
+                pause(10,20)
+                .exec(
                     http("OPAL - Opal-fines-service - Defendant-accounts - Header-summary")
                         .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
                         .headers(Headers.getHeaders(12))

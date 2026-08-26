@@ -2,8 +2,9 @@ package simulations.Scripts.ScenarioBuilder.Testing;
 
 
 
-import simulations.Scripts.Scenario.CreateAccounts.CreateAccountYouthScenario;
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountParentGuardianYouthScenario;
 import simulations.Scripts.Scenario.Login.LoginScenario;
+import simulations.Scripts.Utilities.AccountType;
 import simulations.Scripts.Utilities.Feeders;
 import io.gatling.javaapi.core.*;
 
@@ -28,7 +29,9 @@ public class CreateAccountScenarioBuild {
                   //      exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest()),
                   //      exec(CreateAccountFixedScenario.CreateAccountFixedRequest()),
                        // exec(CreateAccountFineMajorCreditScenario.CreateAccountFineRequest())
-                          exec(CreateAccountYouthScenario.CreateAccountYouthRequest())
+                          exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.YOUTH)),
+                         exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.PARENT_GUARDIAN))
+
 
                    //     exec(CreateAccountFineMinorCreditScenario.CreateAccountMinorCreditRequest()),
                   //      exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
@@ -44,6 +47,6 @@ public class CreateAccountScenarioBuild {
                     // .exec(CreateAccountFineScenario.CreateAccountFineRequest())
                     // .exec(CreateAccountConditionalCautionScenario.CreateAccountConditionalCautionRequest())
                 //)
-            );
+                );
     }
 }
