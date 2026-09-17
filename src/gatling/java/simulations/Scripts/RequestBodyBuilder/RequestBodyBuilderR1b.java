@@ -394,6 +394,69 @@ public static final class DefendantAccountSearch {
                 sortCode
             );
         }
+          public static String buildRemovePaymentMinorCreditorAccountRequestBody(Session session) {
+
+            String getAddressLine1 = session.getString("getAddressLine1");
+            String getAddressLine2 = session.getString("getAddressLine2");
+
+            String randomAddressline3 = DataGenerator.generateRandomAddress();
+            session.set("randomAddressline3", randomAddressline3);
+
+            String getCreditorAccountId = session.getString("getCreditorAccountId");
+            String getIndividualForenames = session.getString("getIndividualForenames");
+            String getIndividualSurname = session.getString("getIndividualSurname");
+            String getIndividualTitle = session.getString("getIndividualTitle");
+            String getPartyId = session.getString("getPartyId");
+         
+            boolean holdPayment = false;
+            boolean payByBacs = true;
+
+            return String.format(
+                "{\n" +
+                "  \"address\": {\n" +
+                "    \"address_line_1\": \"%s\",\n" +
+                "    \"address_line_2\": \"%s\",\n" +
+                "    \"address_line_3\": \"%s\",\n" +
+                "    \"address_line_4\": null,\n" +
+                "    \"address_line_5\": null,\n" +
+                "    \"postcode\": null\n" +
+                "  },\n" +
+                "  \"creditor_account_id\": \"%s\",\n" +
+                "  \"party_details\": {\n" +
+                "    \"individual_details\": {\n" +
+                "      \"age\": null,\n" +
+                "      \"date_of_birth\": \"\",\n" +
+                "      \"forenames\": \"%s\",\n" +
+                "      \"individual_aliases\": null,\n" +
+                "      \"national_insurance_number\": null,\n" +
+                "      \"surname\": \"%s\",\n" +
+                "      \"title\": \"%s\"\n" +
+                "    },\n" +
+                "    \"organisation_details\": null,\n" +
+                "    \"organisation_flag\": false,\n" +
+                "    \"party_id\": \"%s\"\n" +
+                "  },\n" +
+                "  \"payment\": {\n" +
+                "    \"account_name\": null,\n" +
+                "    \"account_number\": null,\n" +
+                "    \"account_reference\": null,\n" +
+                "    \"hold_payment\": false,\n" +
+                "    \"pay_by_bacs\": false,\n" +
+                "    \"sort_code\": null\n" +
+                "  }\n" +
+                "}",
+                getAddressLine1,
+                getAddressLine2,
+                randomAddressline3,
+                getCreditorAccountId,
+                getIndividualForenames,
+                getIndividualSurname,
+                getIndividualTitle,
+                getPartyId,
+                holdPayment,
+                payByBacs
+            );
+        }
         
 
         public static String BuildRemoveEnforcementRequestBody(Session session) {

@@ -7,6 +7,7 @@ import simulations.Scripts.Headers.Headers;
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilderR1b;
 import simulations.Scripts.Utilities.AccountSearch;
 import simulations.Scripts.Utilities.AppConfig;
+import simulations.Scripts.Utilities.ContentDigestGenerator;
 import simulations.Scripts.Utilities.SearchType;
 
 public class R1bMinorCreditorSearchScenario {
@@ -26,8 +27,7 @@ private R1bMinorCreditorSearchScenario() {
                 AccountSearch.search(
                     SearchType.MINOR_CREDITOR,
 
-                    jsonPath("$.creditor_accounts[?(@.defendant.defendant_account_id == '#{AccountId1}')].creditor_account_id")
-                        .findAll()
+                    jsonPath("$.creditor_accounts[?(@.defendant.defendant_account_id == '#{accountId}')].creditor_account_id")
                         .saveAs("creditor_account_id")
                 )
             )
@@ -67,23 +67,100 @@ private R1bMinorCreditorSearchScenario() {
                     .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/minor-creditor-accounts/#{creditor_account_id}")
                     .headers(Headers.getHeaders(12))
                     .check(status().is(200))
-
+                    .check(
+                        jsonPath("$.payment.account_name").optional().saveAs("accountName")
+                    )
             )
-            .exec(session -> {
+
+            .doIfOrElse(session ->
+                !session.contains("accountName") ||
+                session.getString("accountName") == null
+            )
+          .then(
+                exec(session -> {
+
                     String updateMinorCreditorSearchAccountRequestPayload =
-                        RequestBodyBuilderR1b.DefendantAccountSearch.buildUpdateMinorCreditorAccountRequestBody(session);
+                        RequestBodyBuilderR1b.DefendantAccountSearch
+                            .buildUpdateMinorCreditorAccountRequestBody(session);
 
-                        System.out.println("updateMinorCreditorSearchAccountRequestPayload = " + updateMinorCreditorSearchAccountRequestPayload);
+                    String contentDigest =
+                        ContentDigestGenerator
+                            .generateSha512ContentDigest(
+                                updateMinorCreditorSearchAccountRequestPayload
+                            );
 
-                    return session.set("updateMinorCreditorSearchAccountRequestPayload", updateMinorCreditorSearchAccountRequestPayload);
-                }
-            ) 
+                    System.out.println(
+                        "updateMinorCreditorSearchAccountRequestPayload = "
+                            + updateMinorCreditorSearchAccountRequestPayload
+                    );
+
+                    System.out.println(
+                        "Content-Digest = " + contentDigest
+                    );
+
+                    return session
+                        .set(
+                            "updateMinorCreditorSearchAccountRequestPayload",
+                            updateMinorCreditorSearchAccountRequestPayload
+                        )
+                        .set(
+                            "contentDigest",
+                            contentDigest
+                        );
+                })
+            )
+            .orElse(
+                exec(session -> {
+
+                    String updateMinorCreditorSearchAccountRequestPayload =
+                        RequestBodyBuilderR1b.DefendantAccountSearch
+                            .buildRemovePaymentMinorCreditorAccountRequestBody(session);
+
+                    String contentDigest =
+                        ContentDigestGenerator
+                            .generateSha512ContentDigest(
+                                updateMinorCreditorSearchAccountRequestPayload
+                            );
+
+                    System.out.println(
+                        "updateMinorCreditorSearchAccountRequestPayload = "
+                            + updateMinorCreditorSearchAccountRequestPayload
+                    );
+
+                    System.out.println(
+                        "Content-Digest = " + contentDigest
+                    );
+
+                    return session
+                        .set(
+                            "updateMinorCreditorSearchAccountRequestPayload",
+                            updateMinorCreditorSearchAccountRequestPayload
+                        )
+                        .set(
+                            "contentDigest",
+                            contentDigest
+                        );
+                })
+            )
             .exec(
                 http("OPAL - Minor-creditor-accounts - Patch")
                     .patch(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/minor-creditor-accounts/#{creditor_account_id}")
                     .headers(Headers.getHeaders(19))
                     .body(StringBody(session -> session.get("updateMinorCreditorSearchAccountRequestPayload"))).asJson()
-                //    .check(status().is(403))
+                    .check(status().is(200))
+            )
+
+            .exec(
+                http("OPAL - Minor-creditor-accounts - Header-summary")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/minor-creditor-accounts/#{creditor_account_id}/header-summary")
+                    .headers(Headers.getHeaders(12))  
+                    .check(status().is(200))              
+            ) 
+            .exec(
+                http("OPAL - Minor-creditor-accounts - Get")
+                    .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/minor-creditor-accounts/#{creditor_account_id}")
+                    .headers(Headers.getHeaders(12))
+                    .check(status().is(200))
             )
         );
     }

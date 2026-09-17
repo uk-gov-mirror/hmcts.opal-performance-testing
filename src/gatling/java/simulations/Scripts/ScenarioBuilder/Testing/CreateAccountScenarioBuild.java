@@ -2,6 +2,7 @@ package simulations.Scripts.ScenarioBuilder.Testing;
 
 
 
+import simulations.Scripts.Scenario.CreateAccounts.CreateAccountFineMajorCreditScenario;
 import simulations.Scripts.Scenario.CreateAccounts.CreateAccountParentGuardianYouthScenario;
 import simulations.Scripts.Scenario.Login.LoginScenario;
 import simulations.Scripts.Utilities.AccountType;
@@ -28,9 +29,9 @@ public class CreateAccountScenarioBuild {
                     .repeat(2).on(
                   //      exec(CreateAccountParentGuardianScenario.CreateAccountParentGuardianRequest()),
                   //      exec(CreateAccountFixedScenario.CreateAccountFixedRequest()),
-                       // exec(CreateAccountFineMajorCreditScenario.CreateAccountFineRequest())
-                          exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.YOUTH)),
-                         exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.PARENT_GUARDIAN))
+                        exec(CreateAccountFineMajorCreditScenario.CreateAccountFineRequest())
+                    //      exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.YOUTH)),
+                    //     exec(CreateAccountParentGuardianYouthScenario.createAccountRequest(AccountType.PARENT_GUARDIAN))
 
 
                    //     exec(CreateAccountFineMinorCreditScenario.CreateAccountMinorCreditRequest()),

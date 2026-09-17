@@ -100,6 +100,9 @@ public final class CreateAccountFixedScenario {
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
                     .check(Feeders.saveErrorDetails())
+                    .check(
+                        jsonPath("$.summaries").findAll().saveAs("summaries")
+                    )
                 )
                 .exec(UserInfoLogger.logDetailedErrorMessage("OPAL - Opal-fines-service - Draft-accounts - QueryParams"))
                 .exitHereIfFailed()
@@ -125,49 +128,11 @@ public final class CreateAccountFixedScenario {
                         .headers(Headers.getHeaders(11))
                         .check(status().is(200))
                 )
-                .exitHereIfFailed()
-
-                //Build draft account query parameters from business unit data in session (Rejected)               
-
-                .exec(session ->
-                    DraftAccountQueryBuilder.buildAndStore(
-                        session,
-                        "draftAccountRejectedQueryParams",
-                        List.of("Rejected"),
-                        "not_submitted_by",
-                       false
-                    )
-                )                
-                .exec(
-                    http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Rejected")
-                        .get(session ->
-                            AppConfig.UrlConfig.BASE_URL +
-                            "/opal-fines-service/draft-accounts?" +
-                            session.getString("draftAccountRejectedQueryParams")
-                        )
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))
-                )
-                .exitHereIfFailed()
-
-                //Third call for draft account query parameters from business unit data in session (Submitted / Resubmitted) 
-                .exec(
-                    http("OPAL - Opal-fines-service - Draft-accounts - QueryParams - Submitted")
-                        .get(session ->
-                            AppConfig.UrlConfig.BASE_URL +
-                            "/opal-fines-service/draft-accounts?" +
-                            session.getString("draftAccountSubmittedQueryParams")
-                        )
-                        .headers(Headers.getHeaders(11))
-                        .check(status().is(200))
-                        .check(
-                               jsonPath("$.summaries").findAll().saveAs("summaries"))
-                )  
+                .exitHereIfFailed()  
             )
 
             .group("Initiate Account Creation")
             .on(
-
                 //Selecting create account button
                 pause(5,20)
                 .exec(
