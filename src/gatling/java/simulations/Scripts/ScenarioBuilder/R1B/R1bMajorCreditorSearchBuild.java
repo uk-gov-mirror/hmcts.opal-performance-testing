@@ -15,10 +15,10 @@ public class R1bMajorCreditorSearchBuild {
              .on(
                 exec(exec(feed(Feeders.majorCreditorUsers()))
                 .exec(LoginScenario.LoginRequest())
-                .forever().on(
+                .repeat(5).on(
+                //.forever().on(
                 exec(R1bMajorCreditorSearchScenario.MajorCreditorSearch())
             .pause(40,120))
-
             ));
     }
 

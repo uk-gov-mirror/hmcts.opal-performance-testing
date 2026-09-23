@@ -136,7 +136,7 @@ public final class LoginScenario {
                     .check(status().saveAs("httpStatus"))
                     .check(status().is(200))
                     .check(
-                        jsonPath("$.domains.fines.business_unit_users[*].business_unit_id")
+                        jsonPath("$.domains.fines.business_unit_users[?(@.business_unit_id > 0 && @.business_unit_id < 1000)].business_unit_id")
                             .findAll().saveAs("businessUnitIds"),
                         jsonPath("$.domains.fines.business_unit_users[*].business_unit_user_id")
                             .findAll().saveAs("businessUnitUserIds"),

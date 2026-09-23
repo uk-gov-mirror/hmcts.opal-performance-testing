@@ -12,13 +12,13 @@ import io.gatling.javaapi.core.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-public final class AmendingEnforcementsToAccountsScenario {
+public final class EnforcementOverrideToAccountsScenario {
 
-    private AmendingEnforcementsToAccountsScenario() {}
+    private EnforcementOverrideToAccountsScenario() {}
 
-    public static ChainBuilder AmendingEnforcementsToAccountsRequest() {
+    public static ChainBuilder EnforcementOverrideToAccountsScenarioRequest() {
 
-        return group("OPAL Add Enforcements To Accounts")
+        return group("OPAL Override Enforcements To Accounts")
         .on( 
             group("Searching Accounts")
             .on(
@@ -78,63 +78,58 @@ public final class AmendingEnforcementsToAccountsScenario {
             .group("Selecting Enforcement tab").on(
                 pause(10,20)
                 .exec(
-                    http("OPAL - Opal-fines-service - Defendant-accounts - Header-summary")
-                        .get(AppConfig.UrlConfig.BASE_URL + "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
+                    http("OPAL - Opal-fines-service - Defendant-accounts - Enforcement-status")
+                        .get(AppConfig.UrlConfig.BASE_URL +
+                            "/opal-fines-service/defendant-accounts/#{defendant_account_id}/enforcement-status")
                         .headers(Headers.getHeaders(12))
                         .check(status().saveAs("httpStatus"))
                         .check(status().is(200))
                         .check(
-                            jsonPath("$.last_enforcement_action.enforcement_action.result_id")
+                            jsonPath("$.enforcement_override.enforcement_override_result.enforcement_override_result_id")
                                 .optional()
                                 .saveAs("enforcementActionResultId")
                         )
                 )
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                )                     
+                .exec(
+                    http("OPAL - Sso - Authenticated")
+                        .get(AppConfig.UrlConfig.BASE_URL + "/sso/authenticated")
+                        .headers(Headers.getHeaders(11))
+                        .check(status().is(200))                                         
+                ) 
             )
-                .exec(session -> {
+            .exec(session -> {
 
+                String resultId = session.get("enforcementActionResultId");
+
+                System.out.println(
+                    "Existing Enforcement Result: [" + resultId + "]"
+                );
+
+                return session;
+            })
+
+           .doIfOrElse(
+                session -> {
                     String resultId = session.get("enforcementActionResultId");
-
-                    boolean shouldAddEnforcement =
-                        resultId == null ||
-                        resultId.equalsIgnoreCase("CW") ||
-                        resultId.equalsIgnoreCase("REM") ||
-                        resultId.equalsIgnoreCase("CONF") ||
-                        resultId.equalsIgnoreCase("FSN") ||
-                        resultId.equalsIgnoreCase("WDN") ||
-                        resultId.equalsIgnoreCase("SC") ||
-                        resultId.equalsIgnoreCase("S136") ||
-                        resultId.equalsIgnoreCase("NAP");
-
-                        System.out.println(
-                            "Existing Enforcement Result: [" + resultId + "]" +
-                            " | Should Add Enforcement: " + shouldAddEnforcement
-                        );
-
-                    return session.set("shouldAddEnforcement", shouldAddEnforcement);
-                })
-
-                .doIfOrElse(session -> session.getBoolean("shouldAddEnforcement"))
-                    .then(
-                        exec(
-                            AddingEnforcementScenario.AddingEnforcementRequest()
-                    )
-                )                
-                .orElse(
-                    randomSwitch()
-                        .on(    
-                            percent(50.0).then(
-                                exec(
-                                    AmendCollectionOrderEnforcementScenario.AmendCollectionOrderEnforcementRequest()
-                                )
-                            ),
-                            percent(50.0).then(
-                                exec(
-                                    RemovingEnforcementScenario.RemovingEnforcementRequest()
-                                )
-                            )
-                        )
-                )       
-            
+                    return resultId == null;
+                }
+            )
+            .then(
+                exec(
+                    AddingEnforcementScenario.AddingEnforcementRequest()
+                )
+            )
+            .orElse(
+                exec(
+                    RemovingEnforcementScenario.RemovingEnforcementRequest()
+                )
+            ) 
         );            
     }
 }

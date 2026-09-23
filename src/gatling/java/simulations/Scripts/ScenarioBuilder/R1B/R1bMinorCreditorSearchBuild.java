@@ -21,7 +21,7 @@ public class R1bMinorCreditorSearchBuild {
                         int iteration = session.getInt("loopCounter") + 1;
     
                         // Determine the column name based on the iteration number
-                                              String forenameColumn = "";
+                        String forenameColumn = "";
                         String surnameColumn = "";
                         String accountIdColumn = "";
 

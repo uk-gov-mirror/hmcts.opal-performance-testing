@@ -493,7 +493,97 @@ public static final class DefendantAccountSearch {
                 amendedCollectionOrderFlag
             );
         }
+        public static String buildOverrideEnforcementRequestBody(Session session) {
 
+            // Get enforcement from Gatling session
+            String enforcement = session.get("EnforcementId") != null
+                    ? session.get("EnforcementId").toString().trim().toUpperCase()
+                    : "";
+          
+
+            // Stop early if enforcement is missing
+            if (enforcement.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "Enforcement value is NULL or EMPTY. " +
+                    "Check that 'enforcement' is being added to the Gatling Session."
+                );
+            }
+
+            DataGenerator randomStringGenerator = new DataGenerator();
+
+            String reasonText1 = randomStringGenerator.generateRandomString(10);
+            String reasonText2 = randomStringGenerator.generateRandomString(10);
+
+            switch (enforcement) {
+
+                /*
+                * NOENF / CONF / INTL
+                * All use the same parameters.
+                */
+                case "SUMA": 
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_override\": {\n" +
+                        "      \"enforcement_override_result\": {\n" +
+                        "           \"enforcement_override_result_id\": \"%s\"\n" +
+                        "    },\n" +
+                        "  \"enforcer\": \"null,\"\n" +
+                        "  \"lja\": \"null\"\n" +
+                            "}" +
+                        "}",
+                        enforcement
+                    );    
+               
+                /*
+                * CWN
+                */
+                case "CWN":               
+                     return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"hearing_date\",\n" +
+                        "      \"response\": \"2026-08-12\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"court_code\",\n" +
+                        "      \"response\": \"1\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );  
+
+                /*
+                * Unknown enforcement
+                */
+                default:
+
+                    throw new IllegalArgumentException(
+                        "Unknown enforcement type: [" + enforcement + "]"
+                    );
+            }
+        }
+
+        public static String buildRemoveOverrideEnforcementRequestBody(Session session) {
+        
+            return String.format(
+
+                "{\n" +
+                "  \"enforcement_override\": {\n" +
+                "  \"enforcement_override_result\": \"null,\"\n" +                     
+                "  \"enforcer\": \"null,\"\n" +
+                "  \"lja\": \"null\"\n" +
+                "   }" +
+                "}"
+            );
+        }
         public static String buildEnforcementRequestBody(Session session) {
 
             // Get enforcement from Gatling session
@@ -622,11 +712,42 @@ public static final class DefendantAccountSearch {
                         "}",
                         reasonText1
                     );
+
+                /*
+                * MPSO
+                */
+                case "MPSO":
+
+                    return String.format(
+                        "{\n" +
+                        "  \"enforcement_result_responses\": [\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"reason\",\n" +
+                        "      \"response\": \"%s\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"supervisor\",\n" +
+                        "      \"response\": \"Probation officer\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"detailsifother\",\n" +
+                        "      \"response\": \"TEST\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"parameter_name\": \"prisondetention\",\n" +
+                        "      \"response\": \"Prison\"\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"result_id\": \"%s\"\n" +
+                        "}",
+                        reasonText1,
+                        enforcement
+                    );
                    
                 /*
                 * CWN
                 */
-                case "CWN":
+                case "CWN": //Need to remove?
                 case "NAWT":
                 case "REW":
 
@@ -771,7 +892,7 @@ public static final class DefendantAccountSearch {
                 /*
                 * S18
                 */
-                case "S18":
+                case "S18": //Need to remove?
 
                     return String.format(
                         "{\n" +

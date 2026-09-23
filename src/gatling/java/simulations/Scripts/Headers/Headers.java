@@ -300,6 +300,19 @@ public final class Headers {
             headers.put("sec-ch-ua-platform", "Windows");
             headers.put("want-content-digest", "sha-512");
             headers.put("Referer",AppConfig.UrlConfig.BASE_URL);
+            break;
+
+            case TEST_20:
+            headers.put("Sec-Fetch-Dest", "empty");
+            headers.put("Sec-Fetch-Mode", "cors");
+            headers.put("Sec-Fetch-Site", "same-origin");
+            headers.put("want-content-digest", "sha-512");
+            headers.put("sec-ch-ua", "Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24");
+            headers.put("sec-ch-ua-mobile", "?0");
+            headers.put("sec-ch-ua-platform", "Windows");
+            headers.put("Accept-Encoding", "gzip, deflate, br, zstd");
+            headers.put("Accept", "application/json, text/plain, */*");
+
             default:
             break;
         }

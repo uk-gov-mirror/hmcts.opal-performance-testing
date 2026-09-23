@@ -13,11 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import simulations.Scripts.RequestBodyBuilder.RequestBodyBuilderR1b;
 
-public final class AddingEnforcementScenario {
+public final class AddingOverrideEnforcementScenario {
 
-    private AddingEnforcementScenario() {}
+    private AddingOverrideEnforcementScenario() {}
 
-    public static ChainBuilder AddingEnforcementRequest() {
+    public static ChainBuilder AddingOverrideEnforcementRequest() {
 
         return group("OPAL Adding Enforcements")
         .on( 
